@@ -3,14 +3,16 @@
 **CI 质量门禁：Flaky 测试检测与失败归因评测平台** —— 基于 IDoFT 公开数据集
 （Python 子集 1618 条 / 332 个去重仓库）。
 
-> 状态：**阶段 C1 · replay 模式检测流水线 + 第一版指标**（2026-10-12）。
-> 双探头检测器（换进程重跑 + 同进程 `--count`）、N1 负样本、评测驱动均已就位。
-> 第一版指标（19 条正样本 / 7 项目 + 14 条负样本，runs=100）：
-> **精确率 100.0%（下界；always-flaky 基线 57.6%）· Recall@IDoFT 57.9%（基线 100%）
-> · F1 0.733（基线 0.731）** —— 8 条漏检全是 mdutils 的顺序依赖（OD-Vic），
-> 固定顺序重跑的系统性盲区，即 `detect_order.py`（顺序变换）要解决的问题。
-> 逐行数据 `experiments/results.csv`，解读 `experiments/2026-10-12-c1-replay-mvp.md`；
-> 阶段 A 的复现成果（20 条 / 8 个项目，门槛 15 / 3）见 `experiments/ground_truth_phase_a.csv`。
+> 状态：**阶段 C1 · 双模式检测器（replay + 顺序变换）+ 合并口径指标**（2026-10-13）。
+> 换进程重跑 + 同进程 `--count` 双探头抓 NIO/NOD；顺序变换（多顺序扫描 + 前缀
+> 二分 + ddmin 最小 polluter 归因）抓 OD 家族。
+> **合并口径（19 条正样本 / 7 项目 + 14 条负样本）：精确率 100.0%（下界；
+> always-flaky 基线 57.6%）· Recall@IDoFT 100.0%（基线 100%）· F1 1.000
+> （基线 0.731）** —— 顺序模式独立 OD-Vic 召回 12/12，另发现 11 条 IDoFT
+> 未记录的 victim（无真值，只报数不进指标）。
+> 逐行数据 `experiments/results.csv`（replay）/ `results_order.csv`（顺序），
+> 解读 `experiments/2026-10-12-c1-replay-mvp.md` 与
+> `experiments/2026-10-13-c1-order.md`；归因证据 `experiments/raw/*__order.log`。
 
 ## 问题（为什么值得做）
 
@@ -29,6 +31,10 @@ uv run ruff format .   # 格式化
 # 跑评测（需要 Docker；19 条正样本 + N1 负样本，默认 runs=100）
 uv run python experiments/run_eval.py --runs 100 --negatives 2
 uv run python experiments/run_eval.py --projects mtik00/yamicache --runs 10  # 试点
+
+# 顺序变换评测（OD 家族；产出 results_order.csv + metrics_combined.json）
+uv run python experiments/run_order_eval.py --orders 4 --alone-runs 10
+uv run python experiments/run_order_eval.py --projects didix21/mdutils  # 试点
 ```
 
 ## 局限（先读这个再下结论）

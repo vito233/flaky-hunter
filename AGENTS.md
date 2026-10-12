@@ -76,6 +76,10 @@ uv run pre-commit run --all-files
 uv run python experiments/run_eval.py --runs 100 --negatives 2
 uv run python experiments/run_eval.py --projects mtik00/yamicache --runs 10  # 试点
 
+# C1 后半段：顺序变换评测（OD 家族；产出 results_order.csv + metrics_combined.json）
+uv run python experiments/run_order_eval.py --orders 4 --alone-runs 10
+uv run python experiments/run_order_eval.py --projects didix21/mdutils  # 试点
+
 # 评测缓存清理：源码/依赖住在 Docker 卷里（fh-src-*/fh-deps-*，见 runner.py），
 # 吃 WSL2 VM 的磁盘；要腾地方时删掉，下次会自动重建
 docker volume ls --format '{{.Name}}' | grep '^fh-' | xargs -r docker volume rm

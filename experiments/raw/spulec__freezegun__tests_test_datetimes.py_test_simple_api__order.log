@@ -1,0 +1,24 @@
+# 顺序依赖归因证据：tests/test_datetimes.py::test_simple_api
+# 项目 spulec/freezegun @ b46da782a7a0
+# 失败顺序（1/2 个有效顺序挂）：reverse
+# 最小 polluter 集合（2 条，ddmin 收敛，二分+ddmin 共消耗 38 次）：
+#   - tests/test_utils.py::test_should_not_skip_cpython
+#   - tests/test_datetimes.py::test_min_and_max
+# 验证 ① polluter 集合 + victim → 挂（可复现）
+# 验证 ② victim 单独跑 ×10 → 10过/0挂
+# 没跑完的顺序（未计入有效观测）：random-seed1729-1:XML_EMPTY、random-seed1729-2:XML_EMPTY
+# 判定：flaky（high 置信）
+# 依据：1/2 个顺序挂（reverse），单独跑 10 遍全过；最小 polluter 集合 2 条（ddmin 收敛），验证：polluter 集合 + victim 复现挂
+# 备注：另有 2 个顺序没跑完（random-seed1729-1:XML_EMPTY、random-seed1729-2:XML_EMPTY），未计入上述比例
+# ---- 复现序列 pytest 输出尾部（失败签名）----
+
+.FF                                                                      [100%]
+=================================== FAILURES ===================================
+/w/tests/test_datetimes.py:601: AssertionError: assert <class 'freezegun.api.FakeDatetime'> == FakeDatetime
+/w/tests/test_datetimes.py:65: assert 1326499200.0 != 1326499200.0
+----------------------- generated xml file: /tmp/seq.xml -----------------------
+=========================== short test summary info ============================
+FAILED tests/test_datetimes.py::test_min_and_max - AssertionError: assert <cl...
+FAILED tests/test_datetimes.py::test_simple_api - assert 1326499200.0 != 1326...
+2 failed, 1 passed in 0.23s
+

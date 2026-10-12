@@ -23,8 +23,8 @@ IDoFT Python 子集里 **OD 家族（OD / OD-Vic / OD-Brit）占 72.7%**。顺�
 | ID / UD | 0.3% | 两条都试 | 样本太少，无统计意义 |
 | Category 为空 | 2.4% | 两条都试 | 取能复现的那条 |
 
-- **顺序变换**：用 `pytest-random-order` / `pytest-randomly`，不自己实现排列逻辑
-- **二分最小化**：抄 iDFlakies 的流程（随机序 → 失败序 → 二分收敛最小 polluter 集合），别自己发明
+- **顺序变换**：实测（2026-10-13）pytest **按命令行节点 ID 顺序执行**（含同文件内多个节点），所以顺序直接用参数控制，不引入 `pytest-random-order` 插件；随机序用定种子 Python 洗牌（可复现）。**必须 `-p no:randomly` 禁掉 deps 里的 pytest-randomly** —— 它会在 `pytest_collection_modifyitems` 里随机重排，不禁则顺序不可控
+- **二分最小化**：抄 iDFlakies 的流程（随机序 → 失败序 → 二分收敛最小 polluter 集合），别自己发明。工程实现 = 前缀二分（收敛最短仍失败的前缀）+ 保序 ddmin（删块仍失败就接受），预算内未收敛明说"是上界不是最小"
 
 ## 重跑次数与置信度
 

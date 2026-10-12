@@ -1,0 +1,19 @@
+# 顺序依赖归因证据：tests/test_mdutils.py::TestMdUtils::test_new_header
+# 项目 didix21/mdutils @ 2ef859ecc1e4
+# 失败顺序（2/4 个有效顺序挂）：default、random-seed1729-1
+# 最小 polluter 集合（1 条，ddmin 收敛，二分+ddmin 共消耗 4 次）：
+#   - tests/test_fileutils/test_fileutils.py::TestMarkdownFile::test_append_end
+# 验证 ① polluter 集合 + victim → 挂（可复现）
+# 验证 ② victim 单独跑 ×10 → 10过/0挂
+# 判定：flaky（high 置信）
+# 依据：2/4 个顺序挂（default、random-seed1729-1），单独跑 10 遍全过；最小 polluter 集合 1 条（ddmin 收敛），验证：polluter 集合 + victim 复现挂
+# ---- 复现序列 pytest 输出尾部（失败签名）----
+
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+/w/mdutils/fileutils/fileutils.py:23: FileNotFoundError: [Errno 2] No such file or directory: 'Test_file.md'
+----------------------- generated xml file: /tmp/seq.xml -----------------------
+=========================== short test summary info ============================
+FAILED tests/test_mdutils.py::TestMdUtils::test_new_header - FileNotFoundErro...
+1 failed, 1 passed in 0.01s
+

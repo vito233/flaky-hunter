@@ -1,0 +1,54 @@
+{
+  "mode": "order",
+  "runs": 4,
+  "negatives_per_project": 2,
+  "confusion_matrix": {
+    "tp": 12,
+    "fp": 0,
+    "fn": 7,
+    "tn": 14
+  },
+  "precision": 1.0,
+  "recall_at_idoft": 0.631578947368421,
+  "f1": 0.7741935483870968,
+  "baselines": {
+    "always_flaky": {
+      "precision": 0.5757575757575758,
+      "recall": 1.0,
+      "f1": 0.7307692307692308
+    }
+  },
+  "by_category": {
+    "NIO": {
+      "n": 6,
+      "detected": 0,
+      "recall": 0.0
+    },
+    "OD": {
+      "n": 1,
+      "detected": 0,
+      "recall": 0.0
+    },
+    "OD-Vic": {
+      "n": 12,
+      "detected": 12,
+      "recall": 1.0
+    }
+  },
+  "excluded": {},
+  "n_rows": 33,
+  "alone_runs": 10,
+  "extra_victims_outside_eval_set": [
+    "mtik00/yamicache::tests/test_class.py::test_cached",
+    "mtik00/yamicache::tests/test_class.py::test_keyed_cached",
+    "spulec/freezegun::tests/test_class_import.py::test_can_ignore_email_module",
+    "spulec/freezegun::tests/test_class_import.py::test_fake_uses_real_when_ignored",
+    "spulec/freezegun::tests/test_datetimes.py::test_context_manager",
+    "spulec/freezegun::tests/test_datetimes.py::test_min_and_max",
+    "spulec/freezegun::tests/test_datetimes.py::test_nested_context_manager",
+    "spulec/freezegun::tests/test_datetimes.py::test_nested_context_manager_with_tz_offsets",
+    "spulec/freezegun::tests/test_datetimes.py::test_simple_api",
+    "spulec/freezegun::tests/test_datetimes.py::test_time_localtime",
+    "irmen/Pyro5::tests/test_daemon.py::TestDaemon::testHandshakeDenied"
+  ]
+}

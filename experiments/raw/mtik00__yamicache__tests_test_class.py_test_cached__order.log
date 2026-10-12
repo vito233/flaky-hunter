@@ -1,0 +1,27 @@
+# 顺序依赖归因证据：tests/test_class.py::test_cached
+# 项目 mtik00/yamicache @ 1109d08b18be
+# 失败顺序（1/4 个有效顺序挂）：random-seed1729-2
+# 最小 polluter 集合（1 条，ddmin 收敛，二分+ddmin 共消耗 6 次）：
+#   - tests/test_class.py::test_timeout
+# 验证 ① polluter 集合 + victim → 挂（可复现）
+# 验证 ② victim 单独跑 ×10 → 10过/0挂
+# 判定：flaky（high 置信）
+# 依据：1/4 个顺序挂（random-seed1729-2），单独跑 10 遍全过；最小 polluter 集合 1 条（ddmin 收敛），验证：polluter 集合 + victim 复现挂
+# ---- 复现序列 pytest 输出尾部（失败签名）----
+
+/w/tests/test_class.py:48: assert 2 == 1
+=============================== warnings summary ===============================
+yamicache/yamicache.py:77
+  /w/yamicache/yamicache.py:77: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working
+    class Cache(collections.MutableMapping):
+
+tests/test_class.py: 10 warnings
+  /w/yamicache/yamicache.py:237: DeprecationWarning: inspect.getargspec() is deprecated since Python 3.0, use inspect.signature() or inspect.getfullargspec()
+    fargs, _, _, defaults = inspect.getargspec(func)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+----------------------- generated xml file: /tmp/seq.xml -----------------------
+=========================== short test summary info ============================
+FAILED tests/test_class.py::test_cached - assert 2 == 1
+1 failed, 1 passed, 11 warnings in 4.06s
+

@@ -61,9 +61,18 @@ MovedToGradle / FixedOrder / Unmaintained / RepoRenamed`
   `count_runs` = 同进程 `--count` 探头（进程内状态污染型 NIO 的**阳性证据**，
   翻了才算，没翻不给 stable 背书 —— 修正 C）。yamicache 实例证明：
   只上换进程探头会系统性漏掉进程内 NIO。
+- **顺序模式**（2026-10-13 定，`detect_order.py`）：`order_analysis` =
+  顺序变换结果 —— `permutations_tried`（**有效**顺序数，没跑完的不算）、
+  `failing_orders`、`victim`、`polluters`（最小污染集合，ddmin 收敛结果）、
+  `minimized`（False = 撞预算上限，是上界不是最小）。顺序模式**不判 stable**：
+  几个顺序没翻只给阴性观察。判定必须三条件全过：某顺序挂 ∧ 单独跑全过 ∧
+  polluter 集合能复现。
 - **validator 兜底**：宣称 `stable` 需要 `runs.total >= 170` 或 `confidence.level=high`
   （0 次翻转 ≠ 稳定，规范 §2.2；count_runs 不计入）
 - `timestamp_utc` 必须带时区
+- **results.csv 增列**（2026-10-13）：`mode`（replay / order / replay+order）、
+  `polluters`（分号分隔）、`orders_tried`、`minimized`。合并口径
+  （`metrics.combine_modes`）：任一模式报警即报警，两个模式抓不同机制，是互补。
 
 ## 硬数字（可直接引用，全部核验过）
 
