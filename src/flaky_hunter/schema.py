@@ -64,7 +64,8 @@ class DetectionResult(BaseModel):
     test_name: str
     mode: Mode
     env: RunEnv
-    runs: RunStats | None = None  # order 模式无重跑语义时可为空
+    runs: RunStats | None = None  # 换进程重跑（stable 判定的正典，修正 C）
+    count_runs: RunStats | None = None  # 同进程 --count 探头（进程内 NIO 的阳性证据）
     verdict: Verdict
     order_analysis: OrderAnalysis | None = None
     confidence: Confidence
@@ -76,7 +77,8 @@ class DetectionResult(BaseModel):
     def stable_requires_evidence(self) -> DetectionResult:
         """铁律 3 / 规范 §2.2 的技术兜底：
 
-        宣称 stable 却没有 170 遍级别的重跑支撑、又拿不出 high 置信依据 —— 拒收。
+        宣称 stable 却没有 170 遍级别的**换进程**重跑支撑、又拿不出 high 置信依据
+        —— 拒收。同进程 count_runs 不算数（修正 C：--count 只能当阳性证据）。
         """
         if (
             self.verdict == "stable"

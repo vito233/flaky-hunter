@@ -1,11 +1,12 @@
 [project]
 name = "flaky-hunter"
 version = "0.1.0"
-description = "Flaky 测试检测与失败归因评测平台（基于 IDoFT Python 子集 1618 条 / 343 项目）"
+description = "Flaky 测试检测与失败归因评测平台（基于 IDoFT Python 子集 1618 条 / 332 个去重仓库）"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "pydantic>=2.9",
+    "tenacity>=9.0",
 ]
 
 [dependency-groups]
