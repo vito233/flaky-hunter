@@ -1,0 +1,14 @@
+# 提交前自动检查（规范 §0：能交给工具的绝不写人肉清单）。
+# 注意：本机 github.com:443 不通（阶段 A 实测），hook 首次运行拉取仓库需代理；
+#       `pre-commit install` 本身不联网，CI 环境不受此限制。
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.6
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.3
+    hooks:
+      - id: gitleaks

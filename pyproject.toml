@@ -1,0 +1,42 @@
+[project]
+name = "flaky-hunter"
+version = "0.1.0"
+description = "Flaky 测试检测与失败归因评测平台（基于 IDoFT Python 子集 1618 条 / 343 项目）"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.9",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "ruff>=0.9",
+    "pre-commit>=4.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.7,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "I",   # pycodestyle / pyflakes / import 排序
+    "N",             # pep8-naming（规范 §0：命名交给工具）
+    "B",             # bugbear（常见 bug）
+    "UP",            # pyupgrade
+    "SIM", "C4",     # 简化写法
+    "DTZ",           # datetime 必须带时区
+    "T20",           # 禁 print（用 logging / 返回值）
+    "RUF",           # ruff 专属
+]
+# 本项目注释/文档是中文，全角标点是正常用法，不是歧义字符
+ignore = ["RUF001", "RUF002", "RUF003"]
