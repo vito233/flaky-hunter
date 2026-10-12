@@ -80,3 +80,41 @@ def test_owner_repo_from_nested_url() -> None:
     assert _parse_project("https://github.com/owner/repo/tree/main") == "owner/repo"
     with pytest.raises(ValueError, match="owner/repo"):
         _parse_project("not-a-url")
+
+
+def test_real_header_with_parenthetical_accepted() -> None:
+    """真实 IDoFT 文件第三列表头带括号说明（2026-10-12 用 data/raw/py-data.csv 核验）。
+
+    文档里"已核验"的简化写法是错的 —— 不兼容这个，第一次真实解析就会炸。
+    """
+    real_header = (
+        "Project URL,SHA Detected,"
+        "Pytest Test Name (PathToFile::TestClass::TestMethod "
+        "or PathToFile::TestMethod),"
+        "Category,Status,PR Link,Notes"
+    )
+    text = real_header + "\n" + SAMPLE.split("\n", 1)[1]
+    records = parse_idoft(text)
+    assert len(records) == 5
+    assert records[0].test_name == "tests/test_noclass.py::test_main"
+
+
+def test_bom_stripped() -> None:
+    """真实文件可能带 UTF-8 BOM（phase-a 的 py-data.csv 就带）。"""
+    records = parse_idoft("\ufeff" + SAMPLE)
+    assert records[0].project == "mtik00/yamicache"
+
+
+def test_real_py_data_file_parses() -> None:
+    """对库里的真实原始数据跑一遍：1618 条，一条不丢。"""
+    from pathlib import Path
+
+    raw = Path(__file__).resolve().parents[1] / "data" / "raw" / "py-data.csv"
+    if not raw.exists():
+        pytest.skip("data/raw/py-data.csv 不在仓库里")
+    records = parse_idoft(raw.read_text(encoding="utf-8-sig"))
+    assert len(records) == 1618  # data-dictionary.md 的硬数字
+    projects = {r.project for r in records}
+    # 332 个去重仓库（343 是去重 URL 数 —— 有 11 个 URL 带 /issues、/tree
+    # 子路径，和裸 URL 指向同一个仓库。2026-10-12 实测纠正）
+    assert len(projects) == 332

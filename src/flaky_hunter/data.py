@@ -7,6 +7,12 @@
 - Category 允许 `;` 分隔多标签；评测时取**字母序第一个**为主标签（规范 §3.2）
 
 解析原则：**清洗必须留痕** —— 每处修正记进 `warnings`，不悄悄改数据。
+
+⚠️ 表头真相（2026-10-12 用真实文件核验，修正了文档里"已核验"的简化写法）：
+    IDoFT 实际表头第三列是
+    `Pytest Test Name (PathToFile::TestClass::TestMethod or PathToFile::TestMethod)`
+    —— 带一长串括号说明。解析时把括号部分砍掉再比对（见 parse_idoft），
+     docs/data-dictionary.md 已同步记下真实写法。
 """
 
 from __future__ import annotations
@@ -99,22 +105,30 @@ def parse_idoft(text: str) -> list[IdoftRecord]:
     """解析 IDoFT CSV 文本。
 
     表头不符直接抛 IdoftParseError（不猜格式 —— 猜错了下游所有数字作废）。
+    容忍两件事：文件头 BOM、第三列表头自带括号说明（见模块 docstring）。
     """
-    reader = csv.DictReader(io.StringIO(text))
-    if reader.fieldnames is None:
+    text = text.lstrip("\ufeff")
+    reader = csv.reader(io.StringIO(text))
+    rows = [r for r in reader if r and any(cell.strip() for cell in r)]
+    if not rows:
         raise IdoftParseError("空输入：没有表头")
-    if [h.strip() for h in reader.fieldnames] != EXPECTED_COLUMNS:
-        raise IdoftParseError(
-            f"表头不符：期望 {EXPECTED_COLUMNS}，实际 {reader.fieldnames}"
-        )
+
+    # 砍掉表头里括号内的说明文字再比对（真实表头第三列带说明）
+    norm_headers = [h.strip().split("(")[0].strip() for h in rows[0]]
+    if norm_headers != EXPECTED_COLUMNS:
+        raise IdoftParseError(f"表头不符：期望 {EXPECTED_COLUMNS}，实际 {rows[0]}")
 
     records: list[IdoftRecord] = []
-    for lineno, raw in enumerate(reader, start=2):  # 行号从 2 起（1 是表头）
-        row = {k.strip(): (v or "").strip() for k, v in raw.items() if k is not None}
-        extra = raw.get(None)
+    for lineno, raw in enumerate(rows[1:], start=2):  # 行号从 2 起（1 是表头）
         warnings: list[str] = []
-        if extra and any(extra):
+        if len(raw) > len(EXPECTED_COLUMNS):
             warnings.append(f"行 {lineno} 有超出 7 列的多余字段，已忽略")
+        if len(raw) < len(EXPECTED_COLUMNS):
+            warnings.append(f"行 {lineno} 不足 7 列，缺失字段按空值处理")
+        row = {
+            col: (raw[i].strip() if i < len(raw) else "")
+            for i, col in enumerate(EXPECTED_COLUMNS)
+        }
 
         # 已观测脏数据：Category 误落 Status 列（评审实算 3 条）—— 归位并留痕
         status = row["Status"]

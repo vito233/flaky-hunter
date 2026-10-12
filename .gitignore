@@ -8,3 +8,6 @@ wheels/
 
 # Virtual environments
 .venv
+
+# 本地缓存：源码包 / 解压源码 / 依赖（按项目缓存，不入库）
+.cache/

@@ -2,9 +2,15 @@
 
 ## IDoFT 7 列（已核验）
 
+⚠️ **真实表头第三列带括号说明**（2026-10-12 用 `data/raw/py-data.csv` 实测，
+本文档此前的简化写法是错的，已纠正）：
+
 ```
-Project URL, SHA Detected, Pytest Test Name, Category, Status, PR Link, Notes
+Project URL,SHA Detected,Pytest Test Name (PathToFile::TestClass::TestMethod or PathToFile::TestMethod),Category,Status,PR Link,Notes
 ```
+
+解析层把表头括号部分砍掉再比对（`flaky_hunter.data.parse_idoft`），
+另容忍文件头 BOM。
 
 | 列 | 说明 | 怎么用 |
 |---|---|---|
@@ -51,15 +57,20 @@ MovedToGradle / FixedOrder / Unmaintained / RepoRenamed`
 
 - `mode`: `replay | order | history`；`verdict`: `flaky | stable | inconclusive`
 - `status`（目标项目环境）只许 `OK / DEPS_FAIL / TEST_NOT_FOUND / SHA_NOT_FOUND / TIMEOUT`
+- **双探头**（2026-10-12 定）：`runs` = 换进程重跑（stable 判定的正典）；
+  `count_runs` = 同进程 `--count` 探头（进程内状态污染型 NIO 的**阳性证据**，
+  翻了才算，没翻不给 stable 背书 —— 修正 C）。yamicache 实例证明：
+  只上换进程探头会系统性漏掉进程内 NIO。
 - **validator 兜底**：宣称 `stable` 需要 `runs.total >= 170` 或 `confidence.level=high`
-  （0 次翻转 ≠ 稳定，规范 §2.2）
+  （0 次翻转 ≠ 稳定，规范 §2.2；count_runs 不计入）
 - `timestamp_utc` 必须带时区
 
 ## 硬数字（可直接引用，全部核验过）
 
 | 数字 | 含义 |
 |---|---|
-| 1618 / 343 | IDoFT Python 记录数 / 项目数 |
+| 1618 / 332 | IDoFT Python 记录数 / **去重仓库数**（2026-10-12 实测纠正） |
+| 343 | 去重 **URL** 数 —— 不是项目数！20 个 URL 带 `/issues/N`、`/tree/...` 子路径，其中 11 个与裸 URL 同仓库 |
 | 52.4% | 仓库已失效比例 |
 | 77 / 43 | 干净真值条数 / 项目数 |
 | **49.5%** | 多数类基线（全答 OD-Vic）—— 常量 `MAJORITY_CLASS_BASELINE` |
