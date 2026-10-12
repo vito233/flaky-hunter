@@ -120,12 +120,63 @@ def _count_out(xml: str, rc: str = "1") -> str:
     return f"@@COUNT_RC={rc}@@\n@@XML_BEGIN@@\n{xml}\n@@XML_END@@\n@@LOGTAIL@@\nsummary"
 
 
-def test_count_script_uses_junit_xml() -> None:
-    script = build_count_script("t::x", count=100, per_run_timeout=60)
-    assert "--count=100" in script
+def test_count_script_warms_up_before_counting() -> None:
+    """慢测试 ×100 会超过默认熔断被无声杀掉（实测 test_deco_timeout 2s/轮）——
+    先量体温，预算按实测放大，且不超过 count × per_run_timeout。"""
+    script = build_count_script("t::x", count=100, per_run_timeout=120)
     assert "--junit-xml=/tmp/count.xml" in script  # XML 精确计数，不玩正则
-    assert "@@XML_BEGIN@@" in script
+    assert "date +%s" in script  # 量体温
+    assert "@@WARM" in script
+    assert "budget" in script
+    assert "if [ $budget -gt" in script  # 上限保护
+    assert "timeout $budget python -m pytest" in script
     assert '"$TARGET"' in script
+
+
+def test_parse_count_reports_timeout_reason() -> None:
+    """rc=124 = 预算耗尽被 timeout 杀掉 —— 给明确理由，不伪装成"没翻转"。"""
+    out = (
+        "@@WARM secs=2 budget=460@@\n@@COUNT_RC=124@@\n@@XML_BEGIN@@\n\n"
+        "@@XML_END@@\n@@LOGTAIL@@\nkilled"
+    )
+    r = parse_count_output(out, "t::x", expected=100)
+    assert r.ok is False
+    assert r.reason == "COUNT_TIMEOUT"
+    assert r.warm_secs == 2.0
+    assert r.budget_secs == 460
+
+
+def test_parse_count_flags_shortfall() -> None:
+    """unittest.TestCase 风格：--count=100 实际只跑 1 次（parametrize 不适用）。
+    必须打 short 标，不许静默按"100 遍没翻"算。"""
+    xml = (
+        '<testsuites><testsuite name="pytest" tests="1" failures="0">'
+        '<testcase classname="tests.test_noclass" name="test_main[1-1]"/>'
+        "</testsuite></testsuites>"
+    )
+    out = (
+        "@@WARM secs=0 budget=160@@\n@@COUNT_RC=0@@\n@@XML_BEGIN@@\n"
+        + xml
+        + "\n@@XML_END@@\n@@LOGTAIL@@\n1 passed"
+    )
+    r = parse_count_output(out, "tests/test_noclass.py::test_main", expected=100)
+    assert r.ok is True
+    assert r.total == 1
+    assert r.short is True  # 1 < 100
+
+
+def test_parse_count_full_run_is_not_short() -> None:
+    xml = "".join(
+        f'<testcase classname="tests.test_noclass" name="test_main[{i}-3]"/>'
+        for i in (1, 2, 3)
+    )
+    out = (
+        "@@WARM secs=0 budget=120@@\n@@COUNT_RC=0@@\n@@XML_BEGIN@@\n"
+        f'<testsuites><testsuite name="pytest" tests="3" failures="0">{xml}'
+        "</testsuite></testsuites>\n@@XML_END@@\n@@LOGTAIL@@\n3 passed"
+    )
+    r = parse_count_output(out, "tests/test_noclass.py::test_main", expected=3)
+    assert r.short is False
 
 
 def test_parse_count_counts_target_iterations() -> None:

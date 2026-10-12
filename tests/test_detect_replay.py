@@ -214,6 +214,42 @@ def test_count_probe_failure_does_not_block_cross_verdict() -> None:
     assert "XML_PARSE_ERROR" in conf.note
 
 
+def test_count_probe_shortfall_is_visible_in_note() -> None:
+    """unittest 风格只跑 1/100 次 —— 备注必须写明，不许静默按"100 遍没翻"算。"""
+    verdict, _, conf = classify_counts(
+        Counter(["pass"] * 100),
+        CountOutcome(ok=True, passed=1, failed=0, total=1, expected=100),
+        runs=100,
+        per_run_timeout=120,
+    )
+    assert verdict == "stable"
+    assert "只完成 1/100 次" in conf.note
+    assert "unittest" in conf.note
+
+
+def test_count_probe_timeout_reason_surfaced() -> None:
+    verdict, _, conf = classify_counts(
+        Counter(["pass"] * 100),
+        CountOutcome(ok=False, reason="COUNT_TIMEOUT", expected=100),
+        runs=100,
+        per_run_timeout=120,
+    )
+    assert verdict == "stable"
+    assert "COUNT_TIMEOUT" in conf.note
+
+
+def test_short_count_probe_flip_still_counts() -> None:
+    """只跑了 2/100 次就观察到翻 → 仍是阳性证据（备注说明次数不足）。"""
+    verdict, _, conf = classify_counts(
+        Counter(["pass"] * 100),
+        CountOutcome(ok=True, passed=1, failed=1, total=2, expected=100),
+        runs=100,
+        per_run_timeout=120,
+    )
+    assert verdict == "flaky"
+    assert "只完成 2/100 次" in conf.note
+
+
 # ---------------------------------------------------------------- 接线（FakeRunner）
 
 

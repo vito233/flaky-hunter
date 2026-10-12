@@ -162,9 +162,22 @@ def build_count_script(target: str, count: int, per_run_timeout: int) -> str:
     为什么留 JUnit XML：100 遍重跑的文本输出又长又乱，XML 里每次迭代是一条
     testcase，失败带 <failure> 子节点 —— 精确数"目标测试自己"挂了几次，
     不用去 FAILED 行里玩正则匹配（pingouin 假阳性教训）。
+
+    为什么先"量体温"：慢测试（yamicache 的 test_deco_timeout 每轮约 2s）
+    ×100 轮 = 200s，会超过默认单轮熔断被无声杀掉 —— XML 根本没写出来，
+    表现成"无产出"。先跑一次计时，预算 = 实测 × 次数 × 2 倍余量，
+    且不超过 count × per_run_timeout（保证每轮都有熔断上限）。
     """
     return (
-        f'timeout {per_run_timeout} python -m pytest "$TARGET" --count={count} '
+        "unset PYTHONHASHSEED\n"
+        f't0=$(date +%s); timeout {per_run_timeout} python -m pytest "$TARGET" '
+        f"-q --no-header --no-cov -p no:cacheprovider > /tmp/warm.log 2>&1; "
+        "t1=$(date +%s)\n"
+        f"budget=$(( (t1 - t0 + 2) * {count} * 2 + 60 ))\n"
+        f"if [ $budget -gt $(( {per_run_timeout} * {count} )) ]; then "
+        f"budget=$(( {per_run_timeout} * {count} )); fi\n"
+        'echo "@@WARM secs=$((t1-t0)) budget=$budget@@"\n'
+        f'timeout $budget python -m pytest "$TARGET" --count={count} '
         f"-q --no-header --no-cov -p no:cacheprovider "
         f"--junit-xml=/tmp/count.xml > /tmp/count.log 2>&1\n"
         "echo @@COUNT_RC=$?@@\n"
@@ -214,6 +227,9 @@ class CountOutcome:
 
     这个探头**只能作阳性证据**（修正 C）：观察到翻转 → 确实是 flaky；
     没观察到 → 不能证明稳定（PYTHONHASHSEED / 全局 random 不重置）。
+
+    short=True：实际迭代数 < 请求数。已知成因：unittest.TestCase 风格的
+    测试不适用 pytest-repeat 的参数化重复（mdutils 28 条全是，实测只跑 1 次）。
     """
 
     ok: bool
@@ -222,6 +238,14 @@ class CountOutcome:
     total: int = 0
     reason: str = ""
     log_tail: str = ""
+    expected: int = 0
+    warm_secs: float = 0.0
+    budget_secs: int = 0
+
+    @property
+    def short(self) -> bool:
+        """请求了 N 次却只跑了更少 —— 阳性证据不足，且"没翻"的结论要打折看。"""
+        return self.ok and self.expected > 0 and self.total < self.expected
 
 
 _RUN_RE = re.compile(r"^@@RUN (\d+) (\d+)@@$")
@@ -287,17 +311,50 @@ def _count_target_matches(classname: str, name: str, target: str) -> bool:
     )
 
 
-def parse_count_output(output: str, target: str) -> CountOutcome:
-    """解析 --count 探头输出（XML 精确计数，日志尾部留证）。"""
+def parse_count_output(output: str, target: str, expected: int = 0) -> CountOutcome:
+    """解析 --count 探头输出（XML 精确计数，日志尾部留证）。
+
+    expected = 请求的迭代数；实际跑出来的少于它 → short=True（打标，不静默）。
+    rc=124（预算耗尽）→ COUNT_TIMEOUT，不许伪装成"没翻转"。
+    """
     if "@@XML_BEGIN@@" not in output or "@@XML_END@@" not in output:
-        return CountOutcome(ok=False, reason="NO_XML", log_tail=_tail(output))
+        return CountOutcome(
+            ok=False, reason="NO_XML", expected=expected, log_tail=_tail(output)
+        )
     xml = output.split("@@XML_BEGIN@@", 1)[1].split("@@XML_END@@", 1)[0]
     log_tail = output.split("@@LOGTAIL@@", 1)[1] if "@@LOGTAIL@@" in output else ""
+
+    warm_secs = 0.0
+    budget_secs = 0
+    m = re.search(r"@@WARM secs=(\d+) budget=(\d+)@@", output)
+    if m:
+        warm_secs = float(m.group(1))
+        budget_secs = int(m.group(2))
+
+    # 预算耗尽被 timeout 杀掉 → XML 要么没有要么不完整，给明确理由
+    rc_m = re.search(r"@@COUNT_RC=(\d+)@@", output)
+    if rc_m and rc_m.group(1) == "124":
+        return CountOutcome(
+            ok=False,
+            reason="COUNT_TIMEOUT",
+            expected=expected,
+            log_tail=log_tail,
+            warm_secs=warm_secs,
+            budget_secs=budget_secs,
+        )
+
     try:
         # strip：echo 标记行会在 XML 前留一个换行，而 <?xml 声明必须在实体开头
         root = ElementTree.fromstring(xml.strip())
     except ElementTree.ParseError:
-        return CountOutcome(ok=False, reason="XML_PARSE_ERROR", log_tail=log_tail)
+        return CountOutcome(
+            ok=False,
+            reason="XML_PARSE_ERROR",
+            expected=expected,
+            log_tail=log_tail,
+            warm_secs=warm_secs,
+            budget_secs=budget_secs,
+        )
 
     passed = failed = 0
     for tc in root.iter("testcase"):
@@ -311,9 +368,23 @@ def parse_count_output(output: str, target: str) -> CountOutcome:
             passed += 1
     if passed + failed == 0:
         # XML 里没有目标测试的任何迭代 → 没收集到（路径/测试名不对）
-        return CountOutcome(ok=False, reason="NO_MATCH", log_tail=log_tail)
+        return CountOutcome(
+            ok=False,
+            reason="NO_MATCH",
+            expected=expected,
+            log_tail=log_tail,
+            warm_secs=warm_secs,
+            budget_secs=budget_secs,
+        )
     return CountOutcome(
-        ok=True, passed=passed, failed=failed, total=passed + failed, log_tail=log_tail
+        ok=True,
+        passed=passed,
+        failed=failed,
+        total=passed + failed,
+        expected=expected,
+        log_tail=log_tail,
+        warm_secs=warm_secs,
+        budget_secs=budget_secs,
     )
 
 
@@ -622,7 +693,9 @@ class DockerRunner:
         修正 C：只能当阳性证据（翻 → flaky），没翻不能证明稳定。
         """
         script = build_count_script(target, count, per_run_timeout)
-        total_timeout = timeout or (per_run_timeout * 3 + 60)  # 同进程很快，给 3 倍余量
+        # 容器级超时要罩住"量体温 + count 轮"：最坏每轮跑满 per_run_timeout，
+        # 所以给 per_run_timeout × (count+1) + 300；实测常见情况几分钟完事
+        total_timeout = timeout or (per_run_timeout * (count + 1) + 300)
         rc, out = self._run_container(
             script,
             src_dir,
@@ -631,7 +704,11 @@ class DockerRunner:
             timeout=total_timeout,
         )
         if rc == "TIMEOUT":
-            return CountOutcome(ok=False, reason=f"TIMEOUT({total_timeout}s)")
+            return CountOutcome(
+                ok=False, reason=f"TIMEOUT({total_timeout}s)", expected=count
+            )
         if rc == "NOBIN":
-            return CountOutcome(ok=False, reason=f"DOCKER_MISSING: {out}")
-        return parse_count_output(out, target)
+            return CountOutcome(
+                ok=False, reason=f"DOCKER_MISSING: {out}", expected=count
+            )
+        return parse_count_output(out, target, expected=count)

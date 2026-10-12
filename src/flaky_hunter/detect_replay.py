@@ -136,16 +136,24 @@ def classify_counts(
             (True, False): "跨进程非确定性（哈希序/随机数相关）",
             (False, True): "进程内状态污染（换进程重跑看不到，只有同进程循环现形）",
         }[(cross_flip, count_flip)]
-        note = ""
+        notes: list[str] = []
         if notfounds or timeouts:
-            note = f"另有 {notfounds} 次未收集到、{timeouts} 次超时（不计入 total）"
+            notes.append(
+                f"另有 {notfounds} 次未收集到、{timeouts} 次超时（不计入 total）"
+            )
+        if count_flip and count_outcome is not None and count_outcome.short:
+            notes.append(
+                f"同进程探头只完成 {count_outcome.total}/"
+                f"{count_outcome.expected} 次（unittest.TestCase 风格"
+                f"不适用 pytest-repeat 的参数化重复）"
+            )
         return (
             "flaky",
             "OK",
             Confidence(
                 level=level,
                 basis="；".join(basis_parts) + f" —— {mechanism}",
-                note=note,
+                note="；".join(notes),
             ),
         )
 
@@ -210,17 +218,34 @@ def classify_counts(
 
 
 def _count_probe_note(count_outcome: CountOutcome | None) -> str:
-    """同进程探头的备注：没翻要明说"只跑了同进程，不能替稳定背书"。"""
+    """同进程探头的备注：没翻要明说"只跑了同进程，不能替稳定背书"；
+    次数不足（unittest 风格）或探头本身失败，都必须可见。"""
     if count_outcome is None:
         return ""
     if not count_outcome.ok:
         return f"同进程 --count 探头未产出有效结果（{count_outcome.reason}）"
-    if count_outcome.failed == 0:
+    if count_outcome.failed > 0:
+        extra = ""
+        if count_outcome.short:
+            extra = (
+                f"；注意只完成 {count_outcome.total}/{count_outcome.expected} 次"
+                f"（unittest.TestCase 风格不适用 pytest-repeat 的参数化重复）"
+            )
         return (
-            f"同进程 --count ×{count_outcome.total} 也未翻转"
-            f"（该探头只能作阳性证据，不作为稳定背书 —— 修正 C）"
+            f"同进程 --count：{count_outcome.passed} 过 / "
+            f"{count_outcome.failed} 挂{extra}"
         )
-    return f"同进程 --count：{count_outcome.passed} 过 / {count_outcome.failed} 挂"
+    if count_outcome.short:
+        return (
+            f"同进程 --count 只完成 {count_outcome.total}/"
+            f"{count_outcome.expected} 次（unittest.TestCase 风格不适用 "
+            f"pytest-repeat 的参数化重复）—— 阳性证据不足，"
+            f"'没翻'的结论以换进程探头为准"
+        )
+    return (
+        f"同进程 --count ×{count_outcome.total} 也未翻转"
+        f"（该探头只能作阳性证据，不作为稳定背书 —— 修正 C）"
+    )
 
 
 def detect_replay(
