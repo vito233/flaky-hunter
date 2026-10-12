@@ -353,6 +353,14 @@ class DockerRunner:
 
     image 默认走国内 mirror（见 mirror_image 的实测注释）——
     直连官方镜像源会被代理破坏。
+
+    use_volumes=True 时，源码/依赖不进 9p 挂载，而是拷进 Docker 卷
+    （住在 WSL2 VM 里）。实测（2026-10-12，yamicache 单测试 5 连跑）：
+        9p 挂载   62s（12.5s/次，其中 ~10s 是 I/O 等待）
+        :cached   67s（没用）
+        Docker 卷 27s（5.4s/次，剩下的是 CPU —— 且这是在 3 个评测容器
+                   抢核的前提下测的）
+    100 遍重跑差出来就是 20 分钟级别，所以默认走卷。
     """
 
     image: str = mirror_image(IMAGE_PY39)
@@ -360,8 +368,79 @@ class DockerRunner:
     docker_bin: str = "docker"
     run_network: str = "none"
     tools: tuple[str, ...] = DEFAULT_TOOLS
+    use_volumes: bool = True
 
     # ---- 底层：跑一个容器 ----
+
+    def _volume_name(self, kind: str, key: str) -> str:
+        """卷名：`fh-{kind}-{key}`。key 一般是目录名（仓库名-SHA 前缀），唯一。"""
+        safe = re.sub(r"[^0-9a-zA-Z_.-]+", "-", key).strip("-")
+        return f"fh-{kind}-{safe}"
+
+    def _volume_exists(self, name: str) -> bool:
+        try:
+            p = subprocess.run(
+                [self.docker_bin, "volume", "inspect", name],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                timeout=60,
+            )
+        except (subprocess.SubprocessError, OSError):
+            return False
+        return p.returncode == 0
+
+    def _ensure_volume(self, name: str, host_dir: Path) -> bool:
+        """卷不存在就从 host_dir 种子化（一次性 cp）。
+
+        失败返回 False，让调用方退回 9p 挂载（保底能跑，不炸）。
+        """
+        if self._volume_exists(name):
+            return True
+        try:
+            subprocess.run(
+                [self.docker_bin, "volume", "create", name],
+                timeout=60,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+            )
+            win = str(host_dir).replace("\\", "/")
+            subprocess.run(
+                [
+                    self.docker_bin,
+                    "run",
+                    "--rm",
+                    "--network",
+                    "none",
+                    "-v",
+                    f"{win}:/from",
+                    "-v",
+                    f"{name}:/to",
+                    self.image,
+                    "bash",
+                    "-c",
+                    "cp -r /from/. /to/ 2>/dev/null || true",
+                ],
+                timeout=600,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+            )
+        except (subprocess.SubprocessError, OSError):
+            return False
+        return True
+
+    def _mount_args(self, kind: str, host_dir: Path, target: str) -> list[str]:
+        """生成 -v 参数对：卷（默认，快）或 9p 挂载（兜底）。"""
+        win = str(host_dir).replace("\\", "/")
+        if not self.use_volumes:
+            return ["-v", f"{win}:{target}"]
+        vol = self._volume_name(kind, host_dir.name)
+        if not self._ensure_volume(vol, host_dir):
+            return ["-v", f"{win}:{target}"]  # 卷方案失败 → 退回挂载，保底能跑
+        return ["-v", f"{vol}:{target}"]
 
     def _run_container(
         self,
@@ -378,19 +457,20 @@ class DockerRunner:
         报错整体挪到输出末尾，诊断信息错位（PyGraph 的 INSTALL_FAIL 因此
         打不出报错细节）。
         """
-        win_src = str(src_dir).replace("\\", "/")
         cmd = [
             self.docker_bin,
             "run",
             "--rm",
-            "-v",
-            f"{win_src}:/w",
+            *self._mount_args("src", src_dir, "/w"),
             "-w",
             "/w",
         ]
         if deps_dir is not None:
-            win_deps = str(deps_dir).replace("\\", "/")
-            cmd += ["-v", f"{win_deps}:/deps", "-e", "PYTHONPATH=/deps"]
+            cmd += [
+                *self._mount_args("deps", deps_dir, "/deps"),
+                "-e",
+                "PYTHONPATH=/deps",
+            ]
         cmd += ["-e", "PYTHONDONTWRITEBYTECODE=1"]
         if env:
             cmd += [item for kv in env.items() for item in ("-e", f"{kv[0]}={kv[1]}")]
@@ -421,16 +501,40 @@ class DockerRunner:
     # ---- 第一段：装依赖（带网） ----
 
     def setup(self, src_dir: Path, deps_dir: Path, timeout: int = 900) -> SetupOutcome:
-        """把测试工具链 + 项目依赖装进 deps_dir（pip --target）。
+        """把测试工具链 + 项目依赖装好（pip --target=/deps）。
 
         带网跑（pip 要联网）；装什么、怎么解析见 build_setup_script /
-        parse_setup_output。deps_dir 已存在且非空 → 直接复用不重装。
+        parse_setup_output。缓存判定（三种情况都不重装）：
+          1. 同目录旁的 `.done` 标记在 → 上一轮装好了
+          2. 宿主机 deps_dir 非空（比如旧版挂载模式装的）→ 搬进卷，跳过安装
+        卷模式下依赖装进 Docker 卷（VM 内 I/O）；标记写在宿主机，跨轮次有效。
         """
-        if deps_dir.is_dir() and any(deps_dir.iterdir()):
+        deps_dir.mkdir(parents=True, exist_ok=True)
+        marker = deps_dir.parent / f"{deps_dir.name}.done"
+        if marker.exists():
             return SetupOutcome(
                 tools_ok=True, project_installed=True, log_tail="(缓存复用，跳过安装)"
             )
-        deps_dir.mkdir(parents=True, exist_ok=True)
+        host_has_deps = any(deps_dir.iterdir())
+        if host_has_deps:
+            # 宿主机已有装好的依赖 → 搬进卷即用，不重装
+            if not self.use_volumes:
+                marker.write_text("host cache", encoding="utf-8")
+                return SetupOutcome(
+                    tools_ok=True,
+                    project_installed=True,
+                    log_tail="(宿主机缓存复用，跳过安装)",
+                )
+            vol = self._volume_name("deps", deps_dir.name)
+            if self._ensure_volume(vol, deps_dir):
+                marker.write_text("seeded from host", encoding="utf-8")
+                return SetupOutcome(
+                    tools_ok=True,
+                    project_installed=True,
+                    log_tail="(依赖从宿主机缓存搬入卷，跳过安装)",
+                )
+            # 卷失败 → 继续走下面的安装流程（挂载模式兜底）
+
         rc, out = self._run_container(
             build_setup_script(self.tools),
             src_dir,
@@ -450,7 +554,10 @@ class DockerRunner:
                 project_installed=False,
                 log_tail=f"找不到 docker: {out}",
             )
-        return parse_setup_output(out)
+        outcome = parse_setup_output(out)
+        if outcome.tools_ok:
+            marker.write_text("installed", encoding="utf-8")
+        return outcome
 
     # ---- 第二段：跑测试（断网） ----
 

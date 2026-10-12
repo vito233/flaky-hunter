@@ -268,7 +268,9 @@ def _fake_run(rc: int = 0, out: str = ""):
     return fake, calls
 
 
-def test_run_container_mounts_and_network(runner: DockerRunner, monkeypatch) -> None:
+def test_run_container_mounts_and_network(monkeypatch) -> None:
+    """use_volumes=False 时走 9p 挂载（兜底路径）。"""
+    runner = DockerRunner(use_volumes=False)
     fake, calls = _fake_run(0, "@@RUN 1 0@@")
     monkeypatch.setattr(subprocess, "run", fake)
 
@@ -286,25 +288,102 @@ def test_run_container_mounts_and_network(runner: DockerRunner, monkeypatch) -> 
     assert cmd[-1].endswith("echo hi 2>&1")  # stderr 必须并入 stdout
 
 
-def test_setup_uses_bridge_network(runner: DockerRunner, monkeypatch) -> None:
+def test_run_container_uses_volumes_by_default(monkeypatch) -> None:
+    """默认走 Docker 卷：9p 挂载 I/O 慢 12.5s/次，卷内 5.4s/次（实测）。"""
+    runner = DockerRunner(use_volumes=True)
+    monkeypatch.setattr(runner, "_volume_exists", lambda name: True)
+    fake, calls = _fake_run(0, "")
+    monkeypatch.setattr(subprocess, "run", fake)
+
+    runner._run_container("echo hi", Path("/c/src"), deps_dir=Path("/c/deps"))
+
+    cmd = calls[-1]  # 最后一次调用才是 docker run（前面是 volume inspect）
+    assert "fh-src-src:/w" in cmd
+    assert "fh-deps-deps:/deps" in cmd
+    assert not any(m == "/c/src:/w" for m in cmd)  # 不走 9p 挂载
+
+
+def test_volume_failure_falls_back_to_mount(monkeypatch) -> None:
+    """卷方案失败 → 退回 9p 挂载，保底能跑（不炸）。"""
+
+    def fake(cmd, **kwargs):
+        joined = " ".join(cmd)
+        if "volume inspect" in joined:
+            rc = 1  # 卷不存在
+        elif "volume create" in joined:
+            rc = 0
+        elif "cp -r" in joined:
+            rc = 1  # 种子化失败
+        else:
+            rc = 0
+        # 假 subprocess 也要实现 check=True 语义，否则测不出降级路径
+        if kwargs.get("check") and rc != 0:
+            raise subprocess.CalledProcessError(rc, cmd)
+        return subprocess.CompletedProcess(cmd, rc, stdout="")
+
+    calls: list[list[str]] = []
+
+    def recording(cmd, **kwargs):
+        calls.append(cmd)
+        return fake(cmd, **kwargs)
+
+    monkeypatch.setattr(subprocess, "run", recording)
+    runner = DockerRunner(use_volumes=True)
+    runner._run_container("echo hi", Path("/c/src"))
+    assert "/c/src:/w" in calls[-1]  # 种子化失败 → 退回挂载
+
+
+def test_volume_name_sanitizes_key() -> None:
+    assert DockerRunner()._volume_name("src", "yamicache-1109d08b18be") == (
+        "fh-src-yamicache-1109d08b18be"
+    )
+    # 非法字符折叠成单个 -，首尾的 - 削掉
+    assert (
+        DockerRunner()._volume_name("deps", "weird key+sha!") == "fh-deps-weird-key-sha"
+    )
+
+
+def test_setup_uses_bridge_network(runner: DockerRunner, monkeypatch, tmp_path) -> None:
     fake, calls = _fake_run(0, "@@TOOLS_RC=0@@")
     monkeypatch.setattr(subprocess, "run", fake)
-    out = runner.setup(Path("/c/src"), Path("/c/deps"))
+    # 必须用 tmp_path：Path("/c/deps") 在 Windows 上是 C:\c\deps，
+    # marker 会落到真实文件系统，污染后续轮次（2026-10-12 实测踩到）
+    src = tmp_path / "src"
+    deps = tmp_path / "deps" / "key"
+    src.mkdir()
+    out = runner.setup(src, deps)
     assert out.tools_ok is True
-    assert calls[0][calls[0].index("--network") + 1] == "bridge"  # 装依赖要联网
+    run_cmd = calls[-1]  # docker run（前面可能有 volume inspect）
+    assert run_cmd[run_cmd.index("--network") + 1] == "bridge"  # 装依赖要联网
 
 
 def test_setup_cache_hit_skips_docker(
     runner: DockerRunner, monkeypatch, tmp_path
 ) -> None:
-    deps = tmp_path / "deps"
-    deps.mkdir()
-    (deps / "marker").write_text("", encoding="utf-8")
+    deps = tmp_path / "deps" / "key"
+    deps.mkdir(parents=True)
+    (tmp_path / "deps" / "key.done").write_text("installed", encoding="utf-8")
     fake, calls = _fake_run()
     monkeypatch.setattr(subprocess, "run", fake)
     out = runner.setup(tmp_path / "src", deps)
     assert out.tools_ok is True
-    assert calls == []  # 缓存命中，一次 docker 都不起
+    assert calls == []  # 标记在，一次 docker 都不起
+
+
+def test_setup_seeds_host_deps_into_volume(
+    runner: DockerRunner, monkeypatch, tmp_path
+) -> None:
+    """宿主机已有依赖（旧版挂载模式装的）→ 搬进卷，不重装。"""
+    deps = tmp_path / "deps" / "key"
+    deps.mkdir(parents=True)
+    (deps / "pytest").write_text("", encoding="utf-8")
+    fake, calls = _fake_run()
+    monkeypatch.setattr(subprocess, "run", fake)
+    out = runner.setup(tmp_path / "src", deps)
+    assert out.tools_ok is True
+    assert "搬入卷" in out.log_tail
+    assert not any("pip install" in " ".join(c) for c in calls)  # 没跑安装
+    assert (tmp_path / "deps" / "key.done").exists()  # 标记落盘
 
 
 def test_replay_reports_docker_error_on_timeout(
