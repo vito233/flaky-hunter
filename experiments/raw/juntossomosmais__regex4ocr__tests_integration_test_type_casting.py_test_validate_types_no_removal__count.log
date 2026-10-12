@@ -1,0 +1,23 @@
+# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）
+# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 1s，预算 660s）
+# 首个 FAILED 行：
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[80-100]
+
+# 日志尾部：
+
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[3-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[12-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[47-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[53-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[49-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[88-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[38-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[22-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[77-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[92-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[25-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[70-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[95-100]
+FAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[54-100]
+99 failed, 1 passed, 1 warning in 0.49s
+

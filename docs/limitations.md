@@ -20,3 +20,15 @@
 6. **"清单记录 ≠ 到处可复现"** —— 同一记录换个环境可能是"稳定挂"或"怎么跑都过"。
    阶段 A 已积累 16+3 条证据（thundra / PyGraph / clashogram / isbnlib / wellpathpy）。
    这直接影响：以"复现成功"为前提构造的评测集，天然偏向"环境友好"的 flaky 机制。
+
+## 阶段 C1 补充（2026-10-12 评测实测）
+
+7. **同进程 `--count` 探头对 unittest.TestCase 家族无效** —— pytest-repeat 的重复
+   靠 parametrize 实现，而 pytest 对 unittest 用例不走这条路（mdutils 28 条全是
+   unittest 风格，实测 `--count=100` 只跑 1 次）。已在 runner 层打 shortfall 标
+   （实际迭代数 < 请求数即可见），但这类家族的进程内 NIO 本轮覆盖不到。
+   后续可用 `unittest` 自带的进程内 loop 补（`python -c` 里 N 次
+   `TextTestRunner().run()`）。
+8. **小样本 + 抖动测试 = 测量方差**：第一轮评测出现过 1 条 2% 时序抖动的负样本
+   被判 flaky（98过/2挂），修复探头后重跑未复现。100% 精确率是测量值不是承诺，
+   "抖动低于多少算稳定"本身是需要显式声明的阈值决策。

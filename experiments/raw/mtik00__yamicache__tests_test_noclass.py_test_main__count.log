@@ -1,0 +1,23 @@
+# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）
+# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 1s，预算 660s）
+# 首个 FAILED 行：
+FAILED tests/test_noclass.py::test_main[26-100] - assert 1 == 0
+
+# 日志尾部：
+
+FAILED tests/test_noclass.py::test_main[3-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[45-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[10-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[84-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[61-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[34-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[83-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[66-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[33-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[29-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[99-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[58-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[42-100] - assert 1 == 0
+FAILED tests/test_noclass.py::test_main[17-100] - assert 1 == 0
+99 failed, 1 passed, 7 warnings in 0.23s
+

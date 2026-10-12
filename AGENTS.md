@@ -71,6 +71,14 @@ uv run pytest                     # 跑测试（含基线断言）
 uv run pytest -q tests/test_no_leakage.py
 uv run ruff check --fix . && uv run ruff format .
 uv run pre-commit run --all-files
+
+# C1 评测（要 Docker；正样本 19 条 + N1 负样本，runs=100）
+uv run python experiments/run_eval.py --runs 100 --negatives 2
+uv run python experiments/run_eval.py --projects mtik00/yamicache --runs 10  # 试点
+
+# 评测缓存清理：源码/依赖住在 Docker 卷里（fh-src-*/fh-deps-*，见 runner.py），
+# 吃 WSL2 VM 的磁盘；要腾地方时删掉，下次会自动重建
+docker volume ls --format '{{.Name}}' | grep '^fh-' | xargs -r docker volume rm
 ```
 
 ---
