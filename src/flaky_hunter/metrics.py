@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import csv
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 
 # 判定口径：verdict == "flaky" 即"报警"。stable / inconclusive 都算未报警 ——
@@ -24,7 +24,12 @@ FLAGGED_VERDICT = "flaky"
 
 @dataclass
 class Prediction:
-    """一条 (项目, SHA, 测试) 的评测行。excluded=True 的不进指标计算。"""
+    """一条 (项目, SHA, 测试) 的评测行。excluded=True 的不进指标计算。
+
+    mode 记录这行是哪个模式产出的（replay / order / replay+order 合并行）。
+    polluters / orders_tried / minimized 只有 order 模式填充 ——
+    归因证据（谁污染的）随行落盘，results.csv 一票可查。
+    """
 
     project: str
     sha: str
@@ -44,6 +49,10 @@ class Prediction:
     excluded: bool = False
     exclude_reason: str = ""
     note: str = ""
+    mode: str = "replay"
+    polluters: str = ""  # 分号分隔的最小 polluter 集合（order 模式）
+    orders_tried: int = 0  # 顺序变换跑过的顺序数（order 模式）
+    minimized: bool = False  # ddmin 是否在预算内收敛（order 模式）
 
 
 def confusion(preds: list[Prediction]) -> dict[str, int]:
@@ -115,14 +124,23 @@ def format_report(
     *,
     runs: int,
     negatives_per_project: int,
+    header: str | None = None,
 ) -> list[str]:
-    """生成人读报告行（硬格式：每个数字带基线，见 AGENTS.md）。"""
+    """生成人读报告行（硬格式：每个数字带基线，见 AGENTS.md）。
+
+    header 可传自定义标题行（顺序模式 / 合并口径用）；默认是 replay 模式
+    第一版口径，保持既有测试与历史输出不变。
+    """
     cm = confusion(preds)
     precision, recall, f1 = prf(cm)
     base_p, base_r, base_f1 = always_flaky_baseline(cm)
+    if header is None:
+        header = (
+            "replay 模式 · 第一版指标"
+            f"（换进程重跑 ×{runs}；负样本 N1 ×{negatives_per_project}/项目）"
+        )
     lines = [
-        "replay 模式 · 第一版指标"
-        f"（换进程重跑 ×{runs}；负样本 N1 ×{negatives_per_project}/项目）",
+        header,
         f"精确率 {_pct(precision)}（下界；always-flaky 基线 {_pct(base_p)}）",
         f"Recall@IDoFT {_pct(recall)}（always-flaky 基线 {_pct(base_r)}）",
         f"F1 {f1:.3f}（always-flaky 基线 {base_f1:.3f}）",
@@ -150,13 +168,14 @@ def summarize(
     *,
     runs: int,
     negatives_per_project: int,
+    mode: str = "replay",
 ) -> dict:
     """整份摘要（写 metrics.json 用；results.csv 是逐行事实，这是聚合视图）。"""
     cm = confusion(preds)
     precision, recall, f1 = prf(cm)
     base_p, base_r, base_f1 = always_flaky_baseline(cm)
     return {
-        "mode": "replay",
+        "mode": mode,
         "runs": runs,
         "negatives_per_project": negatives_per_project,
         "confusion_matrix": cm,
@@ -198,12 +217,58 @@ def write_results_csv(preds: list[Prediction], path: Path) -> None:
         "excluded",
         "exclude_reason",
         "note",
+        "mode",
+        "polluters",
+        "orders_tried",
+        "minimized",
     ]
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
         w.writeheader()
         for p in preds:
             w.writerow(asdict(p))
+
+
+def combine_modes(
+    replay_preds: list[Prediction], order_preds: list[Prediction]
+) -> list[Prediction]:
+    """合并 replay 与 order 两个模式的判定：**任一模式报警即报警**。
+
+    两个模式抓的是不同机制（replay：固定顺序重跑翻转；order：套装顺序
+    依赖），是互补不是竞争 —— 合并口径才是检测器的完整召回。
+    按键 (project, sha, test_name) 对齐；只在一侧出现的行原样保留
+    （调用方应保证两边覆盖同一评测集，否则合并矩阵含未知行）。
+    合并行以 replay 行为底（它的 runs/count 数字是主证据），
+    order 的 polluters/orders_tried/minimized 挂上去。
+    """
+    order_by_key = {(p.project, p.sha, p.test_name): p for p in order_preds}
+    merged: list[Prediction] = []
+    for rp in replay_preds:
+        key = (rp.project, rp.sha, rp.test_name)
+        op = order_by_key.get(key)
+        if op is None:
+            merged.append(rp)
+            continue
+        y_pred = max(rp.y_pred, op.y_pred)
+        verdict = "flaky" if y_pred else (rp.verdict or op.verdict)
+        note = " | ".join(part for part in (rp.note, op.note) if part)
+        merged.append(
+            replace(
+                rp,
+                y_pred=y_pred,
+                verdict=verdict,
+                note=note,
+                mode="replay+order",
+                polluters=op.polluters,
+                orders_tried=op.orders_tried,
+                minimized=op.minimized,
+            )
+        )
+    replay_keys = {(q.project, q.sha, q.test_name) for q in replay_preds}
+    merged.extend(
+        p for p in order_preds if (p.project, p.sha, p.test_name) not in replay_keys
+    )
+    return merged
 
 
 def write_metrics_json(summary: dict, path: Path) -> None:

@@ -99,6 +99,12 @@ def image_for_year(year: int) -> str:
     return IMAGE_PY310
 
 
+def image_python(image: str) -> str:
+    """`python:3.9-slim` → `3.9`（镜像标签版本，记进 env 备查）。"""
+    tag = image.rsplit(":", 1)[-1] if ":" in image else ""
+    return tag.split("-")[0] if tag else "unknown"
+
+
 # ---------------------------------------------------------------- 脚本生成（纯函数）
 
 
@@ -149,10 +155,15 @@ def build_replay_script(target: str, runs: int, per_run_timeout: int) -> str:
 
 
 def build_collect_script(testdir: str) -> str:
-    """收集测试目录下全部测试节点 ID（负样本构造用）。"""
+    """收集测试目录下全部测试节点 ID（负样本构造 / 顺序扫描用）。
+
+    `-p no:randomly` 是顺序扫描的地基（2026-10-13 实测）：deps 里装了
+    pytest-randomly，它会在 pytest_collection_modifyitems 里**随机重排**
+    —— 不禁掉，收集顺序和后面的运行顺序都是随机的，"默认顺序"不可复现。
+    """
     return (
         f'python -m pytest "{testdir}" --collect-only -q --no-header --no-cov '
-        f"-p no:cacheprovider 2>&1"
+        f"-p no:randomly -p no:cacheprovider 2>&1"
     )
 
 
@@ -188,6 +199,46 @@ def build_count_script(target: str, count: int, per_run_timeout: int) -> str:
         "grep -m1 '^FAILED' /tmp/count.log 2>/dev/null\n"
         "echo @@LOGTAIL@@\n"
         "tail -15 /tmp/count.log\n"
+    )
+
+
+def _sh_quote(text: str) -> str:
+    """单引号包裹 + 内置单引号转义（`'` → `'\\''`）。
+
+    测试节点 ID 里可能有空格（参数化 ID）、`::`、`[]`；单引号是 bash 里
+    唯一不需要猜语义的写法。走环境变量也行，但顺序变换一次要传几十上百个
+    节点 ID，命令行更直接。
+    """
+    return "'" + text.replace("'", "'\\''") + "'"
+
+
+def build_sequence_script(tests: list[str], per_run_timeout: int) -> str:
+    """生成"按给定顺序跑一组测试节点 ID"的容器内脚本（单进程）。
+
+    顺序可控的三个前提（2026-10-13 实测钉住）：
+      1. `-p no:randomly` —— deps 里装着 pytest-randomly，它会在
+         pytest_collection_modifyitems 里随机重排；不禁掉，我们传什么
+         顺序都被搅乱，顺序变换无从谈起
+      2. pytest **按命令行顺序执行**节点 ID（含同文件内的多个节点）——
+         实测验证过，不需要自己写收集插件
+      3. JUnit XML 逐测试计数 —— 不玩 FAILED 行正则（pingouin 教训）
+
+    整体熔断：`timeout $budget` 杀掉整个 pytest → XML 没写出来 →
+    调用方看到 SEQ_TIMEOUT，不许把"没跑完"当成"都过了"。
+    """
+    args = " ".join(_sh_quote(t) for t in tests)
+    budget = per_run_timeout * len(tests) + 60
+    return (
+        f"budget={budget}\n"
+        f"timeout $budget python -m pytest {args} -q --no-header --no-cov "
+        f"-p no:randomly -p no:cacheprovider --junit-xml=/tmp/seq.xml "
+        f"--tb=line > /tmp/seq.log 2>&1\n"
+        'echo "@@SEQ_RC=$?@@"\n'
+        "echo @@XML_BEGIN@@\n"
+        "cat /tmp/seq.xml 2>/dev/null\n"
+        "echo @@XML_END@@\n"
+        "echo @@LOGTAIL@@\n"
+        "tail -15 /tmp/seq.log\n"
     )
 
 
@@ -249,6 +300,26 @@ class CountOutcome:
     def short(self) -> bool:
         """请求了 N 次却只跑了更少 —— 阳性证据不足，且"没翻"的结论要打折看。"""
         return self.ok and self.expected > 0 and self.total < self.expected
+
+
+@dataclass
+class SequenceOutcome:
+    """按序跑一组测试的结果。
+
+    outcomes 的键是**调用方传进去的节点 ID**（不是 XML 里的名字）——
+    逐个映射回去，调用方不用猜哪个失败对应哪个输入。
+    值域：pass / fail / error / skipped / missing。
+        missing = XML 里没有这个节点的任何记录（没收集到，路径或名字不对）
+    ok=False 时看 reason：SEQ_TIMEOUT（整体熔断）/ NO_XML /
+    XML_PARSE_ERROR / EMPTY_SEQUENCE。
+    """
+
+    ok: bool
+    outcomes: dict[str, str] = field(default_factory=dict)
+    log_tail: str = ""
+    docker_error: str = ""  # 非空 = 容器本身没跑起来（我们的问题）
+    reason: str = ""
+    rc: int = -1
 
 
 _RUN_RE = re.compile(r"^@@RUN (\d+) (\d+)@@$")
@@ -422,6 +493,85 @@ def parse_collect_output(output: str) -> CollectOutcome:
             reason = "NO_RESULT"
         return CollectOutcome(ok=False, tests=[], reason=reason)
     return CollectOutcome(ok=True, tests=tests)
+
+
+# ---------------------------------------------------------------- 顺序执行解析
+
+# 严重度排序：同一节点的多次迭代（参数化）取最坏的一次
+_SEVERITY = {"pass": 0, "skipped": 1, "fail": 2, "error": 3}
+
+
+def _node_matches(classname: str, name: str, node: str) -> bool:
+    """JUnit XML 的一条 testcase 是不是输入节点 `node` 的某次执行。
+
+    XML 只有 classname（点号路径，类方法还带类名）和 name，没有 file 属性
+    （2026-10-13 实测 pytest 8.4.2）—— 按输入节点反推期望的 classname/name
+    再比对。规则（与 parse_count_output 的 _count_target_matches 同族）：
+      - name 精确相等，或 name 是参数化展开（`test_p[1-2]` vs 节点 `test_p`）
+      - classname 等于 `模块点号路径[.类名]`，或以其结尾（容忍前缀差异）
+      - 文件级节点（无 `::`）：该文件下任何测试都算它
+    """
+    path, _, rest = node.partition("::")
+    module = path.replace("/", ".").removesuffix(".py")
+    if not rest:
+        return classname == module or classname.startswith(f"{module}.")
+    parts = rest.split("::")
+    want_name = parts[-1]
+    want_cls = ".".join(parts[:-1])
+    expected_cls = f"{module}.{want_cls}" if want_cls else module
+    if name != want_name and not name.startswith(f"{want_name}["):
+        return False
+    return classname == expected_cls or classname.endswith(f".{expected_cls}")
+
+
+def parse_sequence_output(output: str, tests: list[str]) -> SequenceOutcome:
+    """解析顺序执行输出：XML testcase → 输入节点 ID 的判定映射。
+
+    rc=124（整体熔断）→ SEQ_TIMEOUT，给明确理由，不伪装成"都过了"。
+    """
+    rc_m = re.search(r"@@SEQ_RC=(\d+)@@", output)
+    rc = int(rc_m.group(1)) if rc_m else -1
+    if "@@XML_BEGIN@@" not in output or "@@XML_END@@" not in output:
+        reason = "SEQ_TIMEOUT" if rc == _RC_TIMEOUT else "NO_XML"
+        return SequenceOutcome(ok=False, reason=reason, rc=rc, log_tail=_tail(output))
+    xml = output.split("@@XML_BEGIN@@", 1)[1].split("@@XML_END@@", 1)[0]
+    after_xml = output.split("@@XML_END@@", 1)[1]
+    log_tail = (
+        after_xml.split("@@LOGTAIL@@", 1)[1] if "@@LOGTAIL@@" in after_xml else ""
+    )
+    if not xml.strip():
+        # 标记在、XML 空 —— pytest 自己崩了（实测 freezegun：假时间泄漏进
+        # pytest 计时器，INTERNALERROR，XML 没写出来）。给独立理由，
+        # 不和"XML 损坏"混为一谈，log_tail 里有完整堆栈可查。
+        return SequenceOutcome(ok=False, reason="XML_EMPTY", rc=rc, log_tail=log_tail)
+    try:
+        # strip：echo 标记行会在 XML 前留一个换行，声明必须在实体开头
+        root = ElementTree.fromstring(xml.strip())
+    except ElementTree.ParseError:
+        return SequenceOutcome(
+            ok=False, reason="XML_PARSE_ERROR", rc=rc, log_tail=log_tail
+        )
+
+    verdicts: dict[str, str] = {}
+    for tc in root.iter("testcase"):
+        classname = tc.get("classname", "")
+        name = tc.get("name", "")
+        node = next((n for n in tests if _node_matches(classname, name, n)), None)
+        if node is None:
+            continue  # 不在输入列表里的测试（理论上不会有），忽略
+        verdict = "pass"
+        if tc.find("failure") is not None:
+            verdict = "fail"
+        elif tc.find("error") is not None:
+            verdict = "error"
+        elif tc.find("skipped") is not None:
+            verdict = "skipped"
+        current = verdicts.get(node)
+        # 同节点的多次迭代（参数化）取最坏的一次；pass 也要能落账
+        if current is None or _SEVERITY[verdict] > _SEVERITY[current]:
+            verdicts[node] = verdict
+    outcomes = {t: verdicts.get(t, "missing") for t in tests}
+    return SequenceOutcome(ok=True, outcomes=outcomes, rc=rc, log_tail=log_tail)
 
 
 def _tail(text: str, n: int = 15) -> str:
@@ -726,3 +876,38 @@ class DockerRunner:
                 ok=False, reason=f"DOCKER_MISSING: {out}", expected=count
             )
         return parse_count_output(out, target, expected=count)
+
+    def run_sequence(
+        self,
+        src_dir: Path,
+        deps_dir: Path,
+        tests: list[str],
+        per_run_timeout: int = 120,
+        timeout: int | None = None,
+    ) -> SequenceOutcome:
+        """按 tests 的顺序跑这一组（单进程，--network none）。
+
+        顺序变换 / ddmin 的工作马：每次调用 = 一次"这个顺序下谁挂了"的
+        观测。per_run_timeout 在这里是**每组**的预算（容器内 timeout =
+        per_run_timeout × len(tests) + 60）；整个序列被熔断 → 没有 XML →
+        ok=False（SEQ_TIMEOUT）—— 调用方不许把"没跑完"当成"都过了"。
+        """
+        if not tests:
+            return SequenceOutcome(ok=False, reason="EMPTY_SEQUENCE")
+        script = build_sequence_script(tests, per_run_timeout)
+        budget = per_run_timeout * len(tests) + 60
+        total_timeout = timeout or (budget + 300)
+        rc, out = self._run_container(
+            script, src_dir, deps_dir=deps_dir, timeout=total_timeout
+        )
+        if rc == "TIMEOUT":
+            return SequenceOutcome(
+                ok=False,
+                reason=f"TIMEOUT({total_timeout}s)",
+                docker_error=f"整轮超时（{total_timeout}s）",
+            )
+        if rc == "NOBIN":
+            return SequenceOutcome(
+                ok=False, reason="DOCKER_MISSING", docker_error=f"找不到 docker: {out}"
+            )
+        return parse_sequence_output(out, tests)

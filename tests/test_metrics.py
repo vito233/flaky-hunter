@@ -6,6 +6,7 @@ from flaky_hunter.metrics import (
     Prediction,
     always_flaky_baseline,
     by_category,
+    combine_modes,
     confusion,
     format_report,
     prf,
@@ -116,3 +117,70 @@ def test_summarize_json_serializable(tmp_path) -> None:
     assert loaded["mode"] == "replay"
     assert loaded["confusion_matrix"]["tp"] == 1
     assert "always_flaky" in loaded["baselines"]
+
+
+def test_summarize_mode_is_configurable() -> None:
+    summary = summarize([_pred()], runs=4, negatives_per_project=2, mode="order")
+    assert summary["mode"] == "order"
+
+
+# ---------------------------------------------------------------- 合并口径
+
+
+def _order_pred(**kw) -> Prediction:
+    base = {
+        "project": "a/b",
+        "sha": "a" * 40,
+        "test_name": "t::x",
+        "category": "NIO",
+        "y_true": 1,
+        "y_pred": 0,
+        "verdict": "inconclusive",
+        "status": "OK",
+        "runs_total": 10,
+        "passed": 10,
+        "failed": 0,
+        "fail_rate": 0.0,
+        "mode": "order",
+        "polluters": "P",
+        "orders_tried": 4,
+        "minimized": True,
+    }
+    base.update(kw)
+    return Prediction(**base)
+
+
+def test_combine_either_mode_alarms() -> None:
+    """合并口径铁律：任一模式报警即报警（两个模式抓不同机制，是互补）。"""
+    replay = [
+        _pred(test_name="t::x", y_pred=0, verdict="stable"),  # replay 没抓到
+        _pred(test_name="t::y", y_pred=1, verdict="flaky"),  # replay 抓到
+    ]
+    order = [
+        _order_pred(test_name="t::x", y_pred=1, verdict="flaky"),  # order 抓到
+        _order_pred(test_name="t::y", y_pred=0),  # order 没抓到
+    ]
+    merged = combine_modes(replay, order)
+    assert {(p.test_name, p.y_pred) for p in merged} == {("t::x", 1), ("t::y", 1)}
+    x = next(p for p in merged if p.test_name == "t::x")
+    assert x.mode == "replay+order"
+    assert x.verdict == "flaky"
+    assert x.polluters == "P"  # order 的归因挂上去
+    assert x.orders_tried == 4
+
+
+def test_combine_keeps_rows_missing_on_one_side() -> None:
+    replay = [_pred(test_name="t::x")]
+    order = [_order_pred(test_name="t::z")]
+    merged = combine_modes(replay, order)
+    assert {p.test_name for p in merged} == {"t::x", "t::z"}
+    assert next(p for p in merged if p.test_name == "t::x").mode == "replay"
+
+
+def test_combine_no_alarm_keeps_replay_verdict() -> None:
+    replay = [_pred(test_name="t::x", y_pred=0, verdict="stable")]
+    order = [_order_pred(test_name="t::x", y_pred=0, verdict="inconclusive")]
+    merged = combine_modes(replay, order)
+    assert len(merged) == 1
+    assert merged[0].verdict == "stable"  # 以 replay 行为底
+    assert merged[0].y_pred == 0

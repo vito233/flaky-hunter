@@ -35,7 +35,12 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from flaky_hunter.baselines import RERUN_FOR_95_CONFIDENCE
-from flaky_hunter.runner import CountOutcome, DockerRunner, ReplayOutcome
+from flaky_hunter.runner import (
+    CountOutcome,
+    DockerRunner,
+    ReplayOutcome,
+    image_python,
+)
 from flaky_hunter.schema import Confidence, DetectionResult, RunEnv, RunStats
 
 # 默认重跑次数：**100，不是 20** —— 20 遍置信度不足（规范 §2.2：
@@ -48,12 +53,6 @@ MIN_RUNS_FOR_STABLE = 60
 
 # 翻转判定的置信度分档：少于这么多次观察到的翻转只算低置信
 FLIP_MEDIUM_CONFIDENCE_RUNS = 20
-
-
-def _image_python(image: str) -> str:
-    """`python:3.9-slim` → `3.9`（镜像标签版本，记进 env 备查）。"""
-    tag = image.rsplit(":", 1)[-1] if ":" in image else ""
-    return tag.split("-")[0] if tag else "unknown"
 
 
 def classify_counts(
@@ -332,7 +331,7 @@ def detect_replay(
         sha=sha,
         test_name=test_name,
         mode="replay",
-        env=RunEnv(image=runner.image, python=_image_python(runner.image)),
+        env=RunEnv(image=runner.image, python=image_python(runner.image)),
         runs=RunStats(
             total=counts["pass"] + counts["fail"],
             passed=counts["pass"],

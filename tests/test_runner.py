@@ -18,12 +18,15 @@ from flaky_hunter.runner import (
     build_collect_script,
     build_count_script,
     build_replay_script,
+    build_sequence_script,
     build_setup_script,
     image_for_year,
+    image_python,
     mirror_image,
     parse_collect_output,
     parse_count_output,
     parse_replay_output,
+    parse_sequence_output,
     parse_setup_output,
 )
 
@@ -101,6 +104,168 @@ def test_replay_script_resets_hash_seed_and_guards_single_run() -> None:
 
 def test_collect_script_uses_collect_only() -> None:
     assert "--collect-only" in build_collect_script("tests")
+
+
+def test_collect_script_disables_randomly() -> None:
+    """`-p no:randomly` 是顺序扫描的地基：不禁掉收集顺序都是随机的，
+    "默认顺序"不可复现（2026-10-13 实测 deps 里装着 pytest-randomly）。"""
+    assert "-p no:randomly" in build_collect_script("tests")
+
+
+def test_image_python_extracts_tag_version() -> None:
+    assert image_python("python:3.9-slim") == "3.9"
+    assert image_python("docker.m.daocloud.io/library/python:3.10-slim") == "3.10"
+    assert image_python("weird") == "unknown"
+
+
+# ---------------------------------------------------------------- 顺序执行
+
+
+def test_sequence_script_disables_randomly_and_keeps_order() -> None:
+    """顺序变换的两个前提：禁 pytest-randomly + 节点 ID 按序进命令行。"""
+    script = build_sequence_script(
+        ["tests/test_a.py::test_b", "tests/test_a.py::test_a"], 99
+    )
+    assert "-p no:randomly" in script
+    assert (
+        "python -m pytest 'tests/test_a.py::test_b' 'tests/test_a.py::test_a'" in script
+    )
+    assert "--junit-xml=/tmp/seq.xml" in script
+    assert "@@SEQ_RC=" in script
+
+
+def test_sequence_script_quotes_node_ids() -> None:
+    """参数化 ID 可能带空格/引号 —— 单引号包裹 + 转义，不给 shell 留解释空间。"""
+    script = build_sequence_script(["tests/t.py::test_p[a b]"], 60)
+    assert "'tests/t.py::test_p[a b]'" in script
+    script = build_sequence_script(["tests/t.py::test_'x'"], 60)
+    assert "'tests/t.py::test_'\\''x'\\'''" in script
+
+
+def test_sequence_script_budget_scales_with_test_count() -> None:
+    """每组预算 = per_run_timeout × 条数 + 60；容器内 timeout 先熔断。"""
+    script = build_sequence_script(["a", "b", "c"], 100)
+    assert "budget=360" in script
+    assert "timeout $budget python -m pytest" in script
+
+
+def test_parse_sequence_maps_xml_back_to_input_nodes() -> None:
+    # classname 用真实格式（2026-10-13 容器实测）：完整模块点号路径 + 类名，
+    # 目录名与文件名重复时也全带上
+    # （tests.test_fileutils.test_fileutils.TestMarkdownFile）
+    xml = (
+        '<testsuites><testsuite name="pytest" tests="3" failures="1">'
+        '<testcase classname="tests.test_mdutils.TestMdUtils" name="test_new_header">'
+        "<failure>boom</failure></testcase>"
+        '<testcase classname="tests.test_fileutils.test_fileutils.TestMarkdownFile" '
+        'name="test_read"/>'
+        '<testcase classname="tests.test_tools.test_table_of_contents.'
+        'TestTableOfContents" name="test_table_of_contents_with_dot"/>'
+        "</testsuite></testsuites>"
+    )
+    out = f"@@SEQ_RC=1@@\n@@XML_BEGIN@@\n{xml}\n@@XML_END@@\n@@LOGTAIL@@\n1 failed"
+    r = parse_sequence_output(
+        out,
+        [
+            "tests/test_mdutils.py::TestMdUtils::test_new_header",
+            "tests/test_fileutils/test_fileutils.py::TestMarkdownFile::test_read",
+            "tests/test_tools/test_table_of_contents.py"
+            "::TestTableOfContents::test_table_of_contents_with_dot",
+        ],
+    )
+    assert r.ok is True
+    assert r.outcomes == {
+        "tests/test_mdutils.py::TestMdUtils::test_new_header": "fail",
+        "tests/test_fileutils/test_fileutils.py::TestMarkdownFile::test_read": "pass",
+        "tests/test_tools/test_table_of_contents.py"
+        "::TestTableOfContents::test_table_of_contents_with_dot": "pass",
+    }
+
+
+def test_parse_sequence_marks_uncollected_nodes_missing() -> None:
+    """输入了但 XML 里没有 → missing（路径/名字不对），不许默认当 pass。"""
+    xml = (
+        '<testsuites><testsuite name="pytest" tests="1">'
+        '<testcase classname="tests.test_a" name="test_one"/></testsuite></testsuites>'
+    )
+    out = f"@@SEQ_RC=0@@\n@@XML_BEGIN@@\n{xml}\n@@XML_END@@\n@@LOGTAIL@@\nok"
+    r = parse_sequence_output(
+        out, ["tests/test_a.py::test_one", "tests/test_b.py::test_x"]
+    )
+    assert r.outcomes["tests/test_a.py::test_one"] == "pass"
+    assert r.outcomes["tests/test_b.py::test_x"] == "missing"
+
+
+def test_parse_sequence_matches_file_level_node() -> None:
+    """文件级节点（无 ::）：该文件下任何测试都算它。"""
+    xml = (
+        '<testsuites><testsuite name="pytest" tests="1">'
+        '<testcase classname="tests.test_a.TestC" name="test_one">'
+        "<failure>x</failure></testcase></testsuite></testsuites>"
+    )
+    out = f"@@SEQ_RC=1@@\n@@XML_BEGIN@@\n{xml}\n@@XML_END@@\n@@LOGTAIL@@\nbad"
+    r = parse_sequence_output(out, ["tests/test_a.py"])
+    assert r.outcomes["tests/test_a.py"] == "fail"
+    # 另一个文件的测试不算它
+    r2 = parse_sequence_output(out, ["tests/test_other.py"])
+    assert r2.outcomes["tests/test_other.py"] == "missing"
+
+
+def test_parse_sequence_parametrized_names_match() -> None:
+    """参数化展开：XML name 带 [后缀]，输入节点不带也能匹配（取最坏）。"""
+    xml = (
+        '<testsuites><testsuite name="pytest" tests="2" failures="1">'
+        '<testcase classname="tests.test_p" name="test_x[1-2]"/>'
+        '<testcase classname="tests.test_p" name="test_x[2-2]">'
+        "<failure>x</failure></testcase></testsuite></testsuites>"
+    )
+    out = f"@@SEQ_RC=1@@\n@@XML_BEGIN@@\n{xml}\n@@XML_END@@\n@@LOGTAIL@@\n1 failed"
+    r = parse_sequence_output(out, ["tests/test_p.py::test_x"])
+    assert r.outcomes["tests/test_p.py::test_x"] == "fail"
+
+
+def test_parse_sequence_timeout_is_not_silent() -> None:
+    """rc=124 = 整体熔断，XML 没写出来 —— 给明确理由，不伪装成"都过了"。"""
+    out = "@@SEQ_RC=124@@\nkilled"
+    r = parse_sequence_output(out, ["a::b"])
+    assert r.ok is False
+    assert r.reason == "SEQ_TIMEOUT"
+
+
+def test_parse_sequence_no_xml_is_not_ok() -> None:
+    r = parse_sequence_output("random noise", ["a::b"])
+    assert r.ok is False
+    assert r.reason == "NO_XML"
+
+
+def test_parse_sequence_empty_xml_region_is_xml_empty() -> None:
+    """标记在、XML 空 —— pytest 自己崩了（实测 freezegun：假时间泄漏进
+    pytest 计时器，INTERNALERROR，XML 没写出来）。给独立理由，log_tail
+    里应有完整堆栈，不许和"XML 损坏"混为一谈。"""
+    out = (
+        "@@SEQ_RC=1@@\n@@XML_BEGIN@@\n@@XML_END@@\n@@LOGTAIL@@\n"
+        "INTERNALERROR> ... IndexError: list index out of range"
+    )
+    r = parse_sequence_output(out, ["a::b"])
+    assert r.ok is False
+    assert r.reason == "XML_EMPTY"
+    assert "INTERNALERROR" in r.log_tail
+
+
+def test_run_sequence_empty_list_is_not_ok(runner: DockerRunner) -> None:
+    out = runner.run_sequence(Path("/c/src"), Path("/c/deps"), [])
+    assert out.ok is False
+    assert out.reason == "EMPTY_SEQUENCE"
+
+
+def test_run_sequence_reports_docker_error(runner: DockerRunner, monkeypatch) -> None:
+    def fake(cmd, **kwargs):
+        raise subprocess.TimeoutExpired(cmd, 1)
+
+    monkeypatch.setattr(subprocess, "run", fake)
+    out = runner.run_sequence(Path("/c/src"), Path("/c/deps"), ["a::b"])
+    assert out.ok is False
+    assert "整轮超时" in out.docker_error
 
 
 # ---------------------------------------------------------------- 同进程 --count 探头
