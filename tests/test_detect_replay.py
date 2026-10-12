@@ -367,6 +367,38 @@ def test_detect_writes_first_failure_log(tmp_path: Path) -> None:
     saved = Path(result.raw_log_path)
     assert saved.exists()
     assert "assert 1 == 2" in saved.read_text(encoding="utf-8")
+    assert saved.name.endswith("__cross.log")
+
+
+def test_detect_saves_count_probe_evidence_when_cross_clean(tmp_path: Path) -> None:
+    """11 条 TP 全是 count 探头抓的（cross 100/0）—— 它的失败签名必须留证。"""
+    outcome = ReplayOutcome(sequence=["pass"] * 100)
+    count = CountOutcome(
+        ok=True,
+        passed=1,
+        failed=99,
+        total=100,
+        expected=100,
+        first_fail_line="FAILED tests/test_noclass.py::test_main - assert 1 == 0",
+        log_tail="99 failed, 1 passed in 8.13s",
+    )
+    runner = FakeRunner(outcome, count)
+    result = detect_replay(
+        project="mtik00/yamicache",
+        sha="a" * 40,
+        test_name="tests/test_noclass.py::test_main",
+        runner=runner,
+        src_dir=Path("/c/src"),
+        deps_dir=Path("/c/deps"),
+        runs=100,
+        raw_log_dir=tmp_path,
+    )
+    assert result.verdict == "flaky"
+    saved = Path(result.raw_log_path)
+    assert saved.name.endswith("__count.log")
+    text = saved.read_text(encoding="utf-8")
+    assert "assert 1 == 0" in text  # 失败签名（面试最硬的那行）
+    assert "1 过 / 99 挂" in text
 
 
 def test_detect_no_log_when_all_pass(tmp_path: Path) -> None:

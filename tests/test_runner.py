@@ -165,6 +165,30 @@ def test_parse_count_flags_shortfall() -> None:
     assert r.short is True  # 1 < 100
 
 
+def test_parse_count_extracts_first_fail_line() -> None:
+    """首个 FAILED 行是翻转证据的核心（如 yamicache 的 assert 1 == 0）。"""
+    xml = (
+        '<testsuites><testsuite name="pytest" tests="2" failures="1">'
+        '<testcase classname="tests.test_noclass" name="test_main[1-2]"/>'
+        '<testcase classname="tests.test_noclass" name="test_main[2-2]">'
+        '<failure message="assert 1 == 0">boom</failure></testcase>'
+        "</testsuite></testsuites>"
+    )
+    out = (
+        "@@WARM secs=0 budget=120@@\n@@COUNT_RC=1@@\n@@XML_BEGIN@@\n"
+        + xml
+        + "\n@@XML_END@@\n@@FIRSTFAIL@@\n"
+        "FAILED tests/test_noclass.py::test_main[2-2] - assert 1 == 0\n"
+        "@@LOGTAIL@@\n1 failed, 1 passed"
+    )
+    r = parse_count_output(out, "tests/test_noclass.py::test_main", expected=2)
+    assert r.ok is True
+    assert (r.passed, r.failed) == (1, 1)
+    assert r.first_fail_line == (
+        "FAILED tests/test_noclass.py::test_main[2-2] - assert 1 == 0"
+    )
+
+
 def test_parse_count_full_run_is_not_short() -> None:
     xml = "".join(
         f'<testcase classname="tests.test_noclass" name="test_main[{i}-3]"/>'

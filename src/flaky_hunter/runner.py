@@ -184,6 +184,8 @@ def build_count_script(target: str, count: int, per_run_timeout: int) -> str:
         "echo @@XML_BEGIN@@\n"
         "cat /tmp/count.xml 2>/dev/null\n"
         "echo @@XML_END@@\n"
+        "echo @@FIRSTFAIL@@\n"
+        "grep -m1 '^FAILED' /tmp/count.log 2>/dev/null\n"
         "echo @@LOGTAIL@@\n"
         "tail -15 /tmp/count.log\n"
     )
@@ -241,6 +243,7 @@ class CountOutcome:
     expected: int = 0
     warm_secs: float = 0.0
     budget_secs: int = 0
+    first_fail_line: str = ""  # 首个 FAILED 行（翻转证据，落盘留痕用）
 
     @property
     def short(self) -> bool:
@@ -322,7 +325,14 @@ def parse_count_output(output: str, target: str, expected: int = 0) -> CountOutc
             ok=False, reason="NO_XML", expected=expected, log_tail=_tail(output)
         )
     xml = output.split("@@XML_BEGIN@@", 1)[1].split("@@XML_END@@", 1)[0]
-    log_tail = output.split("@@LOGTAIL@@", 1)[1] if "@@LOGTAIL@@" in output else ""
+    after_xml = output.split("@@XML_END@@", 1)[1]
+    first_fail_line = ""
+    if "@@FIRSTFAIL@@" in after_xml:
+        segment = after_xml.split("@@FIRSTFAIL@@", 1)[1]
+        first_fail_line = segment.split("@@LOGTAIL@@", 1)[0].strip()
+    log_tail = (
+        after_xml.split("@@LOGTAIL@@", 1)[1] if "@@LOGTAIL@@" in after_xml else ""
+    )
 
     warm_secs = 0.0
     budget_secs = 0
@@ -341,6 +351,7 @@ def parse_count_output(output: str, target: str, expected: int = 0) -> CountOutc
             log_tail=log_tail,
             warm_secs=warm_secs,
             budget_secs=budget_secs,
+            first_fail_line=first_fail_line,
         )
 
     try:
@@ -354,6 +365,7 @@ def parse_count_output(output: str, target: str, expected: int = 0) -> CountOutc
             log_tail=log_tail,
             warm_secs=warm_secs,
             budget_secs=budget_secs,
+            first_fail_line=first_fail_line,
         )
 
     passed = failed = 0
@@ -375,6 +387,7 @@ def parse_count_output(output: str, target: str, expected: int = 0) -> CountOutc
             log_tail=log_tail,
             warm_secs=warm_secs,
             budget_secs=budget_secs,
+            first_fail_line=first_fail_line,
         )
     return CountOutcome(
         ok=True,
@@ -385,6 +398,7 @@ def parse_count_output(output: str, target: str, expected: int = 0) -> CountOutc
         log_tail=log_tail,
         warm_secs=warm_secs,
         budget_secs=budget_secs,
+        first_fail_line=first_fail_line,
     )
 
 

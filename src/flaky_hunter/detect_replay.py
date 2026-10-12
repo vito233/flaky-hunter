@@ -291,12 +291,36 @@ def detect_replay(
         )
 
     raw_log_path = ""
-    if raw_log_dir is not None and outcome.first_failure_log:
-        raw_log_dir.mkdir(parents=True, exist_ok=True)
-        safe = re.sub(r"[^0w.-]+", "_", f"{project.replace('/', '__')}__{test_name}")
-        path = raw_log_dir / f"{safe}.log"
-        path.write_text(outcome.first_failure_log, encoding="utf-8")
-        raw_log_path = str(path)
+    if raw_log_dir is not None:
+        # 证据优先级：换进程探头的完整失败日志 > 同进程探头的翻转证据
+        # （11 条 TP 全是同进程探头抓的，它的失败签名是双探头设计最硬的证据，
+        #   比如 yamicache 的 `1 = len(Cache object)`）
+        evidence = outcome.first_failure_log
+        evidence_kind = "cross"
+        if (
+            not evidence
+            and count_outcome is not None
+            and count_outcome.ok
+            and count_outcome.failed > 0
+        ):
+            c = count_outcome
+            evidence = (
+                "# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n"
+                f"# {c.passed} 过 / {c.failed} 挂，共 {c.total} 次迭代"
+                f"（请求 {c.expected} 次；预热 {c.warm_secs:.0f}s，"
+                f"预算 {c.budget_secs}s）\n"
+                f"# 首个 FAILED 行：\n{c.first_fail_line}\n\n"
+                f"# 日志尾部：\n{c.log_tail}\n"
+            )
+            evidence_kind = "count"
+        if evidence:
+            raw_log_dir.mkdir(parents=True, exist_ok=True)
+            safe = re.sub(
+                r"[^\w.-]+", "_", f"{project.replace('/', '__')}__{test_name}"
+            )
+            path = raw_log_dir / f"{safe}__{evidence_kind}.log"
+            path.write_text(evidence, encoding="utf-8")
+            raw_log_path = str(path)
 
     counts: Counter[str] = Counter(outcome.sequence)
     verdict, status, confidence = classify_counts(

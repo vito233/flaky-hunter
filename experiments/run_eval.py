@@ -95,7 +95,7 @@ def load_ground_truth(path: Path) -> list[GroundTruth]:
 
 
 def _safe_name(text: str) -> str:
-    return re.sub(r"[^0w.-]+", "_", text)
+    return re.sub(r"[^\w.-]+", "_", text)
 
 
 def _detect_one(
