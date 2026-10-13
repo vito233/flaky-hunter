@@ -35,12 +35,26 @@ class AttributionRecord:
     error: str | None = None
 
 
+def _strip_code_fence(raw: str) -> str:
+    """剥掉模型常见的 markdown 栅栏（```json ... ```）再解析。
+
+    解析器行为变化（2026-10-13）：接真模型后新增，不影响 PROMPT_VERSION。
+    """
+    text = raw.strip()
+    if text.startswith("```"):
+        lines = text.splitlines()
+        if len(lines) >= 2 and lines[-1].strip().endswith("```"):
+            lines = lines[1:-1]
+        text = "\n".join(lines).strip()
+    return text
+
+
 def parse_output(raw: str, *, model_id: str, prompt_version: str) -> AttributionOutput:
     """原始文本 → AttributionOutput。要求 JSON：{"label": ..., "rationale": ...}。
 
     标签不在裁剪后标签集内 / JSON 坏 / 缺字段 → 抛异常（由调用方计入解析失败）。
     """
-    data = json.loads(raw)
+    data = json.loads(_strip_code_fence(raw))
     if not isinstance(data, dict):
         msg = f"期望 JSON 对象，得到 {type(data).__name__}"
         raise ValueError(msg)
