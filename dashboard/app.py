@@ -66,8 +66,11 @@ metrics_df = pd.DataFrame(
     }
 ).set_index("指标")
 st.bar_chart(metrics_df)
+cm = combined["confusion_matrix"]
 st.caption(
-    f"19 条正样本 / 7 项目 + 14 条负样本；重跑 {combined['runs']} 遍换进程 + "
+    f"{cm['tp'] + cm['fn']} 条正样本 / 7 项目 + {cm['fp'] + cm['tn']} 条负样本"
+    f"（2026-10-13 真值口径审计修正后，见 groundtruth-audit）；"
+    f"重跑 {combined['runs']} 遍换进程 + "
     f"{combined['alone_runs']} 遍单独跑 × {combined['orders']} 个顺序。"
     "精确率是**下界**：IDoFT 漏记的真 flaky 只能落进 FP 列（负样本 N1 口径的噪声）"
 )

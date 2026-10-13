@@ -38,6 +38,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from flaky_hunter.idoft import load_idoft_index
 from flaky_hunter.negatives import filter_recorded, select_negatives
 from flaky_hunter.runner import DockerRunner
 
@@ -184,6 +185,17 @@ def main(argv: list[str] | None = None) -> int:
         if not projects:
             log.error("--only=%s 不在真值表里", args.only)
             return 2
+
+    # N1 对照范围铁律（2026-10-13 审计）：剔除"已记录"必须对 IDoFT 全库做，
+    # 不能只对真值表 —— 否则「IDoFT 已记录、真值表没有」的测试会漏进负样本
+    # （当时 56 条里混进 6 条 IDoFT 已知 flaky）。SHA 仍取真值表（检出 SHA 口径）。
+    idoft_index = load_idoft_index(
+        Path(__file__).resolve().parents[1] / "data" / "raw" / "py-data.csv"
+    )
+    projects = {
+        proj: (sha, idoft_index.get(proj, set()) | recorded)
+        for proj, (sha, recorded) in projects.items()
+    }
 
     runner = DockerRunner()
     _parts = tuple(s for s in args.docker_bin.split(";") if s)

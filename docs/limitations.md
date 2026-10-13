@@ -47,18 +47,30 @@
 12. **顺序扫描会被被测项目的 flaky 机制本身打到**：freezegun 的假时间泄漏进
     pytest 计时器，pytest INTERNALERROR 崩掉，整个顺序无结果（XML_EMPTY）。
     处理是跳过 + 留痕 + 不计入有效观测，但这类项目的顺序覆盖天然更低。
-13. **集外 victim 无真值**：顺序模式抓到 11 条 IDoFT 未记录的 victim
-    （三条件验证过），只能报数不进指标 —— "检测器多抓的"在 N1 口径下
-    无处安放，是第 1 条"精确率下界"的直接成因。
-14. **负样本复核（N3）的置信度上限**：56 条 N1 负样本 × 换进程 30 遍
+13. **评测集裁剪 = 选择偏差，且曾因对照范围 bug 混入已记录 flaky**：顺序扫描
+    在评测集外抓到 11 条 victim —— 经 2026-10-13 全库对照审计，**10 条是
+    IDoFT 已记录**（同 SHA 同类别 OD-Vic，阶段 A 抽样未进真值表），真·未
+    记录只有 Pyro5 1 条。更早的 bug：N1 负样本剔除曾只对照真值表（20 条）
+    而非 py-data.csv 全库（1618 条），导致 yamicache test_deco_timeout
+    （IDoFT NOD，同 SHA）被当 TN 实为 FN（合并口径 R 100% → 95.0%）、
+    6 条混进 N3 抽样 —— bug 已修（`flaky_hunter/idoft.py` 全库对照 +
+    防漂移单测），详见 `experiments/2026-10-13-groundtruth-audit.md`。
+    "精确率下界"论据保留：N1 口径下检测器抓到 IDoFT 漏记的真 flaky
+    依然只能落假阳性列。
+14. **负样本复核（N3）的置信度上限**：56 条抽样 × 换进程 30 遍
     （seed=42 可复现），全过 55 · 环境全挂 1（Pyro5 testStartNSfunc 需要
     DNS 解析，断网容器下预期失败，排除并单独报数）· 噪声翻转 0 ——
-    **N1 纯度下界 100%（55/55）、噪声率上界 0%**。但口径要读对：
-    30 遍全过 ≠ 证明稳定（95% 置信平均要 170 遍）；对失败率 ≥5% 的
-    测试，30 遍至少观察到一次翻转的概率 ≈ 78.5% —— 弱翻转（<5% 失败率）
-    抓不全，所以这个 0% 是**上界的估计**，不是"负样本绝对干净"的证明。
+    **口径修正（2026-10-13 审计）**：56 条中 6 条为 IDoFT 已记录
+    （NIO×2 / OD-Vic×4，同 SHA；负样本剔除 bug 混入），真 N1 = 50 条，
+    **N1 纯度下界 100%（50/50）、噪声率上界 0%（对真 N1）**。
+    两个必须读对的口径：① 30 遍全过 ≠ 证明稳定（95% 置信平均要 170 遍）；
+    对失败率 ≥5% 的测试，30 遍至少观察到一次翻转的概率 ≈ 78.5% ——
+    弱翻转抓不全，0% 是**上界的估计**；② 换进程口径对 NIO（进程内污染）
+    与 OD 家族（victim 单独跑能过）**机制性盲区** —— 混入的 6 条 30 遍
+    全过与其 IDoFT 记录不矛盾，恰是该盲区的实证。
     数据：`experiments/negatives_recheck.{csv,json}`（脚本
-    `experiments/run_negatives_recheck.py`）。
+    `experiments/run_negatives_recheck.py`；分类修正在 json 的
+    post_hoc_audit 块）。
 
 ## 阶段 C1 补账补充（2026-10-13 深夜 · 模式 B）
 
@@ -69,7 +81,7 @@
     历史"有差别：自攒历史同 SHA 同环境，公开 CI 历史跨 commit 跨环境
     （我们的 stable 判定因此在历史口径下封顶 medium）。公开 CI 历史
     路线已补：fork 上 history-collect workflow 攒 mdutils master 30 个
-    真实 CI 产物。数据：`experiments/negatives_n2.{csv,json}`（脚本
+    真实 CI 产物。    数据：`experiments/negatives_n2.{csv,json}`（脚本
     `experiments/build_n2_from_recheck.py`，N2 门槛 = 历史 ≥10 遍
     无翻转且全过）。
 16. **模式 B 抓不到顺序依赖和"坏→修好"**：历史翻转检测的是跨 run
@@ -77,3 +89,14 @@
     （坏了后被修好）失败率 50% 却不是 flaky。所以 N2 的"无翻转"证据
     不覆盖 OD 型 flaky —— 负样本里若藏着 OD 型，N2 口径抓不出来
     （replay 同理，这是双模式共同下界，见第 1 条）。
+
+## 审计补充（2026-10-13 深夜 · 真值口径修正）
+
+17. **NOD 家族是检测器的机制性盲区**：合并口径唯一 FN（yamicache
+    test_deco_timeout）为 NOD 型 —— IDoFT 的 NOD 记录来自 NonDex 类
+    工具（对非确定性 API 做语义变异后重跑），我们 replay（换进程原样
+    重跑）与 order（顺序变换）都不做 API 语义变异，NOD 触发条件
+    （特定哈希序/时序）在原样重跑下几乎不复现。第一轮评测它曾翻面
+    一次（98过/2挂）当时被当"抖动误报"处理 —— 审计后重读为真阳性
+    低复现。修复方向（C3 候选）：对 NIO/NOD 类候选加 NonDex 式变异
+    探头，或在报告中声明 NOD 覆盖为 0 并说明工具边界。

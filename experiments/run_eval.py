@@ -37,6 +37,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # 包未安装时也能直接跑
 
 from flaky_hunter.detect_replay import DEFAULT_RERUN_COUNT, detect_replay  # noqa: E402
+from flaky_hunter.idoft import load_idoft_index  # noqa: E402
 from flaky_hunter.metrics import (  # noqa: E402
     Prediction,
     format_report,
@@ -183,8 +184,15 @@ def run_project(
     negatives_per_project: int,
     seed: int,
     raw_dir: Path,
+    idoft_index: dict[str, set[str]] | None = None,
 ) -> list[Prediction]:
-    """一个项目的完整流水线：源码 → 依赖 → 正样本检测 → 负样本构造 + 检测。"""
+    """一个项目的完整流水线：源码 → 依赖 → 正样本检测 → 负样本构造 + 检测。
+
+    idoft_index = IDoFT 全库索引（load_idoft_index 的产物）—— N1 负样本
+    剔除的对照范围铁律（2026-10-13 审计）：必须对全库做，缺省空表只为
+    兼容旧调用（正式评测必须传）。
+    """
+    idoft_index = idoft_index or {}
     name = task.project.split("/")[-1]
     preds: list[Prediction] = []
 
@@ -270,14 +278,17 @@ def run_project(
             pred.failed,
         )
 
-    # ---- 负样本（N1：同项目同 SHA，IDoFT 未记录）----
+    # ---- 负样本（N1：同项目同 SHA，IDoFT 全库未记录）----
+    # 对照范围铁律（2026-10-13 审计）：必须对 py-data.csv 全库做，
+    # 不能只对真值表 —— 否则「IDoFT 已记录、真值表没有」的测试会漏进负样本
     testdir = "tests" if (src / "tests").is_dir() else "."
     collected = runner.collect(src, deps, testdir=testdir)
     if not collected.ok:
         log.warning("  ⚠ 负样本收集失败（%s）—— 本项目无负样本", collected.reason)
         return preds
 
-    candidates = filter_recorded(collected.tests, set(resolved.values()))
+    recorded = idoft_index.get(task.project, set()) | set(resolved.values())
+    candidates = filter_recorded(collected.tests, recorded)
     negatives = select_negatives(candidates, negatives_per_project, seed)
     log.info("  ➖ 负样本候选 %d 条，抽样 %d 条", len(candidates), len(negatives))
     for node in negatives:
@@ -363,6 +374,14 @@ def main() -> int:
     raw_dir = REPO_ROOT / "experiments" / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
 
+    # N1 对照范围铁律（2026-10-13 审计）：剔除"已记录"必须对 IDoFT 全库做
+    idoft_index = load_idoft_index(REPO_ROOT / "data" / "raw" / "py-data.csv")
+    log.info(
+        "IDoFT 全库索引：%d 个项目 / %d 条测试（负样本对照范围）",
+        len(idoft_index),
+        sum(len(v) for v in idoft_index.values()),
+    )
+
     t0 = time.time()
     preds: list[Prediction] = []
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
@@ -377,6 +396,7 @@ def main() -> int:
                 negatives_per_project=args.negatives,
                 seed=args.seed,
                 raw_dir=raw_dir,
+                idoft_index=idoft_index,
             ): task
             for task in tasks.values()
         }

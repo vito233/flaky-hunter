@@ -22,5 +22,14 @@
   "noise_rate_upper_bound": 0.0,
   "confirm_stable_ratio_lower_bound": 1.0,
   "catch_prob_5pct": 0.7854,
-  "disclaimer": "30 遍全过 ≠ 证明稳定（95% 置信需 ~170 遍）；全过比例 = N1 纯度下界。env_fail（全挂）不是 flaky 也不是噪声 —— 是断网等环境约束下的预期失败（C1 指标口径：环境类失败排除并单独报数）"
+  "disclaimer": "30 遍全过 ≠ 证明稳定（95% 置信需 ~170 遍）；全过比例 = N1 纯度下界。env_fail（全挂）不是 flaky 也不是噪声 —— 是断网等环境约束下的预期失败（C1 指标口径：环境类失败排除并单独报数）",
+  "post_hoc_audit": {
+    "date": "2026-10-13",
+    "finding": "56 条抽样中 6 条对照 py-data.csv 全库为 IDoFT 已记录（同 SHA）：yamicache test_cached/test_keyed_cached/test_avoid_collision（NIO/OD-Vic）、freezegun test_can_ignore_email_module/test_ignore_errors_in_start[TypeError]（OD-Vic）、python-fs test_addpath（NIO）。根因 = 负样本剔除曾只对照真值表（bug 已修，见 flaky_hunter/idoft.py 与 experiments/2026-10-13-groundtruth-audit.md）",
+    "true_n1_total": 50,
+    "true_n1_all_pass": 50,
+    "purity_lower_bound_unchanged": "100%（50/50）",
+    "why_all_pass_consistent": "换进程 30 遍对 NIO（进程内污染）与 OD-Vic（victim 单独跑能过）机制性盲区 —— 6 条全过与其 IDoFT 记录不矛盾，反而是该盲区的实证",
+    "csv_untouched": "运行结果是事实，分类修正在本块声明"
+  }
 }

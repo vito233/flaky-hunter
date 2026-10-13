@@ -2,7 +2,11 @@
 
 IDoFT 是"被发现过的 flaky"的并集 —— **正样本管够，负样本一条都没有，必须自己造**。
 
-N1（默认口径）：同项目、同 SHA 下 IDoFT 未记录的测试。
+N1（默认口径）：同项目、同 SHA 下 IDoFT **全库**（py-data.csv，1618 条）未记录的测试。
+    ⚠ 对照范围铁律（2026-10-13 审计）：`filter_recorded` 的 `recorded` 参数
+    必须来自 `flaky_hunter.idoft.load_idoft_index(data/raw/py-data.csv)`，
+    **不许**用真值表 / 评测集等裁剪子集 —— 曾因对照 20 条子集，让 7 条
+    IDoFT 已记录的 flaky 混进负样本池（1 条进 C1 TN 实为 FN、6 条进 N3）。
     偏差方向：检测器抓到真 flaky 而 IDoFT 漏记时只能落进假阳性列
     → 精确率被系统性低估（下界）。这是常规做法，FlakyCat / FlakyXbert
     也是自己补的 non-flaky 组。N2/N3 口径（CI 历史复核 / 抽样跑 K≥30 遍）
