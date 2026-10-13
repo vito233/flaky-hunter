@@ -1,0 +1,12 @@
+{
+ "test_name": "fs/tests/test_rename.py::test_rename_file",
+ "label_true": "NIO",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同一进程内重复运行同一参数化测试，首次通过后续大量失败（1过/99挂），且换进程探头未观察到翻转，说明是进程内状态未清理导致的重复运行失败。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同一进程内重复运行同一参数化测试，首次通过后续大量失败（1过/99挂），且换进程探头未观察到翻转，说明是进程内状态未清理导致的重复运行失败。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

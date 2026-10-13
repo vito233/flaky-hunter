@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_serialization.py::test_serialization",
+ "label_true": "NIO",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程重复迭代 99 次挂 1 次过，且换进程未观察到翻转，说明进程内状态未清理导致重复运行失败。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程重复迭代 99 次挂 1 次过，且换进程未观察到翻转，说明进程内状态未清理导致重复运行失败。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

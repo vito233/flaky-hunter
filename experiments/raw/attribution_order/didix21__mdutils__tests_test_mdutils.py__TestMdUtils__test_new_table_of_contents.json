@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_table_of_contents",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"单独跑×10全过、仅在特定测试顺序后因残留/缺失的Test_file.md文件状态而挂，属顺序依赖受害者。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "单独跑×10全过、仅在特定测试顺序后因残留/缺失的Test_file.md文件状态而挂，属顺序依赖受害者。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

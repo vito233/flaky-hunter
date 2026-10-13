@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_mdutils.py::TestMdUtils::test_references_placed_in_markdown_file",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"单独跑×10全过、套装特定顺序才挂，且错误是该测试依赖前序测试生成的'Test_file.md'文件不存在，属顺序依赖受害者。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "单独跑×10全过、套装特定顺序才挂，且错误是该测试依赖前序测试生成的'Test_file.md'文件不存在，属顺序依赖受害者。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

@@ -1,0 +1,12 @@
+{
+ "test_name": "fs/tests/test_touch.py::test_touch_on_new_file",
+ "label_true": "NIO",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程 100 次迭代中仅 1 次过、99 次挂（换进程无翻转），符合首次通过后进程内状态未清理导致重复执行失败的 NIO 特征。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程 100 次迭代中仅 1 次过、99 次挂（换进程无翻转），符合首次通过后进程内状态未清理导致重复执行失败的 NIO 特征。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

@@ -1,0 +1,32 @@
+{
+ "schema_note": "解析失败计入分母按判错算（最严格主口径）；混淆矩阵行=真值列=预测",
+ "model_id": "glm-5.3-flash",
+ "temperature": 0.0,
+ "prompt_version": "attribution-prompt-v0.1.0",
+ "n_samples": 12,
+ "parse_failure_rate": 0.0,
+ "accuracy": 1.0,
+ "macro_f1": 1.0,
+ "per_class": {
+  "OD-Vic": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "support": 12
+  }
+ },
+ "confusion_matrix": {
+  "OD-Vic": {
+   "OD-Vic": 12
+  }
+ },
+ "od_binary_accuracy": 1.0,
+ "baselines": {
+  "note": "两套口径不得混用（规范 §3.2）",
+  "full_corpus_majority": 0.495,
+  "full_corpus_od_binary": 0.727,
+  "eval_majority": 0.631578947368421,
+  "eval_od_binary": 0.6842105263157895
+ },
+ "timestamp_utc": "2026-10-13T09:02:07.838899+00:00"
+}

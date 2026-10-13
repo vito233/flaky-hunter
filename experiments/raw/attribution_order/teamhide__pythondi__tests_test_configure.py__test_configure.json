@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_configure.py::test_configure",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"单独跑×10全过、套装中受前面测试遗留的已注入状态影响而挂（Already injected），典型顺序依赖受害者。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "单独跑×10全过、套装中受前面测试遗留的已注入状态影响而挂（Already injected），典型顺序依赖受害者。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

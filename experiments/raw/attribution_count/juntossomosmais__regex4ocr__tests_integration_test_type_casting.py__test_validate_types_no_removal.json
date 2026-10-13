@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/integration/test_type_casting.py::test_validate_types_no_removal",
+ "label_true": "NIO",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程重复调用时 99/100 次失败而换进程探头无翻转，说明进程内状态未清理导致首跑后失败，属 NIO。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程重复调用时 99/100 次失败而换进程探头无翻转，说明进程内状态未清理导致首跑后失败，属 NIO。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

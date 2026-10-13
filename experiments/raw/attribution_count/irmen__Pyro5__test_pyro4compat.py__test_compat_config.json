@@ -1,0 +1,12 @@
+{
+ "test_name": "test_pyro4compat.py::test_compat_config",
+ "label_true": "OD",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程重复迭代中 99 挂/1 过且换进程无翻转，说明进程内状态未清理导致首跑后复跑失败。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程重复迭代中 99 挂/1 过且换进程无翻转，说明进程内状态未清理导致首跑后复跑失败。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

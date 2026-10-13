@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_class_import.py::test_import_after_start",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"单独跑×10全过，仅在特定顺序（reverse）下因前序测试残留的 freezegun FakeDatetime 状态而挂，属顺序依赖受害者。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "单独跑×10全过，仅在特定顺序（reverse）下因前序测试残留的 freezegun FakeDatetime 状态而挂，属顺序依赖受害者。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

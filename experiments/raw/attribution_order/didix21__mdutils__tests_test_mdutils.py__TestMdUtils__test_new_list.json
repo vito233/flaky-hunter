@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_list",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"单独跑×10全过，但套装中特定顺序下因前序测试遗留状态（'Test_file.md' 未创建/被清理）而 FileNotFoundError，是顺序依赖受害者。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "单独跑×10全过，但套装中特定顺序下因前序测试遗留状态（'Test_file.md' 未创建/被清理）而 FileNotFoundError，是顺序依赖受害者。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

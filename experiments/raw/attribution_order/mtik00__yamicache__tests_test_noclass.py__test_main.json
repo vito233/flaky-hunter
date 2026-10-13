@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_noclass.py::test_main",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"仅在 reverse 顺序下失败且单独跑 10/10 全过，属被先前测试污染状态的顺序依赖受害者。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "仅在 reverse 顺序下失败且单独跑 10/10 全过，属被先前测试污染状态的顺序依赖受害者。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_mdutils.py::TestMdUtils::test_create_md_file",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"单独跑×10全过，仅在套装特定顺序（default等）中因缺少'文件未创建'而挂，是前序测试留下的文件系统状态导致的顺序依赖受害者。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "单独跑×10全过，仅在套装特定顺序（default等）中因缺少'文件未创建'而挂，是前序测试留下的文件系统状态导致的顺序依赖受害者。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

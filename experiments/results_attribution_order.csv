@@ -1,0 +1,13 @@
+project,test_name,label_true,label_pred,parse_ok,rationale
+mtik00/yamicache,tests/test_noclass.py::test_main,OD-Vic,OD-Vic,True,仅在 reverse 顺序下失败且单独跑 10/10 全过，属被先前测试污染状态的顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_create_md_file,OD-Vic,OD-Vic,True,单独跑×10全过，仅在套装特定顺序（default等）中因缺少'文件未创建'而挂，是前序测试留下的文件系统状态导致的顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_header,OD-Vic,OD-Vic,True,单独跑×10全过但特定顺序下因前序测试遗留文件状态缺失'file.md'而挂，典型顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_table_of_contents,OD-Vic,OD-Vic,True,单独跑×10全过、仅在特定测试顺序后因残留/缺失的Test_file.md文件状态而挂，属顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_list,OD-Vic,OD-Vic,True,单独跑×10全过，但套装中特定顺序下因前序测试遗留状态（'Test_file.md' 未创建/被清理）而 FileNotFoundError，是顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_checkbox_list,OD-Vic,OD-Vic,True,失败仅出现在特定套装顺序中，单独跑10/10通过，签名是找不到前序测试遗留的 'Test_file.md'，属典型顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_checkbox_checked_list,OD-Vic,OD-Vic,True,单独跑10次全过，但在复现序列中前一个测试通过后该测试因缺少 Test_file.md 而挂，说明是被前面测试遗留/破坏的共享文件状态所害。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_reference_image_markdown_data,OD-Vic,OD-Vic,True,victim 单独跑 10/10 通过、仅在特定顺序（套装后续）挂，属顺序依赖受害者
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_references_placed_in_markdown_file,OD-Vic,OD-Vic,True,单独跑×10全过、套装特定顺序才挂，且错误是该测试依赖前序测试生成的'Test_file.md'文件不存在，属顺序依赖受害者。
+chaosmail/python-fs,fs/tests/test_mkdir.py::test_mkdir,OD-Vic,OD-Vic,True,单独跑 10/10 通过，仅在特定顺序（reverse）下因目录已存在而挂，是典型顺序依赖受害者。
+spulec/freezegun,tests/test_class_import.py::test_import_after_start,OD-Vic,OD-Vic,True,单独跑×10全过，仅在特定顺序（reverse）下因前序测试残留的 freezegun FakeDatetime 状态而挂，属顺序依赖受害者。
+teamhide/pythondi,tests/test_configure.py::test_configure,OD-Vic,OD-Vic,True,单独跑×10全过、套装中受前面测试遗留的已注入状态影响而挂（Already injected），典型顺序依赖受害者。

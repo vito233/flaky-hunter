@@ -1,0 +1,122 @@
+[
+ {
+  "project": "mtik00/yamicache",
+  "sha": "1109d08b18be94bdee55e113309f7be29f25d840",
+  "test_name": "tests/test_noclass.py::test_main",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（1/4 个有效顺序挂）：reverse\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n=============================== warnings summary ===============================\nyamicache/yamicache.py:77\n  /w/yamicache/yamicache.py:77: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working\n    class Cache(collections.MutableMapping):\n\ntests/test_noclass.py::test_object_list\ntests/test_noclass.py::test_object_list\n  /w/yamicache/yamicache.py:237: DeprecationWarning: inspect.getargspec() is deprecated since Python 3.0, use inspect.signature() or inspect.getfullargspec()\n    fargs, _, _, defaults = inspect.getargspec(func)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED tests/test_noclass.py::test_main - assert 1 == 0\n1 failed, 1 passed, 3 warnings in 2.04s",
+  "log_files": [
+   "mtik00__yamicache__tests_test_noclass.py_test_main__order.log"
+  ]
+ },
+ {
+  "project": "didix21/mdutils",
+  "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+  "test_name": "tests/test_mdutils.py::TestMdUtils::test_create_md_file",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（2/4 个有效顺序挂）：default、random-seed1729-1\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n/w/mdutils/fileutils/fileutils.py:23: FileNotFoundError: [Errno 2] No such file or directory: 'Test_file.md'\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED tests/test_mdutils.py::TestMdUtils::test_create_md_file - FileNotFound...\n1 failed, 1 passed in 0.02s",
+  "log_files": [
+   "didix21__mdutils__tests_test_mdutils.py_TestMdUtils_test_create_md_file__order.log"
+  ]
+ },
+ {
+  "project": "didix21/mdutils",
+  "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+  "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_header",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（2/4 个有效顺序挂）：default、random-seed1729-1\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n/w/mdutils/fileutils/fileutils.py:23: FileNotFoundError: [Errno 2] No such file or directory: 'Test_file.md'\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED tests/test_mdutils.py::TestMdUtils::test_new_header - FileNotFoundErro...\n1 failed, 1 passed in 0.01s",
+  "log_files": [
+   "didix21__mdutils__tests_test_mdutils.py_TestMdUtils_test_new_header__order.log"
+  ]
+ },
+ {
+  "project": "didix21/mdutils",
+  "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+  "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_table_of_contents",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（3/4 个有效顺序挂）：default、random-seed1729-1、random-seed1729-2\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n/w/mdutils/fileutils/fileutils.py:23: FileNotFoundError: [Errno 2] No such file or directory: 'Test_file.md'\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED tests/test_mdutils.py::TestMdUtils::test_new_table_of_contents - FileN...\n1 failed, 1 passed in 0.02s",
+  "log_files": [
+   "didix21__mdutils__tests_test_mdutils.py_TestMdUtils_test_new_table_of_contents__order.log"
+  ]
+ },
+ {
+  "project": "didix21/mdutils",
+  "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+  "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_list",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（3/4 个有效顺序挂）：default、random-seed1729-1、random-seed1729-2\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n/w/mdutils/fileutils/fileutils.py:23: FileNotFoundError: [Errno 2] No such file or directory: 'Test_file.md'\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED tests/test_mdutils.py::TestMdUtils::test_new_list - FileNotFoundError:...\n1 failed, 1 passed in 0.02s",
+  "log_files": [
+   "didix21__mdutils__tests_test_mdutils.py_TestMdUtils_test_new_list__order.log"
+  ]
+ },
+ {
+  "project": "didix21/mdutils",
+  "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+  "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_checkbox_list",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（3/4 个有效顺序挂）：default、random-seed1729-1、random-seed1729-2\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n/w/mdutils/fileutils/fileutils.py:23: FileNotFoundError: [Errno 2] No such file or directory: 'Test_file.md'\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED tests/test_mdutils.py::TestMdUtils::test_new_checkbox_list - FileNotFo...\n1 failed, 1 passed in 0.02s",
+  "log_files": [
+   "didix21__mdutils__tests_test_mdutils.py_TestMdUtils_test_new_checkbox_list__order.log"
+  ]
+ },
+ {
+  "project": "didix21/mdutils",
+  "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+  "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_checkbox_checked_list",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（3/4 个有效顺序挂）：default、random-seed1729-1、random-seed1729-2\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n/w/mdutils/fileutils/fileutils.py:23: FileNotFoundError: [Errno 2] No such file or directory: 'Test_file.md'\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED tests/test_mdutils.py::TestMdUtils::test_new_checkbox_checked_list - F...\n1 failed, 1 passed in 0.02s",
+  "log_files": [
+   "didix21__mdutils__tests_test_mdutils.py_TestMdUtils_test_new_checkbox_checked_list__order.log"
+  ]
+ },
+ {
+  "project": "didix21/mdutils",
+  "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+  "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_reference_image_markdown_data",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（3/4 个有效顺序挂）：default、random-seed1729-1、random-seed1729-2\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n/w/mdutils/fileutils/fileutils.py:23: FileNotFoundError: [Errno 2] No such file or directory: 'Test_file.md'\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED tests/test_mdutils.py::TestMdUtils::test_new_reference_image_markdown_data\n1 failed, 1 passed in 0.02s",
+  "log_files": [
+   "didix21__mdutils__tests_test_mdutils.py_TestMdUtils_test_new_reference_image_markdown_data__order.log"
+  ]
+ },
+ {
+  "project": "didix21/mdutils",
+  "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+  "test_name": "tests/test_mdutils.py::TestMdUtils::test_references_placed_in_markdown_file",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（3/4 个有效顺序挂）：default、random-seed1729-1、random-seed1729-2\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n/w/mdutils/fileutils/fileutils.py:23: FileNotFoundError: [Errno 2] No such file or directory: 'Test_file.md'\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED tests/test_mdutils.py::TestMdUtils::test_references_placed_in_markdown_file\n1 failed, 1 passed in 0.02s",
+  "log_files": [
+   "didix21__mdutils__tests_test_mdutils.py_TestMdUtils_test_references_placed_in_markdown_file__order.log"
+  ]
+ },
+ {
+  "project": "chaosmail/python-fs",
+  "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+  "test_name": "fs/tests/test_mkdir.py::test_mkdir",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（1/4 个有效顺序挂）：reverse\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n/w/fs/tests/test_mkdir.py:13: ValueError: Directory /w/fs/tests/test_dir/foo already exists!\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED fs/tests/test_mkdir.py::test_mkdir - ValueError: Directory /w/fs/tests...\n1 failed, 1 passed in 0.02s",
+  "log_files": [
+   "chaosmail__python-fs__fs_tests_test_mkdir.py_test_mkdir__order.log"
+  ]
+ },
+ {
+  "project": "spulec/freezegun",
+  "sha": "b46da782a7a051081fd51577749cfc0074db0cc6",
+  "test_name": "tests/test_class_import.py::test_import_after_start",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（1/2 个有效顺序挂）：reverse\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n/w/tests/test_class_import.py:140: AssertionError: assert <class 'freezegun.api.FakeDatetime'> is FakeDatetime\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED tests/test_class_import.py::test_import_after_start - AssertionError: ...\n1 failed, 1 passed in 0.17s",
+  "log_files": [
+   "spulec__freezegun__tests_test_class_import.py_test_import_after_start__order.log"
+  ]
+ },
+ {
+  "project": "teamhide/pythondi",
+  "sha": "913e6a60fc5d02c3db385ad322f970ecec36969b",
+  "test_name": "tests/test_configure.py::test_configure",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 失败顺序（3/4 个有效顺序挂）：reverse、random-seed1729-1、random-seed1729-2\n# 验证 ② victim 单独跑 ×10 → 10过/0挂\n# ---- 复现序列 pytest 输出尾部（失败签名）----\n\n[失败现场]\n.F                                                                       [100%]\n=================================== FAILURES ===================================\n/w/pythondi/__init__.py:76: pythondi.InjectException: Already injected\n----------------------- generated xml file: /tmp/seq.xml -----------------------\n=========================== short test summary info ============================\nFAILED tests/test_configure.py::test_configure - pythondi.InjectException: Al...\n1 failed, 1 passed in 0.01s",
+  "log_files": [
+   "teamhide__pythondi__tests_test_configure.py_test_configure__order.log"
+  ]
+ }
+]

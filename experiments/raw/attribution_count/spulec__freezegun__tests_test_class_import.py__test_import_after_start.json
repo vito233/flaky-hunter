@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_class_import.py::test_import_after_start",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"换进程探头不翻转而同进程重复跑时首次过、后续 99 次全挂，说明进程内状态未被清理，符合 NIO 特征。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "换进程探头不翻转而同进程重复跑时首次过、后续 99 次全挂，说明进程内状态未被清理，符合 NIO 特征。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

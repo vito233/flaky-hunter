@@ -1,0 +1,12 @@
+{
+ "test_name": "fs/tests/test_mkdir.py::test_mkdir_recursive",
+ "label_true": "NIO",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程重复迭代中首次过后几乎全挂（1过/99挂），且换进程探头未观察到翻转，符合进程内状态未清理导致的 NIO 特征。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程重复迭代中首次过后几乎全挂（1过/99挂），且换进程探头未观察到翻转，符合进程内状态未清理导致的 NIO 特征。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

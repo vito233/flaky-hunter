@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_checkbox_checked_list",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"单独跑10次全过，但在复现序列中前一个测试通过后该测试因缺少 Test_file.md 而挂，说明是被前面测试遗留/破坏的共享文件状态所害。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "单独跑10次全过，但在复现序列中前一个测试通过后该测试因缺少 Test_file.md 而挂，说明是被前面测试遗留/破坏的共享文件状态所害。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

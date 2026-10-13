@@ -40,9 +40,6 @@ from flaky_hunter.baselines import (
 
 ROOT = Path(__file__).resolve().parents[1]
 INPUTS = ROOT / "data" / "processed" / "attribution_inputs.json"
-OUT_CSV = ROOT / "experiments" / "results_attribution.csv"
-OUT_METRICS = ROOT / "experiments" / "metrics_attribution.json"
-RAW_DIR = ROOT / "experiments" / "raw" / "attribution"
 
 FIELDS = ["project", "test_name", "label_true", "label_pred", "parse_ok", "rationale"]
 
@@ -51,9 +48,24 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="C2 全量归因评测")
     parser.add_argument("--model", default="glm-5.3-flash")
     parser.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument(
+        "--inputs",
+        type=Path,
+        default=INPUTS,
+        help="输入材料 JSON（对照实验传 attribution_inputs_order/count.json）",
+    )
+    parser.add_argument(
+        "--tag",
+        default="",
+        help="输出文件名后缀（对照实验用，如 order -> results_attribution_order.csv）",
+    )
     args = parser.parse_args()
+    tag = f"_{args.tag}" if args.tag else ""
+    out_csv = ROOT / "experiments" / f"results_attribution{tag}.csv"
+    out_metrics = ROOT / "experiments" / f"metrics_attribution{tag}.json"
+    raw_dir = ROOT / "experiments" / "raw" / f"attribution{tag}"
 
-    items = json.loads(INPUTS.read_text(encoding="utf-8"))
+    items = json.loads(args.inputs.read_text(encoding="utf-8"))
     samples = [
         AttributionInput(
             test_name=it["test_name"],
@@ -74,7 +86,7 @@ def main() -> None:
     if parse_failure_rate(records) == 1.0 and records and all(r.error for r in records):
         raise SystemExit("全部解析失败 —— 先检查网络/凭据，不做无意义指标")
 
-    RAW_DIR.mkdir(parents=True, exist_ok=True)
+    raw_dir.mkdir(parents=True, exist_ok=True)
     y_true: list[str] = []
     y_pred: list[str | None] = []
     csv_rows: list[dict[str, str]] = []
@@ -102,7 +114,7 @@ def main() -> None:
             f"{it['project'].replace('/', '__')}__"
             f"{it['test_name'].replace('::', '__').replace('/', '_')}.json"
         )
-        raw_path = RAW_DIR / raw_name
+        raw_path = raw_dir / raw_name
         raw_path.write_text(
             json.dumps(
                 {
@@ -118,7 +130,7 @@ def main() -> None:
             encoding="utf-8",
         )
 
-    with OUT_CSV.open("w", encoding="utf-8", newline="") as fh:
+    with out_csv.open("w", encoding="utf-8", newline="") as fh:
         writer = csv.DictWriter(fh, fieldnames=FIELDS)
         writer.writeheader()
         writer.writerows(csv_rows)
@@ -153,7 +165,7 @@ def main() -> None:
         },
         "timestamp_utc": datetime.now(UTC).isoformat(),
     }
-    OUT_METRICS.write_text(
+    out_metrics.write_text(
         json.dumps(metrics, ensure_ascii=False, indent=1), encoding="utf-8"
     )
     logging.info(
@@ -167,7 +179,7 @@ def main() -> None:
         metrics["macro_f1"],
         metrics["parse_failure_rate"] * 100,
     )
-    logging.info("逐条 -> %s；三件套 -> %s", OUT_CSV, OUT_METRICS)
+    logging.info("逐条 -> %s；三件套 -> %s", out_csv, out_metrics)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,112 @@
+[
+ {
+  "project": "mtik00/yamicache",
+  "sha": "1109d08b18be94bdee55e113309f7be29f25d840",
+  "test_name": "tests/test_noclass.py::test_main",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 1s，预算 660s）\n# 首个 FAILED 行：\n# 日志尾部：\n\n[失败现场]\nFAILED tests/test_noclass.py::test_main[26-100] - assert 1 == 0\n\n\nFAILED tests/test_noclass.py::test_main[3-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[45-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[10-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[84-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[61-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[34-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[83-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[66-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[33-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[29-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[99-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[58-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[42-100] - assert 1 == 0\nFAILED tests/test_noclass.py::test_main[17-100] - assert 1 == 0\n99 failed, 1 passed, 7 warnings in 0.23s",
+  "log_files": [
+   "mtik00__yamicache__tests_test_noclass.py_test_main__count.log"
+  ]
+ },
+ {
+  "project": "mtik00/yamicache",
+  "sha": "1109d08b18be94bdee55e113309f7be29f25d840",
+  "test_name": "tests/test_serialization.py::test_serialization",
+  "label": "NIO",
+  "failure_log": "[翻转统计（实验观察）]\n# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 0s，预算 460s）\n# 首个 FAILED 行：\n# 日志尾部：\n\n[失败现场]\nFAILED tests/test_serialization.py::test_serialization[95-100] - assert 4 == 1\n\n\nFAILED tests/test_serialization.py::test_serialization[48-100] - assert 88 == 1\nFAILED tests/test_serialization.py::test_serialization[52-100] - assert 89 == 1\nFAILED tests/test_serialization.py::test_serialization[13-100] - assert 90 == 1\nFAILED tests/test_serialization.py::test_serialization[46-100] - assert 91 == 1\nFAILED tests/test_serialization.py::test_serialization[100-100] - assert 92 == 1\nFAILED tests/test_serialization.py::test_serialization[78-100] - assert 93 == 1\nFAILED tests/test_serialization.py::test_serialization[37-100] - assert 94 == 1\nFAILED tests/test_serialization.py::test_serialization[62-100] - assert 95 == 1\nFAILED tests/test_serialization.py::test_serialization[87-100] - assert 96 == 1\nFAILED tests/test_serialization.py::test_serialization[30-100] - assert 97 == 1\nFAILED tests/test_serialization.py::test_serialization[65-100] - assert 98 == 1\nFAILED tests/test_serialization.py::test_serialization[80-100] - assert 99 == 1\nFAILED tests/test_serialization.py::test_serialization[14-100] - assert 100 == 1\nFAILED tests/test_serialization.py::test_serialization[41-100] - assert 101 == 1\n99 failed, 1 passed, 1013 warnings in 0.24s",
+  "log_files": [
+   "mtik00__yamicache__tests_test_serialization.py_test_serialization__count.log"
+  ]
+ },
+ {
+  "project": "juntossomosmais/regex4ocr",
+  "sha": "9f96e9c6fe6ffc3e1452b23103fdfa6a0f1dcede",
+  "test_name": "tests/integration/test_type_casting.py::test_validate_types_no_removal",
+  "label": "NIO",
+  "failure_log": "[翻转统计（实验观察）]\n# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 1s，预算 660s）\n# 首个 FAILED 行：\n# 日志尾部：\n\n[失败现场]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[80-100]\n\n\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[3-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[12-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[47-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[53-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[49-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[88-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[38-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[22-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[77-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[92-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[25-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[70-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[95-100]\nFAILED tests/integration/test_type_casting.py::test_validate_types_no_removal[54-100]\n99 failed, 1 passed, 1 warning in 0.49s",
+  "log_files": [
+   "juntossomosmais__regex4ocr__tests_integration_test_type_casting.py_test_validate_types_no_removal__count.log"
+  ]
+ },
+ {
+  "project": "irmen/Pyro5",
+  "sha": "55bec91891bb9007441024186f3c62b06a3a6870",
+  "test_name": "test_pyro4compat.py::test_compat_config",
+  "label": "OD",
+  "failure_log": "[翻转统计（实验观察）]\n# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 0s，预算 460s）\n# 首个 FAILED 行：\n# 日志尾部：\n\n[失败现场]\nFAILED tests/test_pyro4compat.py::test_compat_config[17-100] - assert 12345 =...\n\n\nFAILED tests/test_pyro4compat.py::test_compat_config[85-100] - assert 12345 =...\nFAILED tests/test_pyro4compat.py::test_compat_config[35-100] - assert 12345 =...\nFAILED tests/test_pyro4compat.py::test_compat_config[91-100] - assert 12345 =...\nFAILED tests/test_pyro4compat.py::test_compat_config[74-100] - assert 12345 =...\nFAILED tests/test_pyro4compat.py::test_compat_config[21-100] - assert 12345 =...\nFAILED tests/test_pyro4compat.py::test_compat_config[50-100] - assert 12345 =...\nFAILED tests/test_pyro4compat.py::test_compat_config[4-100] - assert 12345 ==...\nFAILED tests/test_pyro4compat.py::test_compat_config[57-100] - assert 12345 =...\nFAILED tests/test_pyro4compat.py::test_compat_config[3-100] - assert 12345 ==...\nFAILED tests/test_pyro4compat.py::test_compat_config[18-100] - assert 12345 =...\nFAILED tests/test_pyro4compat.py::test_compat_config[69-100] - assert 12345 =...\nFAILED tests/test_pyro4compat.py::test_compat_config[96-100] - assert 12345 =...\nFAILED tests/test_pyro4compat.py::test_compat_config[73-100] - assert 12345 =...\nFAILED tests/test_pyro4compat.py::test_compat_config[26-100] - assert 12345 =...\n99 failed, 1 passed in 0.23s",
+  "log_files": [
+   "irmen__Pyro5__tests_test_pyro4compat.py_test_compat_config__count.log"
+  ]
+ },
+ {
+  "project": "chaosmail/python-fs",
+  "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+  "test_name": "fs/tests/test_mkdir.py::test_mkdir",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 1s，预算 660s）\n# 首个 FAILED 行：\n# 日志尾部：\n\n[失败现场]\nFAILED fs/tests/test_mkdir.py::test_mkdir[4-100] - ValueError: Directory /w/f...\n\n\nFAILED fs/tests/test_mkdir.py::test_mkdir[24-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[2-100] - ValueError: Directory /w/f...\nFAILED fs/tests/test_mkdir.py::test_mkdir[55-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[41-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[14-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[80-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[65-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[30-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[87-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[62-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[37-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[78-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[46-100] - ValueError: Directory /w/...\nFAILED fs/tests/test_mkdir.py::test_mkdir[13-100] - ValueError: Directory /w/...\n99 failed, 1 passed in 0.20s",
+  "log_files": [
+   "chaosmail__python-fs__fs_tests_test_mkdir.py_test_mkdir__count.log"
+  ]
+ },
+ {
+  "project": "spulec/freezegun",
+  "sha": "b46da782a7a051081fd51577749cfc0074db0cc6",
+  "test_name": "tests/test_class_import.py::test_import_after_start",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 1s，预算 660s）\n# 首个 FAILED 行：\n# 日志尾部：\n\n[失败现场]\nFAILED tests/test_class_import.py::test_import_after_start[94-100] - Assertio...\n\n\nFAILED tests/test_class_import.py::test_import_after_start[53-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[49-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[12-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[47-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[36-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[86-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[63-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[79-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[31-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[81-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[64-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[15-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[40-100] - Assertio...\nFAILED tests/test_class_import.py::test_import_after_start[9-100] - Assertion...\n99 failed, 1 passed in 0.61s",
+  "log_files": [
+   "spulec__freezegun__tests_test_class_import.py_test_import_after_start__count.log"
+  ]
+ },
+ {
+  "project": "teamhide/pythondi",
+  "sha": "913e6a60fc5d02c3db385ad322f970ecec36969b",
+  "test_name": "tests/test_configure.py::test_configure",
+  "label": "OD-Vic",
+  "failure_log": "[翻转统计（实验观察）]\n# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 1s，预算 660s）\n# 首个 FAILED 行：\n# 日志尾部：\n\n[失败现场]\nFAILED tests/test_configure.py::test_configure[60-100] - pythondi.InjectExcep...\n\n\nFAILED tests/test_configure.py::test_configure[17-100] - pythondi.InjectExcep...\nFAILED tests/test_configure.py::test_configure[42-100] - pythondi.InjectExcep...\nFAILED tests/test_configure.py::test_configure[56-100] - pythondi.InjectExcep...\nFAILED tests/test_configure.py::test_configure[19-100] - pythondi.InjectExcep...\nFAILED tests/test_configure.py::test_configure[68-100] - pythondi.InjectExcep...\nFAILED tests/test_configure.py::test_configure[27-100] - pythondi.InjectExcep...\nFAILED tests/test_configure.py::test_configure[72-100] - pythondi.InjectExcep...\nFAILED tests/test_configure.py::test_configure[3-100] - pythondi.InjectExcept...\nFAILED tests/test_configure.py::test_configure[97-100] - pythondi.InjectExcep...\nFAILED tests/test_configure.py::test_configure[20-100] - pythondi.InjectExcep...\nFAILED tests/test_configure.py::test_configure[75-100] - pythondi.InjectExcep...\nFAILED tests/test_configure.py::test_configure[4-100] - pythondi.InjectExcept...\nFAILED tests/test_configure.py::test_configure[90-100] - pythondi.InjectExcep...\nFAILED tests/test_configure.py::test_configure[51-100] - pythondi.InjectExcep...\n99 failed, 1 passed in 0.25s",
+  "log_files": [
+   "teamhide__pythondi__tests_test_configure.py_test_configure__count.log"
+  ]
+ },
+ {
+  "project": "chaosmail/python-fs",
+  "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+  "test_name": "fs/tests/test_mkdir.py::test_mkdir_recursive",
+  "label": "NIO",
+  "failure_log": "[翻转统计（实验观察）]\n# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 0s，预算 460s）\n# 首个 FAILED 行：\n# 日志尾部：\n\n[失败现场]\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[11-100] - ValueError: Dir...\n\n\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[83-100] - ValueError: Dir...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[66-100] - ValueError: Dir...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[27-100] - ValueError: Dir...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[72-100] - ValueError: Dir...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[97-100] - ValueError: Dir...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[68-100] - ValueError: Dir...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[19-100] - ValueError: Dir...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[2-100] - ValueError: Dire...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[56-100] - ValueError: Dir...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[51-100] - ValueError: Dir...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[5-100] - ValueError: Dire...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[20-100] - ValueError: Dir...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[75-100] - ValueError: Dir...\nFAILED fs/tests/test_mkdir.py::test_mkdir_recursive[90-100] - ValueError: Dir...\n99 failed, 1 passed in 0.20s",
+  "log_files": [
+   "chaosmail__python-fs__fs_tests_test_mkdir.py_test_mkdir_recursive__count.log"
+  ]
+ },
+ {
+  "project": "chaosmail/python-fs",
+  "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+  "test_name": "fs/tests/test_rename.py::test_rename_directory",
+  "label": "NIO",
+  "failure_log": "[翻转统计（实验观察）]\n# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 0s，预算 460s）\n# 首个 FAILED 行：\n# 日志尾部：\n\n[失败现场]\nFAILED fs/tests/test_rename.py::test_rename_directory[60-100] - ValueError: D...\n\n\nFAILED fs/tests/test_rename.py::test_rename_directory[58-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[17-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[42-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[56-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[19-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[68-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[8-100] - ValueError: Di...\nFAILED fs/tests/test_rename.py::test_rename_directory[27-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[72-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[97-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[20-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[75-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[90-100] - ValueError: D...\nFAILED fs/tests/test_rename.py::test_rename_directory[51-100] - ValueError: D...\n99 failed, 1 passed in 0.19s",
+  "log_files": [
+   "chaosmail__python-fs__fs_tests_test_rename.py_test_rename_directory__count.log"
+  ]
+ },
+ {
+  "project": "chaosmail/python-fs",
+  "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+  "test_name": "fs/tests/test_rename.py::test_rename_file",
+  "label": "NIO",
+  "failure_log": "[翻转统计（实验观察）]\n# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 1s，预算 660s）\n# 首个 FAILED 行：\n# 日志尾部：\n\n[失败现场]\nFAILED fs/tests/test_rename.py::test_rename_file[82-100] - ValueError: File /...\n\n\nFAILED fs/tests/test_rename.py::test_rename_file[10-100] - ValueError: File /...\nFAILED fs/tests/test_rename.py::test_rename_file[51-100] - ValueError: File /...\nFAILED fs/tests/test_rename.py::test_rename_file[75-100] - ValueError: File /...\nFAILED fs/tests/test_rename.py::test_rename_file[90-100] - ValueError: File /...\nFAILED fs/tests/test_rename.py::test_rename_file[20-100] - ValueError: File /...\nFAILED fs/tests/test_rename.py::test_rename_file[3-100] - ValueError: File /w...\nFAILED fs/tests/test_rename.py::test_rename_file[4-100] - ValueError: File /w...\nFAILED fs/tests/test_rename.py::test_rename_file[68-100] - ValueError: File /...\nFAILED fs/tests/test_rename.py::test_rename_file[72-100] - ValueError: File /...\nFAILED fs/tests/test_rename.py::test_rename_file[97-100] - ValueError: File /...\nFAILED fs/tests/test_rename.py::test_rename_file[27-100] - ValueError: File /...\nFAILED fs/tests/test_rename.py::test_rename_file[56-100] - ValueError: File /...\nFAILED fs/tests/test_rename.py::test_rename_file[100-100] - ValueError: File ...\nFAILED fs/tests/test_rename.py::test_rename_file[19-100] - ValueError: File /...\n99 failed, 1 passed in 0.18s",
+  "log_files": [
+   "chaosmail__python-fs__fs_tests_test_rename.py_test_rename_file__count.log"
+  ]
+ },
+ {
+  "project": "chaosmail/python-fs",
+  "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+  "test_name": "fs/tests/test_touch.py::test_touch_on_new_file",
+  "label": "NIO",
+  "failure_log": "[翻转统计（实验观察）]\n# 同进程 --count 探头翻转证据（换进程探头未观察到翻转）\n# 1 过 / 99 挂，共 100 次迭代（请求 100 次；预热 1s，预算 660s）\n# 首个 FAILED 行：\n# 日志尾部：\n\n[失败现场]\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[90-100] - ValueError: F...\n\n\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[16-100] - ValueError: F...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[59-100] - ValueError: F...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[28-100] - ValueError: F...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[98-100] - ValueError: F...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[1-100] - ValueError: Fi...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[67-100] - ValueError: F...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[82-100] - ValueError: F...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[32-100] - ValueError: F...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[60-100] - ValueError: F...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[85-100] - ValueError: F...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[35-100] - ValueError: F...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[6-100] - ValueError: Fi...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[44-100] - ValueError: F...\nFAILED fs/tests/test_touch.py::test_touch_on_new_file[11-100] - ValueError: F...\n99 failed, 1 passed in 0.19s",
+  "log_files": [
+   "chaosmail__python-fs__fs_tests_test_touch.py_test_touch_on_new_file__count.log"
+  ]
+ }
+]

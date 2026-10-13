@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_configure.py::test_configure",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程重复运行时 99/100 次因 pythondi 注入容器状态未重置而挂，换进程不翻转，属进程内残留状态导致的首次过、重复跑挂。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程重复运行时 99/100 次因 pythondi 注入容器状态未重置而挂，换进程不翻转，属进程内残留状态导致的首次过、重复跑挂。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

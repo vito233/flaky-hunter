@@ -1,0 +1,12 @@
+project,test_name,label_true,label_pred,parse_ok,rationale
+mtik00/yamicache,tests/test_noclass.py::test_main,OD-Vic,NIO,True,换进程探头未观察到翻转，而同进程 100 次迭代中仅第 1 次通过、之后 99 次全挂，符合进程内状态未清理导致的 NIO 特征。
+mtik00/yamicache,tests/test_serialization.py::test_serialization,NIO,NIO,True,同进程重复迭代 99 次挂 1 次过，且换进程未观察到翻转，说明进程内状态未清理导致重复运行失败。
+juntossomosmais/regex4ocr,tests/integration/test_type_casting.py::test_validate_types_no_removal,NIO,NIO,True,同进程重复调用时 99/100 次失败而换进程探头无翻转，说明进程内状态未清理导致首跑后失败，属 NIO。
+irmen/Pyro5,test_pyro4compat.py::test_compat_config,OD,NIO,True,同进程重复迭代中 99 挂/1 过且换进程无翻转，说明进程内状态未清理导致首跑后复跑失败。
+chaosmail/python-fs,fs/tests/test_mkdir.py::test_mkdir,OD-Vic,NIO,True,换进程探头无翻转，同进程重复迭代 1 过/99 挂且首个通过后续失败，说明进程内状态未清理导致重复跑失败。
+spulec/freezegun,tests/test_class_import.py::test_import_after_start,OD-Vic,NIO,True,换进程探头不翻转而同进程重复跑时首次过、后续 99 次全挂，说明进程内状态未被清理，符合 NIO 特征。
+teamhide/pythondi,tests/test_configure.py::test_configure,OD-Vic,NIO,True,同进程重复运行时 99/100 次因 pythondi 注入容器状态未重置而挂，换进程不翻转，属进程内残留状态导致的首次过、重复跑挂。
+chaosmail/python-fs,fs/tests/test_mkdir.py::test_mkdir_recursive,NIO,NIO,True,同进程重复迭代中首次过后几乎全挂（1过/99挂），且换进程探头未观察到翻转，符合进程内状态未清理导致的 NIO 特征。
+chaosmail/python-fs,fs/tests/test_rename.py::test_rename_directory,NIO,NIO,True,同进程重复迭代 99/100 挂而换进程未观察到翻转，说明首次运行后进程内状态未清理导致后续失败。
+chaosmail/python-fs,fs/tests/test_rename.py::test_rename_file,NIO,NIO,True,同一进程内重复运行同一参数化测试，首次通过后续大量失败（1过/99挂），且换进程探头未观察到翻转，说明是进程内状态未清理导致的重复运行失败。
+chaosmail/python-fs,fs/tests/test_touch.py::test_touch_on_new_file,NIO,NIO,True,同进程 100 次迭代中仅 1 次过、99 次挂（换进程无翻转），符合首次通过后进程内状态未清理导致重复执行失败的 NIO 特征。

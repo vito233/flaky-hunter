@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_checkbox_list",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"失败仅出现在特定套装顺序中，单独跑10/10通过，签名是找不到前序测试遗留的 'Test_file.md'，属典型顺序依赖受害者。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "失败仅出现在特定套装顺序中，单独跑10/10通过，签名是找不到前序测试遗留的 'Test_file.md'，属典型顺序依赖受害者。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}
