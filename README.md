@@ -58,6 +58,13 @@ uv run python experiments/run_order_eval.py --projects didix21/mdutils  # 试点
 
 # C2 地板：生成裁剪后标签表（data/processed/labels.csv，19 条 / 6 类）
 uv run python experiments/build_labels.py
+
+# 看板（可选依赖组，不污染核心依赖；3 个视图：检测 / 归因 / 真值表）
+uv sync --extra dashboard
+uv run streamlit run dashboard/app.py
+
+# N3 负样本复核（7 项目 × 8 条 N1 负样本 × 换进程 K 遍，报告确认稳定比例）
+uv run python experiments/run_negatives_recheck.py --runs 30
 ```
 
 ## 局限（先读这个再下结论）

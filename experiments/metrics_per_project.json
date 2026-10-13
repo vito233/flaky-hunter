@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "mode": "replay+order 合并（任一探头报警即报警）",
+  "note": "within-project = 每项目内部算 P/R；cross-project = 总体口径 —— 本工具是规则型检测器，无训练无调参，不存在 train/test 泄漏，两套口径相同是**结论**不是缺陷。每项目差异来自：① 样本量（Pyro5 仅 1 条正样本，数字波动大）② 负样本 N1 口径噪声 （IDoFT 漏记 reservoir），精确率只能报下界",
+  "per_project": [
+    {
+      "project": "chaosmail/python-fs",
+      "positives": 5,
+      "negatives": 2,
+      "tp": 5,
+      "fp": 0,
+      "fn": 0,
+      "tn": 2,
+      "precision_lower_bound": 1.0,
+      "recall_at_idoft": 1.0
+    },
+    {
+      "project": "didix21/mdutils",
+      "positives": 8,
+      "negatives": 2,
+      "tp": 8,
+      "fp": 0,
+      "fn": 0,
+      "tn": 2,
+      "precision_lower_bound": 1.0,
+      "recall_at_idoft": 1.0
+    },
+    {
+      "project": "irmen/Pyro5",
+      "positives": 1,
+      "negatives": 2,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "tn": 2,
+      "precision_lower_bound": 1.0,
+      "recall_at_idoft": 1.0
+    },
+    {
+      "project": "juntossomosmais/regex4ocr",
+      "positives": 1,
+      "negatives": 2,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "tn": 2,
+      "precision_lower_bound": 1.0,
+      "recall_at_idoft": 1.0
+    },
+    {
+      "project": "mtik00/yamicache",
+      "positives": 2,
+      "negatives": 2,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 2,
+      "precision_lower_bound": 1.0,
+      "recall_at_idoft": 1.0
+    },
+    {
+      "project": "spulec/freezegun",
+      "positives": 1,
+      "negatives": 2,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "tn": 2,
+      "precision_lower_bound": 1.0,
+      "recall_at_idoft": 1.0
+    },
+    {
+      "project": "teamhide/pythondi",
+      "positives": 1,
+      "negatives": 2,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "tn": 2,
+      "precision_lower_bound": 1.0,
+      "recall_at_idoft": 1.0
+    },
+    {
+      "project": "OVERALL（= cross-project，无调参无泄漏）",
+      "positives": 19,
+      "negatives": 14,
+      "tp": 19,
+      "fp": 0,
+      "fn": 0,
+      "tn": 14,
+      "precision_lower_bound": 1.0,
+      "recall_at_idoft": 1.0
+    }
+  ],
+  "drift_check": "与 metrics_combined.json 的 confusion_matrix 逐项一致"
+}
