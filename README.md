@@ -13,6 +13,17 @@
 > 脱离子集基线引用）。
 > 详见 [`experiments/2026-10-13-c2-attribution.md`](experiments/2026-10-13-c2-attribution.md)
 > 与 [`docs/negative-result.md`](docs/negative-result.md)。
+>
+> 状态 2：**CI 门禁已挂真实项目 fork**（2026-10-13）。`gate.py` 三探头门禁
+> （默认序 + 反向序 + 文件级同进程 count，单独跑验证定性）以报告模式挂上
+> [`vito233/mdutils`](https://github.com/vito233/mdutils)（parent
+> didix21/mdutils），`pull_request` 触发。正反双用例验收：
+> 干净 PR 判定 **pass**（118 条 / 12 文件 / 18.7s）；注入该项目 IDoFT 真值
+> 8 条 OD-Vic 的历史元凶模式（chdir 进临时目录不恢复）后判定 **alert**，
+> 检出 10 条 order_victim —— **对已知真值召回 100%**（真值 8 条全部重新抓出
+> + 注入 victim + 1 条连带）。单次 run 总耗时 32s / 49s。
+> 详见 [`experiments/2026-10-13-ci-gate-fork.md`](experiments/2026-10-13-ci-gate-fork.md)。
+>
 > 换进程重跑 + 同进程 `--count` 双探头抓 NIO/NOD；顺序变换（多顺序扫描 + 前缀
 > 二分 + ddmin 最小 polluter 归因）抓 OD 家族。
 > **合并口径（19 条正样本 / 7 项目 + 14 条负样本）：精确率 100.0%（下界；
