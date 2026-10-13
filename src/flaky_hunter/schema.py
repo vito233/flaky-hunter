@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field, model_validator
 from flaky_hunter.baselines import RERUN_FOR_95_CONFIDENCE
 
 SCHEMA_VERSION = "1.0"
+HISTORY_SCHEMA_VERSION = "1.0"
 
 Mode = Literal["replay", "order", "history"]
 Verdict = Literal["flaky", "stable", "inconclusive"]
@@ -53,6 +54,48 @@ class Confidence(BaseModel):
     level: ConfidenceLevel
     basis: str
     note: str = ""
+
+
+class HistoryResult(BaseModel):
+    """模式 B（历史翻转）单测试结果 —— 吃现成 JUnit XML 历史，不重跑。
+
+    test_id 口径：JUnit 的 `classname::name`（pytest 产 XML 时 classname 是
+    点号模块路径，如 `tests.test_x`）——与 replay 的路径形式
+    （`tests/test_x.py::test_y`）不同，两种口径不混用（data-dictionary）。
+    """
+
+    test_id: str
+    sequence: str  # 按时间序的 P/F/S 串（P=过 F=挂 S=跳过；文件缺失不计入串）
+    runs_total: int = Field(ge=0)  # 历史文件中出现该测试的次数（含 skipped）
+    valid_runs: int = Field(ge=0)  # P+F 数 —— 判定的分母（skipped 不算有效）
+    passed: int = Field(ge=0)
+    failed: int = Field(ge=0)
+    skipped: int = Field(ge=0)
+    missing_files: int = Field(ge=0)  # files_parsed - runs_total
+    flip_transitions: int = Field(ge=0)  # 相邻 P/F 不同的次数（历史模式主口径）
+    flip_min_count: int = Field(ge=0)  # 少数派计数（与 replay 口径对齐）
+    verdict: Verdict
+    confidence: Confidence
+
+
+class HistorySummary(BaseModel):
+    flaky: int = Field(ge=0)
+    stable: int = Field(ge=0)
+    inconclusive: int = Field(ge=0)
+    tests_total: int = Field(ge=0)
+
+
+class HistoryReport(BaseModel):
+    """模式 B 整体产出（一个历史目录 = 一次报告）。"""
+
+    schema_version: str = HISTORY_SCHEMA_VERSION
+    project: str  # owner/repo 或历史来源标注
+    source_dir: str
+    files_parsed: int = Field(ge=1)
+    ordering: str  # 时间序来源声明，如 "filename-lexicographic"
+    results: list[HistoryResult]
+    summary: HistorySummary
+    timestamp_utc: datetime  # 必须带时区（DTZ）
 
 
 class DetectionResult(BaseModel):

@@ -1,0 +1,411 @@
+{
+  "schema_version": "1.0",
+  "generated_utc": "2026-10-13T12:44:32.173149+00:00",
+  "definition": "N2 = N1 + 历史无翻转（valid_runs>=10, flip=0, 全过；全挂=env_fail 排除并单独报数）",
+  "provenance_disclaimer": "历史 = negatives_recheck.csv 的 30 遍换进程运行记录（同 SHA 同容器，2026-10-13 实跑）；非目标项目公开 CI 历史",
+  "min_history_for_n2": 10,
+  "pipeline": {
+    "tests_total": 55,
+    "flaky": 0,
+    "stable": 0,
+    "inconclusive": 55,
+    "files_parsed": 30,
+    "via": "junit-xml-pipeline"
+  },
+  "counts": {
+    "recheck_rows": 56,
+    "env_fail_excluded": 1,
+    "env_fail_tests": [
+      "tests/test_naming.py::TestOfflineNameServer::testStartNSfunc"
+    ],
+    "n2_total": 55,
+    "projects": 7
+  },
+  "n2_tests": [
+    {
+      "project": "chaosmail/python-fs",
+      "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+      "test_name": "fs/tests/test_add_prefix.py::test_add_prefix_to_filename",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "chaosmail/python-fs",
+      "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+      "test_name": "fs/tests/test_addpath.py::test_addpath",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "chaosmail/python-fs",
+      "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+      "test_name": "fs/tests/test_addpath.py::test_addpath_not_existing_path",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "chaosmail/python-fs",
+      "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+      "test_name": "fs/tests/test_cwd.py::test_cwd",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "chaosmail/python-fs",
+      "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+      "test_name": "fs/tests/test_dirname.py::test_dirname_from_dir",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "chaosmail/python-fs",
+      "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+      "test_name": "fs/tests/test_exists.py::test_exists_dir",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "chaosmail/python-fs",
+      "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+      "test_name": "fs/tests/test_normalize.py::test_normalize",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "chaosmail/python-fs",
+      "sha": "2567922ced9387e327e65f3244caff3b7af35684",
+      "test_name": "fs/tests/test_rmdir.py::test_rmdir_file",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "didix21/mdutils",
+      "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+      "test_name": "tests/test_fileutils/test_fileutils.py::TestMarkdownFile::test_create_file_case_0",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "didix21/mdutils",
+      "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+      "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_inline_link_bold_format",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "didix21/mdutils",
+      "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+      "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_inline_link_bold_italic_code_format",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "didix21/mdutils",
+      "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+      "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_inline_link_empty",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "didix21/mdutils",
+      "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+      "test_name": "tests/test_tools/test_header.py::TestHeader::test_atx_level_2",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "didix21/mdutils",
+      "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+      "test_name": "tests/test_tools/test_header.py::TestHeader::test_atx_level_5",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "didix21/mdutils",
+      "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+      "test_name": "tests/test_tools/test_header.py::TestHeader::test_setext_level_2",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "didix21/mdutils",
+      "sha": "2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb",
+      "test_name": "tests/test_tools/test_table_of_contents.py::TestTableOfContents::test_table_of_contents_with_back_slash",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "irmen/Pyro5",
+      "sha": "55bec91891bb9007441024186f3c62b06a3a6870",
+      "test_name": "tests/test_client.py::TestProxy::testProxyWithStmt",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "irmen/Pyro5",
+      "sha": "55bec91891bb9007441024186f3c62b06a3a6870",
+      "test_name": "tests/test_daemon.py::TestDaemon::testRegisterEtc",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "irmen/Pyro5",
+      "sha": "55bec91891bb9007441024186f3c62b06a3a6870",
+      "test_name": "tests/test_echoserver.py::TestEchoserver::testEcho",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "irmen/Pyro5",
+      "sha": "55bec91891bb9007441024186f3c62b06a3a6870",
+      "test_name": "tests/test_naming.py::TestOfflineNameServerTestsSqlStorage::testNSCmain",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "irmen/Pyro5",
+      "sha": "55bec91891bb9007441024186f3c62b06a3a6870",
+      "test_name": "tests/test_protocol.py::TestReceivingMessage::test_create_payload_memview",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "irmen/Pyro5",
+      "sha": "55bec91891bb9007441024186f3c62b06a3a6870",
+      "test_name": "tests/test_server.py::TestServerOnce::testProxyMetadata",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "irmen/Pyro5",
+      "sha": "55bec91891bb9007441024186f3c62b06a3a6870",
+      "test_name": "tests/test_server_timeout.py::TestServerThreadTimeout::testServerConnections",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "juntossomosmais/regex4ocr",
+      "sha": "9f96e9c6fe6ffc3e1452b23103fdfa6a0f1dcede",
+      "test_name": "tests/integration/test_type_casting.py::test_cast_type_datetime_type_exception",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "juntossomosmais/regex4ocr",
+      "sha": "9f96e9c6fe6ffc3e1452b23103fdfa6a0f1dcede",
+      "test_name": "tests/integration/test_type_casting.py::test_cast_type_metadata_unknown",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "juntossomosmais/regex4ocr",
+      "sha": "9f96e9c6fe6ffc3e1452b23103fdfa6a0f1dcede",
+      "test_name": "tests/integration/test_type_casting.py::test_cast_type_value_exception",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "juntossomosmais/regex4ocr",
+      "sha": "9f96e9c6fe6ffc3e1452b23103fdfa6a0f1dcede",
+      "test_name": "tests/integration/test_type_casting.py::test_remove_wrong_types_no_removal",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "juntossomosmais/regex4ocr",
+      "sha": "9f96e9c6fe6ffc3e1452b23103fdfa6a0f1dcede",
+      "test_name": "tests/unit/test_drm_scanner.py::test_sat_coupon_has_sat_drm_match",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "juntossomosmais/regex4ocr",
+      "sha": "9f96e9c6fe6ffc3e1452b23103fdfa6a0f1dcede",
+      "test_name": "tests/unit/test_drm_scanner.py::test_scan_drms_folder",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "juntossomosmais/regex4ocr",
+      "sha": "9f96e9c6fe6ffc3e1452b23103fdfa6a0f1dcede",
+      "test_name": "tests/unit/test_extraction.py::test_extract_fields_without_matches",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "juntossomosmais/regex4ocr",
+      "sha": "9f96e9c6fe6ffc3e1452b23103fdfa6a0f1dcede",
+      "test_name": "tests/unit/test_yml_parser.py::test_yml_parser_raises_exception",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "mtik00/yamicache",
+      "sha": "1109d08b18be94bdee55e113309f7be29f25d840",
+      "test_name": "tests/test_class.py::test_cached",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "mtik00/yamicache",
+      "sha": "1109d08b18be94bdee55e113309f7be29f25d840",
+      "test_name": "tests/test_class.py::test_counters",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "mtik00/yamicache",
+      "sha": "1109d08b18be94bdee55e113309f7be29f25d840",
+      "test_name": "tests/test_class.py::test_keyed_cached",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "mtik00/yamicache",
+      "sha": "1109d08b18be94bdee55e113309f7be29f25d840",
+      "test_name": "tests/test_class.py::test_nocache",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "mtik00/yamicache",
+      "sha": "1109d08b18be94bdee55e113309f7be29f25d840",
+      "test_name": "tests/test_clear_deco.py::test_clear",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "mtik00/yamicache",
+      "sha": "1109d08b18be94bdee55e113309f7be29f25d840",
+      "test_name": "tests/test_collide.py::test_avoid_collision",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "mtik00/yamicache",
+      "sha": "1109d08b18be94bdee55e113309f7be29f25d840",
+      "test_name": "tests/test_exceptions.py::test_function",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "mtik00/yamicache",
+      "sha": "1109d08b18be94bdee55e113309f7be29f25d840",
+      "test_name": "tests/test_init.py::test_init_cache",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "spulec/freezegun",
+      "sha": "b46da782a7a051081fd51577749cfc0074db0cc6",
+      "test_name": "tests/test_class_import.py::test_can_ignore_email_module",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "spulec/freezegun",
+      "sha": "b46da782a7a051081fd51577749cfc0074db0cc6",
+      "test_name": "tests/test_class_import.py::test_start_and_stop_works",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "spulec/freezegun",
+      "sha": "b46da782a7a051081fd51577749cfc0074db0cc6",
+      "test_name": "tests/test_datetimes.py::TestOldStyleClasses::test_inherited_method",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "spulec/freezegun",
+      "sha": "b46da782a7a051081fd51577749cfc0074db0cc6",
+      "test_name": "tests/test_datetimes.py::Tester::test_class_decorator_skips_callable_object_py2",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "spulec/freezegun",
+      "sha": "b46da782a7a051081fd51577749cfc0074db0cc6",
+      "test_name": "tests/test_datetimes.py::Tester::test_still_the_same",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "spulec/freezegun",
+      "sha": "b46da782a7a051081fd51577749cfc0074db0cc6",
+      "test_name": "tests/test_datetimes.py::test_compare_datetime_and_time_with_timezone",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "spulec/freezegun",
+      "sha": "b46da782a7a051081fd51577749cfc0074db0cc6",
+      "test_name": "tests/test_errors.py::test_ignore_errors_in_start[TypeError]",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "spulec/freezegun",
+      "sha": "b46da782a7a051081fd51577749cfc0074db0cc6",
+      "test_name": "tests/test_pickle.py::test_pickle",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "teamhide/pythondi",
+      "sha": "913e6a60fc5d02c3db385ad322f970ecec36969b",
+      "test_name": "tests/test_configure.py::test_configure_after_clear",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "teamhide/pythondi",
+      "sha": "913e6a60fc5d02c3db385ad322f970ecec36969b",
+      "test_name": "tests/test_container.py::test_clear",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "teamhide/pythondi",
+      "sha": "913e6a60fc5d02c3db385ad322f970ecec36969b",
+      "test_name": "tests/test_container.py::test_get",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "teamhide/pythondi",
+      "sha": "913e6a60fc5d02c3db385ad322f970ecec36969b",
+      "test_name": "tests/test_container.py::test_has_shared_state",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "teamhide/pythondi",
+      "sha": "913e6a60fc5d02c3db385ad322f970ecec36969b",
+      "test_name": "tests/test_container.py::test_has_shared_state_with_instance",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "teamhide/pythondi",
+      "sha": "913e6a60fc5d02c3db385ad322f970ecec36969b",
+      "test_name": "tests/test_container.py::test_set",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "teamhide/pythondi",
+      "sha": "913e6a60fc5d02c3db385ad322f970ecec36969b",
+      "test_name": "tests/test_provider.py::test_bind_class_init",
+      "history_runs": 30,
+      "flips": 0
+    },
+    {
+      "project": "teamhide/pythondi",
+      "sha": "913e6a60fc5d02c3db385ad322f970ecec36969b",
+      "test_name": "tests/test_provider.py::test_bind_class_init_with_dict",
+      "history_runs": 30,
+      "flips": 0
+    }
+  ]
+}

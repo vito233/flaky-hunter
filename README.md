@@ -65,6 +65,13 @@ uv run streamlit run dashboard/app.py
 
 # N3 负样本复核（7 项目 × 8 条 N1 负样本 × 换进程 K 遍，报告确认稳定比例）
 uv run python experiments/run_negatives_recheck.py --runs 30
+
+# 模式 B：历史翻转（吃 JUnit XML 目录，文件名典序 = 时间序；秒级零 Docker）
+python -m flaky_hunter.detect_history --xml-dir <历史目录> \
+    --project owner/repo --json-out history.json --md-out history.md
+
+# N2 口径落档（negatives_recheck 30 遍记录 → JUnit 历史 → detect_history 管道）
+uv run python experiments/build_n2_from_recheck.py
 ```
 
 ## 局限（先读这个再下结论）

@@ -1,0 +1,2140 @@
+{
+  "schema_version": "1.0",
+  "project": "vito233/mdutils@master (GitHub Actions, 30 runs, 2026-10-13)",
+  "source_dir": "experiments\\raw\\history-mdutils",
+  "files_parsed": 30,
+  "ordering": "filename-lexicographic（文件名典序 = 时间序；调用方负责用可排序命名，如 0001.xml 或 ISO 时间戳前缀）",
+  "results": [
+    {
+      "test_id": "tests.test_fileutils.test_fileutils.TestMarkdownFile::test_append_end",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_fileutils.test_fileutils.TestMarkdownFile::test_append_second_line",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_fileutils.test_fileutils.TestMarkdownFile::test_create_file",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_fileutils.test_fileutils.TestMarkdownFile::test_create_file_case_0",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_fileutils.test_fileutils.TestMarkdownFile::test_create_file_case_1",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_fileutils.test_fileutils.TestMarkdownFile::test_create_file_case_3",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_fileutils.test_fileutils.TestMarkdownFile::test_read",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_fileutils.test_fileutils.TestMarkdownFile::test_rewrite_all_file",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_create_md_file",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_insert_code",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_bold_reference_link",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_checkbox_checked_list",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_checkbox_list",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_code_reference_link",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_header",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_inline_image",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_inline_link",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_inline_link_align_format",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_inline_link_bold_format",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_inline_link_bold_italic_code_format",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_inline_link_bold_italic_format",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_inline_link_code_format",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_inline_link_empty",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_inline_link_italic_format",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_inline_link_text_empty",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_italics_reference_link",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_line",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_list",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_list_bold_items",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_paragraph",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_reference_image",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_reference_image_markdown_data",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_reference_link",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_reference_link_when_reference_tag_not_defined_and_align_is_defined",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_reference_link_when_reference_tag_not_defined_and_bold_italics_code_is_defined",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_new_table_of_contents",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_references_placed_in_markdown_file",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_mdutils.TestMdUtils::test_wrap_text",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_header.TestHeader::test_atx_with_header_id",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_header.TestHeader::test_atx_without_header_id",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_header.TestHeader::test_choose_header",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_header.TestHeader::test_header",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_header.TestHeader::test_setext_level_1",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_header.TestHeader::test_setext_level_2",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtml::test_image_align_center",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtml::test_image_align_center_width_height",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtml::test_image_path",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtml::test_image_size_height",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtml::test_image_size_width",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtml::test_image_size_width_height",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtml::test_paragraph",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtml::test_paragraph_when_align_is_not_defined",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtml::test_paragraph_when_invalid_align_is_passed",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtmlSize::test_raise_exception",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtmlSize::test_size_to_width_height_when_providing_int_whitespace_X_int",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtmlSize::test_size_to_width_height_when_providing_int_x_int",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtmlSize::test_size_to_width_height_when_providing_number",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtmlSize::test_size_to_width_height_when_providing_x_int",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_html.TestHtmlSize::test_size_to_width_height_when_providing_x_str_int",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_image.TestLink::test_inline_inline_tooltip",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_image.TestLink::test_new_inline_image",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_image.TestLink::test_new_reference_image",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_image.TestLink::test_new_reference_when_reference_tag_is_not_defined",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_image.TestLink::test_reference_image_tooltip",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_inline.TestLink::test_inline_link",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_inline.TestLink::test_link_is_not_defined",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_inline.TestLink::test_link_tooltip",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_inline.TestLink::test_link_without_text_tooltip",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_inline.TestLink::test_text_is_not_defined",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_mdcheckbox.TestMDCheckbox::test_basic_checkbox",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_mdcheckbox.TestMDCheckbox::test_basic_checkbox_checked",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_mdcheckbox.TestMDCheckbox::test_checkbox_with_some_items_checked",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_mdcheckbox.TestMDCheckbox::test_complex_checkbox",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_mdcheckbox.TestMDCheckbox::test_complex_checkbox_checked",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_mdlist.TestMDList::test_another_marker",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_mdlist.TestMDList::test_basic_list",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_mdlist.TestMDList::test_complex_list",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_mdlist.TestMDList::test_ordered_list",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_mdlist.TestMDList::test_ordered_with_mixed_unordered_list",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_mdlist.TestMDList::test_unordered_with_mixed_ordered_list",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_reference.TestReference::test_add_multiple_link_references",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_reference.TestReference::test_get_reference_when_references_are_empty",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_reference.TestReference::test_get_references_in_markdown_format_check_they_are_sorted",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_reference.TestReference::test_new_reference",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_reference.TestReference::test_new_reference_without_defining_reference_tag",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_reference.TestReference::test_reference_link_if_already_exists_in_global_references",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_reference.TestReference::test_tooltip_get_reference",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_column_row_does_not_much_text_length_array",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_centered_table",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_default_table",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_basic",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_empty_data",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_mixed_data_types",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_rows_with_empty_lists",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_single_column",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_single_row",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_uneven_rows",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_with_center_alignment",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_with_left_alignment",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_with_mixed_alignment",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_with_partial_alignment_list",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_with_right_alignment",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_create_table_array_with_special_characters",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table.TestTable::test_invalid_text_align",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table_of_contents.TestTableOfContents::test_create_table_of_contents",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table_of_contents.TestTableOfContents::test_table_of_contents_with_back_slash",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table_of_contents.TestTableOfContents::test_table_of_contents_with_colon",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table_of_contents.TestTableOfContents::test_table_of_contents_with_dot",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_table_of_contents.TestTableOfContents::test_table_of_contents_with_hyphen",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_textutils.TestTextUtils::test_add_tooltip",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_textutils.TestTextUtils::test_bold",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_textutils.TestTextUtils::test_center_text",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_textutils.TestTextUtils::test_inline_code",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_textutils.TestTextUtils::test_insert_code",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_textutils.TestTextUtils::test_italics",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_textutils.TestTextUtils::test_text_color",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_textutils.TestTextUtils::test_text_external_link",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    },
+    {
+      "test_id": "tests.test_tools.test_textutils.TestTextUtils::test_text_format",
+      "sequence": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "runs_total": 30,
+      "valid_runs": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "missing_files": 0,
+      "flip_transitions": 0,
+      "flip_min_count": 0,
+      "verdict": "inconclusive",
+      "confidence": {
+        "level": "medium",
+        "basis": "历史 ×30 全部通过，但不足 60 条（二项检验线）—— 0 次翻转 ≠ 稳定（规范 §2.2）",
+        "note": ""
+      }
+    }
+  ],
+  "summary": {
+    "flaky": 0,
+    "stable": 0,
+    "inconclusive": 118,
+    "tests_total": 118
+  },
+  "timestamp_utc": "2026-10-13T12:37:34.279538Z"
+}

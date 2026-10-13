@@ -59,3 +59,21 @@
     抓不全，所以这个 0% 是**上界的估计**，不是"负样本绝对干净"的证明。
     数据：`experiments/negatives_recheck.{csv,json}`（脚本
     `experiments/run_negatives_recheck.py`）。
+
+## 阶段 C1 补账补充（2026-10-13 深夜 · 模式 B）
+
+15. **N2 的"历史"是自攒的，不是目标项目公开 CI 历史**：N2 口径
+    （N1 + 历史无翻转）用的历史 = negatives_recheck 的 30 遍换进程记录
+    （同 SHA 同容器，本机 Docker 实跑）——TODOLIST 第 3 周 DoD 明示
+    "或从 fork 里自己跑出的历史攒"属合规路线，但与"项目自己的 CI
+    历史"有差别：自攒历史同 SHA 同环境，公开 CI 历史跨 commit 跨环境
+    （我们的 stable 判定因此在历史口径下封顶 medium）。公开 CI 历史
+    路线已补：fork 上 history-collect workflow 攒 mdutils master 30 个
+    真实 CI 产物。数据：`experiments/negatives_n2.{csv,json}`（脚本
+    `experiments/build_n2_from_recheck.py`，N2 门槛 = 历史 ≥10 遍
+    无翻转且全过）。
+16. **模式 B 抓不到顺序依赖和"坏→修好"**：历史翻转检测的是跨 run
+    非确定性；OD 家族在固定顺序下不翻（和 replay 同样的盲区），FFFPPP
+    （坏了后被修好）失败率 50% 却不是 flaky。所以 N2 的"无翻转"证据
+    不覆盖 OD 型 flaky —— 负样本里若藏着 OD 型，N2 口径抓不出来
+    （replay 同理，这是双模式共同下界，见第 1 条）。

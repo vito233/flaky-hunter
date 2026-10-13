@@ -76,6 +76,16 @@ MovedToGradle / FixedOrder / Unmaintained / RepoRenamed`
   `minimized`（False = 撞预算上限，是上界不是最小）。顺序模式**不判 stable**：
   几个顺序没翻只给阴性观察。判定必须三条件全过：某顺序挂 ∧ 单独跑全过 ∧
   polluter 集合能复现。
+- **历史模式**（2026-10-13 定，`detect_history.py`）：独立模型
+  `HistoryResult` / `HistoryReport`（**不走** `DetectionResult` —— 历史模式
+  没有 Docker env、没有检出 SHA，硬套会撒谎）。`test_id` = JUnit 的
+  `classname::name`（classname 缺省时直接用 `name`，便于自攒历史沿用
+  replay 路径形式）；`sequence` = 按时间序 P/F/S 串；`flip_transitions`
+  = 相邻切换（历史主口径，FFFPPP=1）与 `flip_min_count` = 少数派计数
+  （与 replay 可比，FFFPPP=2）。判定：翻转 → flaky；全过 ≥60 → stable
+  （**历史口径封顶 medium**：历史 run 可能跨 commit/环境）；全挂 / 次数
+  不足 → inconclusive（全挂 ≠ 翻转、0 次翻转 ≠ 稳定）。时间序 = 文件名
+  典序，坏 XML 抛错不静默跳过。
 - **validator 兜底**：宣称 `stable` 需要 `runs.total >= 170` 或 `confidence.level=high`
   （0 次翻转 ≠ 稳定，规范 §2.2；count_runs 不计入）
 - `timestamp_utc` 必须带时区
