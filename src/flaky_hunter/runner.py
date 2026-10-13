@@ -29,6 +29,7 @@ flaky 完全无效，只能当快速初筛），又不用重复付容器启动�
 
 from __future__ import annotations
 
+import contextlib
 import re
 import subprocess
 import xml.etree.ElementTree as ElementTree
@@ -61,8 +62,24 @@ def mirror_image(name: str) -> str:
     return f"{REGISTRY_MIRROR}/library/{name}"
 
 
+def docker_prefix(bin_spec: str | tuple[str, ...]) -> list[str]:
+    """docker 命令前缀。
+
+    字符串 = 单命令（"docker"）；元组 = 多段前缀，用于跨层转发 ——
+    gate 预演在 Windows 跑、Docker 在 WSL 里，走 `("wsl", "-d", ...,
+    "-e", "docker")`。**-e（--exec）不可省**：wsl.exe 不带 -e 时会把
+    参数拼成一条命令行再交给默认 shell 解释，多行脚本里的引号会被
+    二次改写（2026-10-13 实测：bash 报 unexpected EOF，多行脚本全碎）。
+    """
+    if isinstance(bin_spec, str):
+        return [bin_spec]
+    return list(bin_spec)
+
+
 # pip 走国内源（阶段 A 实测：官方源会被代理破坏，报 size validation 失败）
 PIP_MIRROR = "https://pypi.tuna.tsinghua.edu.cn/simple"
+# CI 门禁用（第 5 周）：GitHub Actions 的 runner 在海外，直连官方源更快
+PIP_OFFICIAL = "https://pypi.org/simple"
 
 # 默认镜像：3.9-slim 走 mirror（阶段 A 实测 7 个项目全部可跑；
 # 方法论按年份选镜像是通则，见 image_for_year）
@@ -108,7 +125,9 @@ def image_python(image: str) -> str:
 # ---------------------------------------------------------------- 脚本生成（纯函数）
 
 
-def build_setup_script(tools: tuple[str, ...] = DEFAULT_TOOLS) -> str:
+def build_setup_script(
+    tools: tuple[str, ...] = DEFAULT_TOOLS, pip_mirror: str = PIP_MIRROR
+) -> str:
     """生成依赖安装脚本。
 
     两步分离（阶段 A 2026-10-12 定稿）：
@@ -116,13 +135,16 @@ def build_setup_script(tools: tuple[str, ...] = DEFAULT_TOOLS) -> str:
       ② 项目本身尽力装：标准装 → --no-build-isolation 兜底 → 跳过。
          零依赖项目从源码目录直接跑就行（PyGraph 实测：不装反而全收集到），
          所以项目装不上**不阻塞**。
+
+    pip_mirror 可配（第 5 周 CI 门禁需要）：国内走清华源；GitHub Actions
+    的 runner 在海外，直连官方源更快 —— 传 PIP_OFFICIAL 即可。
     """
     tools_list = " ".join(f"'{t}'" for t in tools)
     return (
-        f"python -m pip install -q -i {PIP_MIRROR} --target=/deps {tools_list}; "
+        f"python -m pip install -q -i {pip_mirror} --target=/deps {tools_list}; "
         f"echo @@TOOLS_RC=$?@@; "
-        f"python -m pip install -q -i {PIP_MIRROR} --target=/deps . "
-        f"|| python -m pip install -q -i {PIP_MIRROR} "
+        f"python -m pip install -q -i {pip_mirror} --target=/deps . "
+        f"|| python -m pip install -q -i {pip_mirror} "
         f"--no-build-isolation --target=/deps . "
         f"|| echo @@PROJECT_SKIPPED@@"
     )
@@ -600,7 +622,7 @@ class DockerRunner:
 
     image: str = mirror_image(IMAGE_PY39)
     pip_mirror: str = PIP_MIRROR
-    docker_bin: str = "docker"
+    docker_bin: str | tuple[str, ...] = "docker"
     run_network: str = "none"
     tools: tuple[str, ...] = DEFAULT_TOOLS
     use_volumes: bool = True
@@ -615,7 +637,7 @@ class DockerRunner:
     def _volume_exists(self, name: str) -> bool:
         try:
             p = subprocess.run(
-                [self.docker_bin, "volume", "inspect", name],
+                [*docker_prefix(self.docker_bin), "volume", "inspect", name],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.DEVNULL,
                 timeout=60,
@@ -633,7 +655,7 @@ class DockerRunner:
             return True
         try:
             subprocess.run(
-                [self.docker_bin, "volume", "create", name],
+                [*docker_prefix(self.docker_bin), "volume", "create", name],
                 timeout=60,
                 check=True,
                 stdout=subprocess.PIPE,
@@ -643,7 +665,7 @@ class DockerRunner:
             win = str(host_dir).replace("\\", "/")
             subprocess.run(
                 [
-                    self.docker_bin,
+                    *docker_prefix(self.docker_bin),
                     "run",
                     "--rm",
                     "--network",
@@ -693,7 +715,7 @@ class DockerRunner:
         打不出报错细节）。
         """
         cmd = [
-            self.docker_bin,
+            *docker_prefix(self.docker_bin),
             "run",
             "--rm",
             *self._mount_args("src", src_dir, "/w"),
@@ -735,6 +757,21 @@ class DockerRunner:
 
     # ---- 第一段：装依赖（带网） ----
 
+    def run_script(
+        self,
+        script: str,
+        src_dir: Path,
+        deps_dir: Path | None = None,
+        timeout: int = 900,
+    ) -> tuple[int | str, str]:
+        """跑一段自定义脚本（默认断网，与测试同一环境）—— 公开薄转发。
+
+        用户：gate 的文件级 --count 探头（第 5 周 CI 门禁）；后续模式 B
+        （历史翻转）大概率也走这里。不另起抽象层：参数语义与 _run_container
+        完全一致，只是不再要求调用方住在本模块内部。
+        """
+        return self._run_container(script, src_dir, deps_dir=deps_dir, timeout=timeout)
+
     def setup(self, src_dir: Path, deps_dir: Path, timeout: int = 900) -> SetupOutcome:
         """把测试工具链 + 项目依赖装好（pip --target=/deps）。
 
@@ -744,13 +781,21 @@ class DockerRunner:
           2. 宿主机 deps_dir 非空（比如旧版挂载模式装的）→ 搬进卷，跳过安装
         卷模式下依赖装进 Docker 卷（VM 内 I/O）；标记写在宿主机，跨轮次有效。
         """
-        deps_dir.mkdir(parents=True, exist_ok=True)
+        deps_dir = Path(deps_dir)
+        # POSIX 风格路径（gate 预演传 WSL 路径）：宿主侧建不了就不建，
+        # 挂载点由 Docker 兜底自动创建 —— 不让目录创建挡住安装
+        with contextlib.suppress(OSError):
+            deps_dir.mkdir(parents=True, exist_ok=True)
         marker = deps_dir.parent / f"{deps_dir.name}.done"
         if marker.exists():
             return SetupOutcome(
                 tools_ok=True, project_installed=True, log_tail="(缓存复用，跳过安装)"
             )
-        host_has_deps = any(deps_dir.iterdir())
+        try:
+            host_has_deps = any(deps_dir.iterdir())
+        except OSError:
+            # 宿主侧看不到这个目录（POSIX 风格路径 / 权限）→ 视为无缓存
+            host_has_deps = False
         if host_has_deps:
             # 宿主机已有装好的依赖 → 搬进卷即用，不重装
             if not self.use_volumes:
@@ -771,7 +816,7 @@ class DockerRunner:
             # 卷失败 → 继续走下面的安装流程（挂载模式兜底）
 
         rc, out = self._run_container(
-            build_setup_script(self.tools),
+            build_setup_script(self.tools, pip_mirror=self.pip_mirror),
             src_dir,
             deps_dir=deps_dir,
             network="bridge",
@@ -791,7 +836,10 @@ class DockerRunner:
             )
         outcome = parse_setup_output(out)
         if outcome.tools_ok:
-            marker.write_text("installed", encoding="utf-8")
+            # 宿主侧写不了（如 gate 预演传 POSIX 风格路径）→ 只损失缓存
+            # （下轮重装），功能不受影响 —— 不让它炸掉整个 setup
+            with contextlib.suppress(OSError):
+                marker.write_text("installed", encoding="utf-8")
         return outcome
 
     # ---- 第二段：跑测试（断网） ----

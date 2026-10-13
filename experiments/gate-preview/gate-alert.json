@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0",
+  "verdict": "alert",
+  "reason": "检出 10 条 flaky 嫌疑（报告模式，不阻断合并）",
+  "nodes_total": 120,
+  "files_total": 13,
+  "findings": [
+    {
+      "test": "tests/test_gate_demo.py::test_victim_needs_cwd",
+      "kind": "order_victim",
+      "evidence": "默认序挂（30s 级快速扫描）",
+      "single_run": "pass"
+    },
+    {
+      "test": "tests/test_mdutils.py::TestMdUtils::test_create_md_file",
+      "kind": "order_victim",
+      "evidence": "默认序挂（30s 级快速扫描）",
+      "single_run": "pass"
+    },
+    {
+      "test": "tests/test_mdutils.py::TestMdUtils::test_new_checkbox_checked_list",
+      "kind": "order_victim",
+      "evidence": "默认序挂（30s 级快速扫描）",
+      "single_run": "pass"
+    },
+    {
+      "test": "tests/test_mdutils.py::TestMdUtils::test_new_checkbox_list",
+      "kind": "order_victim",
+      "evidence": "默认序挂（30s 级快速扫描）",
+      "single_run": "pass"
+    },
+    {
+      "test": "tests/test_mdutils.py::TestMdUtils::test_new_header",
+      "kind": "order_victim",
+      "evidence": "默认序挂（30s 级快速扫描）",
+      "single_run": "pass"
+    },
+    {
+      "test": "tests/test_mdutils.py::TestMdUtils::test_new_list",
+      "kind": "order_victim",
+      "evidence": "默认序挂（30s 级快速扫描）",
+      "single_run": "pass"
+    },
+    {
+      "test": "tests/test_mdutils.py::TestMdUtils::test_new_list_bold_items",
+      "kind": "order_victim",
+      "evidence": "默认序挂（30s 级快速扫描）",
+      "single_run": "pass"
+    },
+    {
+      "test": "tests/test_mdutils.py::TestMdUtils::test_new_reference_image_markdown_data",
+      "kind": "order_victim",
+      "evidence": "默认序挂（30s 级快速扫描）",
+      "single_run": "pass"
+    },
+    {
+      "test": "tests/test_mdutils.py::TestMdUtils::test_new_table_of_contents",
+      "kind": "order_victim",
+      "evidence": "默认序挂（30s 级快速扫描）",
+      "single_run": "pass"
+    },
+    {
+      "test": "tests/test_mdutils.py::TestMdUtils::test_references_placed_in_markdown_file",
+      "kind": "order_victim",
+      "evidence": "默认序挂（30s 级快速扫描）",
+      "single_run": "pass"
+    }
+  ],
+  "bad_tests": [],
+  "probes": [
+    {
+      "name": "setup",
+      "ok": true,
+      "seconds": 0.0,
+      "note": "工具链就绪"
+    },
+    {
+      "name": "collect",
+      "ok": true,
+      "seconds": 1.5,
+      "note": "120 条"
+    },
+    {
+      "name": "seq_default",
+      "ok": true,
+      "seconds": 1.4,
+      "note": "10 挂"
+    },
+    {
+      "name": "seq_reverse",
+      "ok": true,
+      "seconds": 1.3,
+      "note": "0 挂"
+    },
+    {
+      "name": "count:tests/test_fileutils/test_fileutils.py",
+      "ok": true,
+      "seconds": 1.3,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_gate_demo.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=1，1 挂"
+    },
+    {
+      "name": "count:tests/test_mdutils.py",
+      "ok": true,
+      "seconds": 1.3,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_header.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_html.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_image.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_inline.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_mdcheckbox.py",
+      "ok": true,
+      "seconds": 1.3,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_mdlist.py",
+      "ok": true,
+      "seconds": 1.3,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_reference.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_table.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_table_of_contents.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_textutils.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    }
+  ],
+  "image": "docker.io/library/python:3.10-slim",
+  "count": 20,
+  "generated_utc": "2026-10-13T10:07:22.609761Z"
+}

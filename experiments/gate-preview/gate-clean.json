@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "verdict": "pass",
+  "reason": "三探头全绿 —— 快速门禁未观察到翻转；0 次翻转 ≠ 证明稳定",
+  "nodes_total": 118,
+  "files_total": 12,
+  "findings": [],
+  "bad_tests": [],
+  "probes": [
+    {
+      "name": "setup",
+      "ok": true,
+      "seconds": 0.0,
+      "note": "工具链就绪"
+    },
+    {
+      "name": "collect",
+      "ok": true,
+      "seconds": 1.4,
+      "note": "118 条"
+    },
+    {
+      "name": "seq_default",
+      "ok": true,
+      "seconds": 1.3,
+      "note": "0 挂"
+    },
+    {
+      "name": "seq_reverse",
+      "ok": true,
+      "seconds": 1.3,
+      "note": "0 挂"
+    },
+    {
+      "name": "count:tests/test_fileutils/test_fileutils.py",
+      "ok": true,
+      "seconds": 1.3,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_mdutils.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_header.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_html.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_image.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_inline.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_mdcheckbox.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_mdlist.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_reference.py",
+      "ok": true,
+      "seconds": 1.3,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_table.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_table_of_contents.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    },
+    {
+      "name": "count:tests/test_tools/test_textutils.py",
+      "ok": true,
+      "seconds": 1.2,
+      "note": "rc=0，0 挂"
+    }
+  ],
+  "image": "docker.io/library/python:3.10-slim",
+  "count": 20,
+  "generated_utc": "2026-10-13T10:05:27.832425Z"
+}
