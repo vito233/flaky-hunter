@@ -3,8 +3,7 @@
 **CI 质量门禁：Flaky 测试检测与失败归因评测平台** —— 基于 IDoFT 公开数据集
 （Python 子集 1618 条 / 332 个去重仓库）。
 
-> 状态：**C1 ✅ 完成（双模式检测器 + 合并口径指标）· 下一站 C2 · LLM 归因评测**
-> （2026-10-13）。
+> 状态：**C1 ✅ 完成 · C2 地板 ✅（归因 harness 搭好，真模型即插即用）**（2026-10-13）。
 > 换进程重跑 + 同进程 `--count` 双探头抓 NIO/NOD；顺序变换（多顺序扫描 + 前缀
 > 二分 + ddmin 最小 polluter 归因）抓 OD 家族。
 > **合并口径（19 条正样本 / 7 项目 + 14 条负样本）：精确率 100.0%（下界；
@@ -36,6 +35,9 @@ uv run python experiments/run_eval.py --projects mtik00/yamicache --runs 10  # �
 # 顺序变换评测（OD 家族；产出 results_order.csv + metrics_combined.json）
 uv run python experiments/run_order_eval.py --orders 4 --alone-runs 10
 uv run python experiments/run_order_eval.py --projects didix21/mdutils  # 试点
+
+# C2 地板：生成裁剪后标签表（data/processed/labels.csv，19 条 / 6 类）
+uv run python experiments/build_labels.py
 ```
 
 ## 局限（先读这个再下结论）

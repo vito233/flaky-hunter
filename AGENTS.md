@@ -80,6 +80,9 @@ uv run python experiments/run_eval.py --projects mtik00/yamicache --runs 10  # �
 uv run python experiments/run_order_eval.py --orders 4 --alone-runs 10
 uv run python experiments/run_order_eval.py --projects didix21/mdutils  # 试点
 
+# C2 地板：生成裁剪后标签表（data/processed/labels.csv，19 条 / 6 类）
+uv run python experiments/build_labels.py
+
 # 评测缓存清理：源码/依赖住在 Docker 卷里（fh-src-*/fh-deps-*，见 runner.py），
 # 吃 WSL2 VM 的磁盘；要腾地方时删掉，下次会自动重建
 docker volume ls --format '{{.Name}}' | grep '^fh-' | xargs -r docker volume rm
@@ -90,10 +93,14 @@ docker volume ls --format '{{.Name}}' | grep '^fh-' | xargs -r docker volume rm
 ## 报数字的格式（硬格式）
 
 ```
-归因准确率 68.2%（多数类基线 49.5%，OD 二分类基线 72.7%）
+归因准确率 68.2%（本评测集口径：多数类基线 63.2%，OD 二分类基线 68.4%）
+归因准确率 52.1%（全量口径：多数类基线 49.5%，OD 二分类基线 72.7%）
 Macro-F1 0.51（基线 0.17）
 ```
 
+- 归因准确率**必须声明口径**：全量（1618 条，评审附录 C）与本评测集
+  （19 条 / 7 项目）两套基线不得混用（规范 §3.2；常量在 `baselines.py`，
+  防漂移测试兜底）
 - 召回率一律写成 **`Recall@IDoFT`**（分母是 IDoFT 记录数，不是"世界上所有 flaky"）
 - 精确率注明是**下界**（原因见 `docs/limitations.md` 第 1 条）
 - 报"稳定"结论时**必须附带实际运行次数**（0 次翻转 ≠ 稳定）

@@ -43,6 +43,15 @@ Project URL,SHA Detected,Pytest Test Name (PathToFile::TestClass::TestMethod or 
 
 分布（Python 子集实算）：OD-Vic 801 / OD-Brit 322 / NOD 235 / NIO 160 / OD 54 / 空 39 / ID 3 / UD 1
 
+**裁剪后标签集（归因评测用，规范 §3.2，2026-10-13 定稿）**：
+`OD / OD-Brit / NIO / NOD / OD-Vic / OTHER`（6 类）。Python 子集样本 <20 的
+类别（ID 3 / UD 1；NDOD / NDOI / OSD / TZD 为 0 条）并入 `OTHER`，空标签（39）
+排除。本评测集（`experiments/ground_truth_phase_a.csv` eval_eligible=true，
+19 条 / 7 项目）分布：OD-Vic 12 / NIO 6 / OD 1；裁剪结果
+`data/processed/labels.csv`（程序生成，`experiments/build_labels.py`）。
+本评测集基线口径：多数类 63.2%（12/19）· OD vs 非 OD 68.4%（13/19），
+与全量口径 49.5% / 72.7% 分开声明。
+
 ## Status 官方枚举
 
 `空白 / Opened / Accepted / InspiredAFix / DeveloperWontFix / DeveloperFixed / Deleted /
