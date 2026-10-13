@@ -1,0 +1,2 @@
+# 统一行尾为 LF，杜绝 Windows(CRLF) 造成的整文件 diff 噪音
+* text=auto eol=lf
