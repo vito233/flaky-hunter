@@ -1,0 +1,56 @@
+{
+ "schema_note": "解析失败计入分母按判错算（最严格主口径）；混淆矩阵行=真值列=预测",
+ "model_id": "glm-5.3-flash",
+ "temperature": 0.0,
+ "prompt_version": "attribution-prompt-v0.1.0",
+ "n_samples": 19,
+ "parse_failure_rate": 0.0,
+ "accuracy": 0.6842105263157895,
+ "macro_f1": 0.49561403508771923,
+ "per_class": {
+  "NIO": {
+   "precision": 0.6,
+   "recall": 1.0,
+   "f1": 0.7499999999999999,
+   "support": 6
+  },
+  "OD": {
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "support": 1
+  },
+  "OD-Vic": {
+   "precision": 1.0,
+   "recall": 0.5833333333333334,
+   "f1": 0.7368421052631579,
+   "support": 12
+  }
+ },
+ "confusion_matrix": {
+  "NIO": {
+   "NIO": 6,
+   "OD": 0,
+   "OD-Vic": 0
+  },
+  "OD": {
+   "NIO": 1,
+   "OD": 0,
+   "OD-Vic": 0
+  },
+  "OD-Vic": {
+   "NIO": 3,
+   "OD": 2,
+   "OD-Vic": 7
+  }
+ },
+ "od_binary_accuracy": 0.7894736842105263,
+ "baselines": {
+  "note": "两套口径不得混用（规范 §3.2）",
+  "full_corpus_majority": 0.495,
+  "full_corpus_od_binary": 0.727,
+  "eval_majority": 0.631578947368421,
+  "eval_od_binary": 0.6842105263157895
+ },
+ "timestamp_utc": "2026-10-13T08:43:07.314239+00:00"
+}

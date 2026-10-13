@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_mdutils.py::TestMdUtils::test_create_md_file",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"顺序探头显示该测试单独排在前面时因找不到 'Test_file.md' 失败，说明其依赖其它测试先创建的文件，单独跑能过、依赖前序测试的状态，属顺序依赖受害者。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "顺序探头显示该测试单独排在前面时因找不到 'Test_file.md' 失败，说明其依赖其它测试先创建的文件，单独跑能过、依赖前序测试的状态，属顺序依赖受害者。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

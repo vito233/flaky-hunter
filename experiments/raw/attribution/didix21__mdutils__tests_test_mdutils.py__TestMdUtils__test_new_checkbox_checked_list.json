@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_checkbox_checked_list",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"顺序探头显示该测试单独（先跑）通过、在其它测试之后失败，且失败原因是依赖前面测试生成的 Test_file.md 文件，属顺序依赖受害者。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "顺序探头显示该测试单独（先跑）通过、在其它测试之后失败，且失败原因是依赖前面测试生成的 Test_file.md 文件，属顺序依赖受害者。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

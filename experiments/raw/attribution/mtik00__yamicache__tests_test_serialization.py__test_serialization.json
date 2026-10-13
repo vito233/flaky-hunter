@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_serialization.py::test_serialization",
+ "label_true": "NIO",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程 --count 重复执行探针中首次通过后重复运行持续失败（99 failed, 1 passed），断言值随重复次数递增（4、88~101），表明进程内状态未清理、随运行累积。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程 --count 重复执行探针中首次通过后重复运行持续失败（99 failed, 1 passed），断言值随重复次数递增（4、88~101），表明进程内状态未清理、随运行累积。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_noclass.py::test_main",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程重复执行探头显示 test_main 首次通过、后续 99 次全部失败，说明进程内缓存/状态未被清理，属于 NOD 之外的非幂等（NIO）型 flaky。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程重复执行探头显示 test_main 首次通过、后续 99 次全部失败，说明进程内缓存/状态未被清理，属于 NOD 之外的非幂等（NIO）型 flaky。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

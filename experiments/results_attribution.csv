@@ -1,0 +1,20 @@
+project,test_name,label_true,label_pred,parse_ok,rationale
+mtik00/yamicache,tests/test_noclass.py::test_main,OD-Vic,NIO,True,同进程重复执行探头显示 test_main 首次通过、后续 99 次全部失败，说明进程内缓存/状态未被清理，属于 NOD 之外的非幂等（NIO）型 flaky。
+mtik00/yamicache,tests/test_serialization.py::test_serialization,NIO,NIO,True,"同进程 --count 重复执行探针中首次通过后重复运行持续失败（99 failed, 1 passed），断言值随重复次数递增（4、88~101），表明进程内状态未清理、随运行累积。"
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_create_md_file,OD-Vic,OD-Vic,True,顺序探头显示该测试单独排在前面时因找不到 'Test_file.md' 失败，说明其依赖其它测试先创建的文件，单独跑能过、依赖前序测试的状态，属顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_header,OD-Vic,OD-Vic,True,顺序探头显示该测试在别的测试之后运行时因 'Test_file.md' 不存在而报 FileNotFoundError，说明前面测试产生的文件状态影响了它，单独跑能过，属顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_table_of_contents,OD-Vic,OD-Vic,True,顺序探头显示该测试单独（首）运行能通过，但排在另一测试之后因 'Test_file.md' 文件状态残留/缺失而失败，属顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_list,OD-Vic,OD,True,顺序探头显示该测试单独与另一测试一起跑即失败（FileNotFoundError: Test_file.md），说明它依赖先前测试创建的文件，属于顺序依赖（受害者型）。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_checkbox_list,OD-Vic,OD-Vic,True,顺序探头显示该测试单独先跑通过（.），随后再跑因前序测试遗留的 Test_file.md 被删除/未创建而 FileNotFoundError，属于顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_checkbox_checked_list,OD-Vic,OD-Vic,True,顺序探头显示该测试单独（先跑）通过、在其它测试之后失败，且失败原因是依赖前面测试生成的 Test_file.md 文件，属顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_new_reference_image_markdown_data,OD-Vic,OD-Vic,True,顺序探头显示单独与前一测试一起跑时因 'Test_file.md' 不存在而挂，说明该测试受先前测试遗留的文件状态影响，单独运行应能通过，属顺序依赖受害者。
+didix21/mdutils,tests/test_mdutils.py::TestMdUtils::test_references_placed_in_markdown_file,OD-Vic,OD,True,顺序探头下该测试在另一测试之后运行时因找不到文件 'Test_file.md' 失败，单独排序不同则通过，属测试顺序依赖。
+juntossomosmais/regex4ocr,tests/integration/test_type_casting.py::test_validate_types_no_removal,NIO,NIO,True,同进程 --count 探头显示首次通过、重复运行后 99 个参数化用例失败，符合进程内状态未清理导致的重复跑挂。
+irmen/Pyro5,test_pyro4compat.py::test_compat_config,OD,NIO,True,同进程 --count 探头显示 100 次重复中仅 1 次通过、其余全挂，说明第一次运行留下未清理的进程内配置状态导致后续重复运行失败。
+chaosmail/python-fs,fs/tests/test_mkdir.py::test_mkdir,OD-Vic,NIO,True,同进程重复运行时目录未清理导致 already exists，首跑通过、重跑挂，属进程内状态残留。
+spulec/freezegun,tests/test_class_import.py::test_import_after_start,OD-Vic,OD-Vic,True,单独跑（.F 中第一项）能过，仅在同进程先跑其他测试后才失败，freezegun 的 FakeDatetime 泄漏属于被先前测试污染的顺序依赖受害者。
+teamhide/pythondi,tests/test_configure.py::test_configure,OD-Vic,NIO,True,同进程重复运行时因 'Already injected' 进程内状态未清理而失败（99/100 次挂，仅首次通过），属典型 NIO。
+chaosmail/python-fs,fs/tests/test_mkdir.py::test_mkdir_recursive,NIO,NIO,True,同进程重复运行（--count 探头）时同一测试 99 次失败 1 次通过，说明首次能过、进程内状态未清理导致后续重跑挂，属 NIO。
+chaosmail/python-fs,fs/tests/test_rename.py::test_rename_directory,NIO,NIO,True,同一进程内 --count 重复运行时 99 次失败仅 1 次通过，说明首次通过后进程内残留状态未清理导致后续重复执行挂掉。
+chaosmail/python-fs,fs/tests/test_rename.py::test_rename_file,NIO,NIO,True,同进程重复运行中第一次通过后，后续99次因文件残留状态抛ValueError，属于进程内状态未清理的NIO特征。
+chaosmail/python-fs,fs/tests/test_touch.py::test_touch_on_new_file,NIO,NIO,True,"同进程 --count 重复执行探针显示首次跑过、后续重复跑大量挂（99 failed, 1 passed），属进程内状态未清理导致的重复运行失败。"

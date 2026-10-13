@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_mdutils.py::TestMdUtils::test_references_placed_in_markdown_file",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD\", \"rationale\": \"顺序探头下该测试在另一测试之后运行时因找不到文件 'Test_file.md' 失败，单独排序不同则通过，属测试顺序依赖。\"}",
+ "output": {
+  "label": "OD",
+  "rationale": "顺序探头下该测试在另一测试之后运行时因找不到文件 'Test_file.md' 失败，单独排序不同则通过，属测试顺序依赖。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

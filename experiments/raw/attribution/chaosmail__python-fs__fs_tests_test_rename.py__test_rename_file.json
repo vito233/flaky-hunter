@@ -1,0 +1,12 @@
+{
+ "test_name": "fs/tests/test_rename.py::test_rename_file",
+ "label_true": "NIO",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程重复运行中第一次通过后，后续99次因文件残留状态抛ValueError，属于进程内状态未清理的NIO特征。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程重复运行中第一次通过后，后续99次因文件残留状态抛ValueError，属于进程内状态未清理的NIO特征。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

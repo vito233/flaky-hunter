@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_checkbox_list",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD-Vic\", \"rationale\": \"顺序探头显示该测试单独先跑通过（.），随后再跑因前序测试遗留的 Test_file.md 被删除/未创建而 FileNotFoundError，属于顺序依赖受害者。\"}",
+ "output": {
+  "label": "OD-Vic",
+  "rationale": "顺序探头显示该测试单独先跑通过（.），随后再跑因前序测试遗留的 Test_file.md 被删除/未创建而 FileNotFoundError，属于顺序依赖受害者。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

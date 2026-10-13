@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/integration/test_type_casting.py::test_validate_types_no_removal",
+ "label_true": "NIO",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程 --count 探头显示首次通过、重复运行后 99 个参数化用例失败，符合进程内状态未清理导致的重复跑挂。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程 --count 探头显示首次通过、重复运行后 99 个参数化用例失败，符合进程内状态未清理导致的重复跑挂。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

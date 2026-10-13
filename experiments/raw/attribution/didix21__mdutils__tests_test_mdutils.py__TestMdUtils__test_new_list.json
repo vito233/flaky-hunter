@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_mdutils.py::TestMdUtils::test_new_list",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"OD\", \"rationale\": \"顺序探头显示该测试单独与另一测试一起跑即失败（FileNotFoundError: Test_file.md），说明它依赖先前测试创建的文件，属于顺序依赖（受害者型）。\"}",
+ "output": {
+  "label": "OD",
+  "rationale": "顺序探头显示该测试单独与另一测试一起跑即失败（FileNotFoundError: Test_file.md），说明它依赖先前测试创建的文件，属于顺序依赖（受害者型）。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

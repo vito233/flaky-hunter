@@ -1,0 +1,12 @@
+{
+ "test_name": "tests/test_configure.py::test_configure",
+ "label_true": "OD-Vic",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程重复运行时因 'Already injected' 进程内状态未清理而失败（99/100 次挂，仅首次通过），属典型 NIO。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程重复运行时因 'Already injected' 进程内状态未清理而失败（99/100 次挂，仅首次通过），属典型 NIO。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}

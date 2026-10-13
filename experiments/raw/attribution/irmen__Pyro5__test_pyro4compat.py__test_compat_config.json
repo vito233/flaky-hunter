@@ -1,0 +1,12 @@
+{
+ "test_name": "test_pyro4compat.py::test_compat_config",
+ "label_true": "OD",
+ "raw": "{\"label\": \"NIO\", \"rationale\": \"同进程 --count 探头显示 100 次重复中仅 1 次通过、其余全挂，说明第一次运行留下未清理的进程内配置状态导致后续重复运行失败。\"}",
+ "output": {
+  "label": "NIO",
+  "rationale": "同进程 --count 探头显示 100 次重复中仅 1 次通过、其余全挂，说明第一次运行留下未清理的进程内配置状态导致后续重复运行失败。",
+  "model_id": "glm-5.3-flash",
+  "prompt_version": "attribution-prompt-v0.1.0"
+ },
+ "error": null
+}
