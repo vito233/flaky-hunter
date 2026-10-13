@@ -476,8 +476,9 @@ def main(argv: list[str] | None = None) -> int:
 
     report = run_gate(
         runner,
-        Path(args.src),
-        Path(args.deps),
+        # CI 里传相对路径（--src .）：docker -v 不接受相对挂载，先转绝对
+        Path(args.src).resolve(),
+        Path(args.deps).resolve(),
         testdir=args.testdir,
         count=args.count,
         per_test_timeout=args.per_test_timeout,
