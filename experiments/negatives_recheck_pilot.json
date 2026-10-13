@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "generated_utc": "2026-10-13T11:23:12.647910+00:00",
+  "runs_per_sample": 3,
+  "seed": 42,
+  "projects": 1,
+  "samples_total": 2,
+  "samples_valid": 2,
+  "collect_failures": 0,
+  "flipped_count": 0,
+  "noise_rate_upper_bound": 0.0,
+  "all_pass_count": 2,
+  "confirm_stable_ratio_lower_bound": 1.0,
+  "catch_prob_5pct": 0.7854,
+  "flipped_tests": [],
+  "disclaimer": "30 遍全过 ≠ 证明稳定（95% 置信需 ~170 遍）；全过比例 = N1 纯度下界"
+}

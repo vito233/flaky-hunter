@@ -1,0 +1,3 @@
+project,sha,test_name,runs,passed,failed,timeouts,notfound,flipped,all_pass,seconds,note
+didix21/mdutils,2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb,tests/test_mdutils.py::TestMdUtils::test_new_inline_link_bold_italic_code_format,3,3,0,0,0,False,True,3.3,
+didix21/mdutils,2ef859ecc1e4f1a3e24f4150c96f61180bc57ceb,tests/test_tools/test_table_of_contents.py::TestTableOfContents::test_table_of_contents_with_back_slash,3,3,0,0,0,False,True,3.4,

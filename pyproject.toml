@@ -10,6 +10,12 @@ dependencies = [
     "tenacity>=9.0",
 ]
 
+[project.optional-dependencies]
+dashboard = [
+    "pandas>=3.0.6",
+    "streamlit>=1.65.0",
+]
+
 [dependency-groups]
 dev = [
     "pytest>=8.3",
