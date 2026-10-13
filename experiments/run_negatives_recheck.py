@@ -50,10 +50,22 @@ GROUND_TRUTH = (
 # 统计口径：30 遍内抓到 ≥5% 失败率翻转的概率（写进报告，防误读）
 CATCH_PROB_5PCT = 1 - 0.95**30
 
+# 每项目测试目录：python-fs 的测试在 fs/tests/（真值表测试名可证），
+# 统一 "tests" 会 COLLECT_ERROR。封闭集合，显式配置比自动探测可靠
+# （自动退到 "." 会把 build/ 里的旧测试副本也收进负样本池 —— 脏）。
+PROJECT_TESTDIRS = {"chaosmail/python-fs": "fs"}
+
 
 @dataclass
 class RecheckRow:
-    """一条负样本的复核结果。"""
+    """一条负样本的复核结果。
+
+    verdict 三分类（与 C1 指标口径一致）：
+        stable_ok   K 遍全过 = "K 遍内无翻转"（≠ 证明稳定）
+        env_fail    K 遍**全挂** = 环境类失败（如断网下 DNS 不可用）——
+                    不是 flaky 也不是干净负样本，**排除并单独报数**
+        noisy       有过有挂 = N1 混入真 flaky（噪声，全实验最关心的）
+    """
 
     project: str
     sha: str
@@ -63,8 +75,9 @@ class RecheckRow:
     failed: int
     timeouts: int
     notfound: int
-    flipped: bool  # K 遍内出现过 fail/error = N1 噪声
-    all_pass: bool  # K 遍全过 = "K 遍内无翻转"（≠ 证明稳定）
+    flipped: bool  # 有过有挂 = N1 噪声
+    all_pass: bool  # K 遍全过
+    env_fail: bool  # K 遍全挂（0 有效通过）= 环境类失败，排除
     seconds: float
     note: str = ""
 
@@ -92,8 +105,13 @@ def recheck_one(
     test_name: str,
     runs: int,
     per_run_timeout: int,
+    raw_log_dir: Path | None = None,
 ) -> RecheckRow:
-    """一条负样本：换进程重跑 runs 遍，数翻转。"""
+    """一条负样本：换进程重跑 runs 遍，按三分类定性。
+
+    stable_ok（K 遍全过）/ env_fail（K 遍全挂 = 环境类失败，排除并
+    单独报数，与 C1 指标口径同规则）/ noisy（有过有挂 = N1 噪声）。
+    """
     t0 = time.monotonic()
     outcome = runner.replay(
         src_dir, deps_dir, test_name, runs=runs, per_run_timeout=per_run_timeout
@@ -111,13 +129,21 @@ def recheck_one(
             notfound=0,
             flipped=False,
             all_pass=False,
+            env_fail=False,
             seconds=seconds,
             note=f"DOCKER: {outcome.docker_error[:120]}",
         )
     counts = {"pass": 0, "fail": 0, "timeout": 0, "notfound": 0}
     for verdict in outcome.sequence:
         counts[verdict] = counts.get(verdict, 0) + 1
-    flipped = counts["fail"] > 0
+    env_fail = counts["pass"] == 0
+    flipped = counts["pass"] > 0 and counts["fail"] > 0
+    if flipped and raw_log_dir is not None and outcome.first_failure_log:
+        raw_log_dir.mkdir(parents=True, exist_ok=True)
+        safe = test_name.replace("/", "_").replace("::", "__")
+        (raw_log_dir / f"{safe}.log").write_text(
+            outcome.first_failure_log, encoding="utf-8"
+        )
     return RecheckRow(
         project="",
         sha="",
@@ -128,9 +154,10 @@ def recheck_one(
         timeouts=counts["timeout"],
         notfound=counts["notfound"],
         flipped=flipped,
-        all_pass=(not flipped and counts["notfound"] == 0 and counts["timeout"] == 0),
+        all_pass=not flipped and not env_fail,
+        env_fail=env_fail,
         seconds=seconds,
-        note=("首个失败日志见 raw" if flipped and outcome.first_failure_log else ""),
+        note=("首个失败日志已落 raw" if flipped else ""),
     )
 
 
@@ -163,6 +190,7 @@ def main(argv: list[str] | None = None) -> int:
     runner.docker_bin = _parts[0] if len(_parts) == 1 else _parts
     src_root = Path(args.src_root)
     deps_root = Path(args.deps_root)
+    raw_dir = Path(__file__).resolve().parent / "raw" / "negatives-recheck"
 
     rows: list[RecheckRow] = []
     for proj, (sha, recorded) in sorted(projects.items()):
@@ -181,13 +209,25 @@ def main(argv: list[str] | None = None) -> int:
             )
             rows.append(
                 RecheckRow(
-                    proj, sha, "(setup)", 0, 0, 0, 0, 0, False, False, 0.0, "SETUP_FAIL"
+                    proj,
+                    sha,
+                    "(setup)",
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    False,
+                    False,
+                    False,
+                    0.0,
+                    "SETUP_FAIL",
                 )
             )
             continue
 
         # collect → filter_recorded → 抽样（与 C1 同一套 N1 逻辑，扩抽样量）
-        coll = runner.collect(src, deps)
+        coll = runner.collect(src, deps, testdir=PROJECT_TESTDIRS.get(proj, "tests"))
         if not coll.ok:
             log.error("  收集失败：%s —— 项目跳过（如实报告）", coll.reason)
             rows.append(
@@ -200,6 +240,7 @@ def main(argv: list[str] | None = None) -> int:
                     0,
                     0,
                     0,
+                    False,
                     False,
                     False,
                     0.0,
@@ -217,12 +258,23 @@ def main(argv: list[str] | None = None) -> int:
         )
 
         for node in picked:
-            row = recheck_one(runner, src, deps, node, args.runs, args.per_run_timeout)
+            row = recheck_one(
+                runner,
+                src,
+                deps,
+                node,
+                args.runs,
+                args.per_run_timeout,
+                raw_log_dir=raw_dir,
+            )
             row.project, row.sha = proj, sha
             rows.append(row)
-            mark = (
-                "⚠️ 翻转" if row.flipped else ("✅ 全过" if row.all_pass else "❔ 异常")
-            )
+            if row.flipped:
+                mark = "⚠️ 翻转（N1 噪声）"
+            elif row.env_fail:
+                mark = "🚫 全挂（环境类失败，排除）"
+            else:
+                mark = "✅ 全过"
             log.info(
                 "  %s %s（%d/%d 过，%.0fs）%s",
                 mark,
@@ -233,13 +285,15 @@ def main(argv: list[str] | None = None) -> int:
                 row.note,
             )
 
-    # 汇总（口径：noise 上界，见模块 docstring）
+    # 汇总（口径：三分类，见模块 docstring 与 RecheckRow 注释）
     valid = [r for r in rows if r.runs > 0]
     flipped = [r for r in valid if r.flipped]
+    env_fail = [r for r in valid if r.env_fail]
     all_pass = [r for r in valid if r.all_pass]
+    clean = [r for r in valid if not r.env_fail]  # 排除环境失败后的分母
     collected_fail = [r for r in rows if r.note.startswith("COLLECT_")]
     summary = {
-        "schema_version": "1.0",
+        "schema_version": "2.0",
         "generated_utc": datetime.now(UTC).isoformat(),
         "runs_per_sample": args.runs,
         "seed": args.seed,
@@ -247,18 +301,26 @@ def main(argv: list[str] | None = None) -> int:
         "samples_total": len(rows),
         "samples_valid": len(valid),
         "collect_failures": len(collected_fail),
-        "flipped_count": len(flipped),
+        "verdict_breakdown": {
+            "stable_ok（K 遍全过）": len(all_pass),
+            "env_fail（K 遍全挂，排除并单独报数）": len(env_fail),
+            "noisy（有过有挂 = N1 噪声）": len(flipped),
+        },
+        "env_fail_tests": [
+            {"project": r.project, "test": r.test_name} for r in env_fail
+        ],
+        "flipped_tests": [{"project": r.project, "test": r.test_name} for r in flipped],
         "noise_rate_upper_bound": (
-            round(len(flipped) / len(valid), 4) if valid else None
+            round(len(flipped) / len(clean), 4) if clean else None
         ),
-        "all_pass_count": len(all_pass),
         "confirm_stable_ratio_lower_bound": (
-            round(len(all_pass) / len(valid), 4) if valid else None
+            round(len(all_pass) / len(clean), 4) if clean else None
         ),
         "catch_prob_5pct": round(CATCH_PROB_5PCT, 4),
-        "flipped_tests": [r.test_name for r in flipped],
         "disclaimer": (
-            "30 遍全过 ≠ 证明稳定（95% 置信需 ~170 遍）；全过比例 = N1 纯度下界"
+            "30 遍全过 ≠ 证明稳定（95% 置信需 ~170 遍）；全过比例 = N1 纯度下界。"
+            "env_fail（全挂）不是 flaky 也不是噪声 —— 是断网等环境约束下的"
+            "预期失败（C1 指标口径：环境类失败排除并单独报数）"
         ),
     }
 
@@ -282,15 +344,21 @@ def main(argv: list[str] | None = None) -> int:
         "有效样本：%d 条（收集失败 %d 条项目级跳过）", len(valid), len(collected_fail)
     )
     log.info(
-        "K 遍内翻转：%d 条 → 噪声率上界 %s",
+        "三分类：全过 %d · 环境全挂（排除）%d · 噪声翻转 %d",
+        len(all_pass),
+        len(env_fail),
         len(flipped),
-        summary["noise_rate_upper_bound"],
     )
     log.info(
-        "K 遍全过：%d 条 → 确认稳定比例（下界）%s",
-        len(all_pass),
+        "排除环境失败后（分母 %d）：噪声率上界 %s · 确认稳定比例（下界）%s",
+        len(clean),
+        summary["noise_rate_upper_bound"],
         summary["confirm_stable_ratio_lower_bound"],
     )
+    if env_fail:
+        log.info("环境失败明细（预期：断网下依赖 DNS/socket 的测试）：")
+        for r in env_fail:
+            log.info("  - %s %s", r.project, r.test_name)
     log.info(
         "口径：对失败率 ≥5%% 的测试，K=30 抓到概率 ≈ %.1f%%；弱翻转抓不全",
         CATCH_PROB_5PCT * 100,
