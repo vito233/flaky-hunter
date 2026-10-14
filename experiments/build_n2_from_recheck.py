@@ -20,6 +20,11 @@ noise 0 条。对不上 = 管道有问题，先修管道再落档。
     uv run python experiments/build_n2_from_recheck.py --skip-pipeline
         # --skip-pipeline：不走 XML→detect_history 管道，直接从 CSV 聚合
         # （仅用于快速对账，不作为 N2 表的正式来源）
+    # 2026-10-14 扩样后 N2 v2：输入/输出参数化（不传参数 = v1 行为不变）
+    uv run python experiments/build_n2_from_recheck.py \
+        --recheck experiments/negatives_recheck_v2.csv \
+        --out-json experiments/negatives_n2_v2.json \
+        --out-csv experiments/negatives_n2_v2.csv
 """
 
 from __future__ import annotations
@@ -44,17 +49,21 @@ N2_CSV = EXPERIMENTS_DIR / "negatives_n2.csv"
 MIN_HISTORY_FOR_N2 = 10
 
 
-def load_recheck_rows() -> list[dict[str, str]]:
-    with RECHECK_CSV.open(encoding="utf-8") as f:
+def load_recheck_rows(path: Path) -> list[dict[str, str]]:
+    with path.open(encoding="utf-8") as f:
         return list(csv.DictReader(f))
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--skip-pipeline", action="store_true")
+    parser.add_argument("--recheck", default=str(RECHECK_CSV), help="复核 CSV 输入")
+    parser.add_argument("--out-json", default=str(N2_JSON))
+    parser.add_argument("--out-csv", default=str(N2_CSV))
     args = parser.parse_args(argv)
 
-    rows = load_recheck_rows()
+    recheck_csv = Path(args.recheck)
+    rows = load_recheck_rows(recheck_csv)
     # 三分类口径：env_fail（全挂 = 环境失败）排除并单独报数
     candidates = [r for r in rows if r["env_fail"] != "True"]
     env_fail = [r for r in rows if r["env_fail"] == "True"]
@@ -89,7 +98,7 @@ def main(argv: list[str] | None = None) -> int:
                     encoding="utf-8",
                 )
             report = detect_history(
-                project="negatives-recheck(30x cross-process, local Docker)",
+                project=f"negatives-recheck({n_runs}x cross-process, local Docker)",
                 xml_dir=tmp,
             )
             by_id = {r.test_id: r for r in report.results}
@@ -119,13 +128,28 @@ def main(argv: list[str] | None = None) -> int:
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
 
+    # 出处随输入走：复核生成日期从同目录 JSON 读，不写死（扩样 v2 复用同一脚本）
+    meta_date = ""
+    meta_path = recheck_csv.with_suffix(".json")
+    if meta_path.exists():
+        try:
+            meta_date = str(
+                json.loads(meta_path.read_text(encoding="utf-8")).get(
+                    "generated_utc", ""
+                )
+            )[:10]
+        except (json.JSONDecodeError, OSError):
+            meta_date = ""
+    runs_seen = sorted({int(r["runs"]) for r in candidates})
+    runs_note = runs_seen[0] if runs_seen else "?"
     payload = {
         "schema_version": "1.0",
         "generated_utc": datetime.now(UTC).isoformat(),
         "definition": "N2 = N1 + 历史无翻转（valid_runs>=10, flip=0, 全过；"
         "全挂=env_fail 排除并单独报数）",
-        "provenance_disclaimer": "历史 = negatives_recheck.csv 的 30 遍换进程"
-        "运行记录（同 SHA 同容器，2026-10-13 实跑）；非目标项目公开 CI 历史",
+        "provenance_disclaimer": f"历史 = {recheck_csv.name} 的 {runs_note} 遍换进程"
+        f"运行记录（同 SHA 同容器，{meta_date or '日期见复核 JSON'} 实跑）；"
+        "非目标项目公开 CI 历史",
         "min_history_for_n2": MIN_HISTORY_FOR_N2,
         "pipeline": report_summary,
         "counts": {
@@ -146,10 +170,12 @@ def main(argv: list[str] | None = None) -> int:
             for r in n2
         ],
     }
-    N2_JSON.write_text(
+    out_json = Path(args.out_json)
+    out_csv = Path(args.out_csv)
+    out_json.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    with N2_CSV.open("w", encoding="utf-8", newline="") as f:
+    with out_csv.open("w", encoding="utf-8", newline="") as f:
         w = csv.writer(f)
         w.writerow(["project", "sha", "test_name", "history_runs", "flips"])
         for r in n2:

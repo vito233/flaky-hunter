@@ -11,9 +11,11 @@
     单独跑能过  = flaky 嫌疑 → 报警（附触发探头与证据）
     单独跑也挂  = 坏测试 → 不冤枉，单独列出不计报警
 
-为什么第一版是"报告模式"（检出也不让 CI 变红）：
-    门禁上线的工程惯例 —— 先 shadow 观察误报率，数字站住了再转硬拦截。
-    `--strict` 一开就是硬拦截（alert → exit 1），留给第二版。
+两档模式（第二版起）：
+    报告模式（默认，shadow）：检出也不让 CI 变红 —— 先观察误报率。
+    `--strict` 硬拦截：alert → exit 1（阻断合并）；inconclusive → exit 2
+    （fail-closed：扫描没完成就不放行 —— 门禁不许瞎着给 pass）。
+    报告模式恒 exit 0。退出码矩阵有单测钉住（tests/test_gate.py）。
 
 覆盖范围声明（写进报告，防误读）：
     这是**快速门禁**（分钟级），不是 100 遍全量复核（小时级）。
@@ -49,7 +51,7 @@ from flaky_hunter.runner import (
 
 log = logging.getLogger("gate")
 
-GATE_SCHEMA_VERSION = "1.0"
+GATE_SCHEMA_VERSION = "1.1"  # 1.1：+mode 字段（report/strict）+ strict 退出码语义
 
 # 嫌疑的定性：抓到它的探头决定它叫什么
 FindingKind = Literal["order_victim", "order_flap", "inprocess_nio"]
@@ -85,6 +87,7 @@ class GateReport(BaseModel):
 
     schema_version: str = GATE_SCHEMA_VERSION
     verdict: Verdict
+    mode: Literal["report", "strict"] = "report"
     reason: str = ""
     nodes_total: int = 0
     files_total: int = 0
@@ -168,12 +171,14 @@ def gate_verdict(
     findings: list[GateFinding],
     bad_tests: list[str],
     probes: list[GateProbe],
+    strict: bool = False,
 ) -> tuple[Verdict, str]:
     """(verdict, reason) —— 判定规则全在这一个纯函数里，可完整单测。
 
     核心探头（setup / collect / 两个序扫描）失败 = 扫描没完成 → inconclusive
     （门禁不许在瞎的时候给 pass）。文件 count 探头单文件失败不致命：
     挂本身可能就是信号，交给单独跑验证去定性。
+    verdict 与模式无关（对扫描事实的陈述）；模式只改理由文案和退出码。
     """
     by_name = {p.name: p for p in probes}
     for name in _CORE_PROBES:
@@ -181,6 +186,8 @@ def gate_verdict(
         if p is not None and not p.ok:
             return "inconclusive", f"探头 {name} 失败，扫描没有完成 —— 门禁不给结论"
     if findings:
+        if strict:
+            return "alert", f"检出 {len(findings)} 条 flaky 嫌疑（硬拦截：合并被阻断）"
         return "alert", f"检出 {len(findings)} 条 flaky 嫌疑（报告模式，不阻断合并）"
     reason = "三探头全绿 —— 快速门禁未观察到翻转；0 次翻转 ≠ 证明稳定"
     if bad_tests:
@@ -191,8 +198,9 @@ def gate_verdict(
 def render_markdown(report: GateReport) -> str:
     """渲染 Job Summary 用 Markdown（Actions 页面直接可读）。"""
     icon = {"pass": "✅", "alert": "⚠️", "inconclusive": "❔"}[report.verdict]
+    mode_label = "硬拦截" if report.mode == "strict" else "报告模式"
     lines = [
-        f"## {icon} Flaky 门禁判定：{report.verdict}",
+        f"## {icon} Flaky 门禁判定：{report.verdict}（{mode_label}）",
         "",
         f"- **理由**：{report.reason}",
         f"- **扫描覆盖**：{report.nodes_total} 条测试 / {report.files_total} 个文件，"
@@ -223,12 +231,18 @@ def render_markdown(report: GateReport) -> str:
             "",
         ]
         lines += [f"- `{t}`" for t in report.bad_tests]
-    lines += [
-        "",
-        "---",
-        "_快速门禁（报告模式）：三探头全绿 ≠ 证明没有 flaky（0 次翻转 ≠ 稳定）。"
-        "全量复核走 flaky-hunter 的 100 遍重跑 + 顺序扫描。_",
-    ]
+    if report.mode == "strict":
+        footer = (
+            "_快速门禁（硬拦截）：alert 阻断合并（exit 1）、inconclusive 不放行"
+            "（exit 2，fail-closed）；三探头全绿 ≠ 证明没有 flaky"
+            "（0 次翻转 ≠ 稳定）。全量复核走 flaky-hunter 的 100 遍重跑 + 顺序扫描。_"
+        )
+    else:
+        footer = (
+            "_快速门禁（报告模式）：三探头全绿 ≠ 证明没有 flaky（0 次翻转 ≠ 稳定）。"
+            "全量复核走 flaky-hunter 的 100 遍重跑 + 顺序扫描。_"
+        )
+    lines += ["", "---", footer]
     return "\n".join(lines) + "\n"
 
 
@@ -254,7 +268,7 @@ def _single_run_pass(
     return outcome.outcomes.get(node, "missing")
 
 
-def _short_circuit(probes: list[GateProbe]) -> GateReport:
+def _short_circuit(probes: list[GateProbe], strict: bool = False) -> GateReport:
     """核心探头失败时立即收场：让 gate_verdict 给 inconclusive，不伪装成功。"""
     verdict, reason = gate_verdict([], [], probes)
     failed = [p for p in probes if not p.ok and p.note]
@@ -262,6 +276,7 @@ def _short_circuit(probes: list[GateProbe]) -> GateReport:
         reason += "（" + "；".join(f"{p.name}: {p.note}" for p in failed) + "）"
     return GateReport(
         verdict=verdict,
+        mode="strict" if strict else "report",
         reason=reason,
         probes=probes,
         generated_utc=datetime.now(UTC),
@@ -276,6 +291,7 @@ def run_gate(
     count: int = 20,
     per_test_timeout: int = 30,
     files: list[str] | None = None,
+    strict: bool = False,
 ) -> GateReport:
     """门禁主流程：setup → collect → 双序扫描 → 单独验证 → 文件 count → 判定。"""
     src_dir = Path(src_dir)
@@ -308,7 +324,7 @@ def run_gate(
         "工具链就绪" if setup.tools_ok else f"安装失败: {setup.log_tail[-80:]}",
     )
     if not setup.tools_ok:
-        return _short_circuit(probes)
+        return _short_circuit(probes, strict=strict)
 
     t0 = time.monotonic()
     coll = runner.collect(src_dir, deps_dir, testdir)
@@ -319,7 +335,7 @@ def run_gate(
         f"{len(coll.tests)} 条" if coll.ok else coll.reason,
     )
     if not coll.ok:
-        return _short_circuit(probes)
+        return _short_circuit(probes, strict=strict)
 
     nodes = coll.tests
     file_map = group_by_file(nodes) if coll.ok else OrderedDict()
@@ -398,9 +414,10 @@ def run_gate(
                     bad_tests.append(node)
 
     # ⑤ 判定
-    verdict, reason = gate_verdict(findings, bad_tests, probes)
+    verdict, reason = gate_verdict(findings, bad_tests, probes, strict=strict)
     report = GateReport(
         verdict=verdict,
+        mode="strict" if strict else "report",
         reason=reason,
         nodes_total=len(nodes),
         files_total=len(file_map),
@@ -420,7 +437,7 @@ def run_gate(
 def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     parser = argparse.ArgumentParser(
-        prog="flaky-hunter-gate", description="flaky-hunter CI 门禁（报告模式）"
+        prog="flaky-hunter-gate", description="flaky-hunter CI 门禁（报告/硬拦截双模）"
     )
     parser.add_argument("--src", required=True, help="项目源码目录（挂进容器 /w）")
     parser.add_argument(
@@ -459,7 +476,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--strict",
         action="store_true",
-        help="硬门禁：alert → exit 1（默认报告模式恒 0）",
+        help=(
+            "硬拦截：alert → exit 1（阻断合并）、inconclusive → exit 2"
+            "（fail-closed，瞎了不放行）；默认报告模式恒 0"
+        ),
     )
     args = parser.parse_args(argv)
 
@@ -483,6 +503,7 @@ def main(argv: list[str] | None = None) -> int:
         count=args.count,
         per_test_timeout=args.per_test_timeout,
         files=args.files,
+        strict=args.strict,
     )
 
     md = render_markdown(report)
@@ -493,7 +514,15 @@ def main(argv: list[str] | None = None) -> int:
     if args.md_out:
         Path(args.md_out).write_text(md, encoding="utf-8")
     log.info("%s", md)
-    return 1 if (args.strict and report.verdict == "alert") else 0
+    if not args.strict:
+        return 0  # 报告模式（shadow）：恒绿，观察误报率用
+    if report.verdict == "alert":
+        return 1  # 硬拦截：检出嫌疑，阻断合并
+    if report.verdict == "inconclusive":
+        # fail-closed：扫描没完成就不放行。与 argparse 用法错误同码（2），
+        # CI 日志里看 verdict 区分
+        return 2
+    return 0
 
 
 if __name__ == "__main__":

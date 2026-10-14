@@ -9,6 +9,7 @@ import json
 import pytest
 from pydantic import ValidationError
 
+import flaky_hunter.gate as gate_mod
 from flaky_hunter.gate import (
     GateFinding,
     GateProbe,
@@ -337,3 +338,101 @@ def test_run_gate_reverse_order_flap():
     report = run_gate(runner, src_dir=".", deps_dir="/tmp/d")
     assert report.verdict == "alert"
     assert report.findings[0].kind == "order_flap"
+
+
+# ---------------------------------------------------------------- strict 第二版
+# （mode 字段 / 模式化文案 / main() 退出码矩阵）
+
+
+def test_verdict_alert_reason_respects_mode():
+    """理由文案随模式走：报告模式说『不阻断』，strict 说『被阻断』。"""
+    f = [GateFinding(test="a", kind="order_victim")]
+    probes = _probes(*_CORE)
+    _, report_reason = gate_verdict(f, [], probes, strict=False)
+    _, strict_reason = gate_verdict(f, [], probes, strict=True)
+    assert "报告模式" in report_reason
+    assert "硬拦截" in strict_reason
+    assert report_reason != strict_reason
+
+
+def test_run_gate_strict_mode_sets_report_mode_field():
+    runner = FakeGateRunner(
+        seq_results=[_all_pass(NODES), _all_pass(NODES)],
+        script_results=[("@@FILE_RC=0@@", "@@FILE_RC=0@@\n") for _ in range(2)],
+    )
+    report = run_gate(runner, src_dir=".", deps_dir="/tmp/d", strict=True)
+    assert report.mode == "strict"
+    assert report.verdict == "pass"  # verdict 与模式无关（对扫描事实的陈述）
+
+
+def test_run_gate_strict_setup_failure_still_short_circuits():
+    """strict 下环境挂了照样短路到 inconclusive —— 不许伪装成别的结论。"""
+    runner = FakeGateRunner(seq_results=[], script_results=[])
+    runner._setup = SetupOutcome(
+        tools_ok=False, project_installed=False, log_tail="pip boom"
+    )
+    report = run_gate(runner, src_dir=".", deps_dir="/tmp/d", strict=True)
+    assert report.mode == "strict"
+    assert report.verdict == "inconclusive"
+    assert runner.seq_calls == []
+
+
+def test_render_markdown_footer_reflects_mode():
+    def _report(verdict, mode):
+        return GateReport(
+            verdict=verdict, mode=mode, generated_utc="2026-10-14T00:00:00Z"
+        )
+
+    md_report = render_markdown(_report("alert", "report"))
+    md_strict = render_markdown(_report("alert", "strict"))
+    assert "报告模式" in md_report
+    assert "硬拦截" in md_strict
+    assert "exit 1" in md_strict and "exit 2" in md_strict
+    # 覆盖范围免责声明两种模式都必须在场
+    assert "0 次翻转 ≠ 稳定" in md_report
+    assert "0 次翻转 ≠ 稳定" in md_strict
+
+
+def test_gate_report_mode_field_roundtrip():
+    report = GateReport(
+        verdict="pass", mode="strict", generated_utc="2026-10-14T00:00:00Z"
+    )
+    restored = GateReport.model_validate_json(report.model_dump_json())
+    assert restored.mode == "strict"
+
+
+@pytest.mark.parametrize(
+    ("strict", "verdict", "expected"),
+    [
+        (False, "alert", 0),  # 报告模式：检出也恒绿（shadow）
+        (False, "inconclusive", 0),
+        (False, "pass", 0),
+        (True, "alert", 1),  # 硬拦截：检出 → 阻断
+        (True, "inconclusive", 2),  # fail-closed：瞎了不放行
+        (True, "pass", 0),
+    ],
+)
+def test_main_exit_code_matrix(monkeypatch, strict, verdict, expected):
+    """main() 退出码矩阵：CI 红绿完全由 (模式, verdict) 决定，无暗门。"""
+    captured: dict[str, object] = {}
+
+    class _FakeRunner:
+        image = "img:latest"
+
+    monkeypatch.setattr(gate_mod, "DockerRunner", _FakeRunner)
+
+    def fake_run_gate(runner, src_dir, deps_dir, **kwargs):
+        captured["strict"] = kwargs.get("strict")
+        return GateReport(
+            verdict=verdict,
+            mode="strict" if kwargs.get("strict") else "report",
+            generated_utc="2026-10-14T00:00:00Z",
+        )
+
+    monkeypatch.setattr(gate_mod, "run_gate", fake_run_gate)
+    argv = ["--src", ".", "--deps", "/tmp/d"]
+    if strict:
+        argv.append("--strict")
+    rc = gate_mod.main(argv)
+    assert captured["strict"] is strict  # CLI 旗子必须真的传进 run_gate
+    assert rc == expected
