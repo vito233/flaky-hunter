@@ -93,6 +93,20 @@ MovedToGradle / FixedOrder / Unmaintained / RepoRenamed`
   `polluters`（分号分隔）、`orders_tried`、`minimized`。合并口径
   （`metrics.combine_modes`）：任一模式报警即报警，两个模式抓不同机制，是互补。
 
+## 负样本三档数据文件（N1 / N2 / N3）
+
+| 文件 | 口径 | 规模 |
+|---|---|---|
+| `experiments/negatives_recheck.{csv,json}` | N3 v1：7×8 条 × 30 遍（2026-10-13；6 条混入已审计修正，真 N1 = 50） | 56 条 |
+| `experiments/negatives_recheck_v2.{csv,json}` | N3 v2：7×20 条 × 30 遍（2026-10-14，抽样前全库对照） | 129 条 |
+| `experiments/negatives_n2.{csv,json}` | N2 v1 = N1 + ≥10 遍无翻转全过 | 55 条 |
+| `experiments/negatives_n2_v2.{csv,json}` | N2 v2（同口径，v2 数据重建） | 128 条 |
+
+三分类口径：`stable_ok`（30 遍全过）/ `env_fail`（全挂 = 环境类失败，
+排除并单独报数）/ `noisy`（有过有挂 = 真噪声）。N2 由
+`build_n2_from_recheck.py` 走 JUnit XML → `detect_history` 管道重建
+（内置两道对账；输入/输出可参数化，默认吃 v1 文件）。
+
 ## 硬数字（可直接引用，全部核验过）
 
 | 数字 | 含义 |

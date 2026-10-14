@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0",
+  "generated_utc": "2026-10-14T07:08:39.728114+00:00",
+  "runs_per_sample": 30,
+  "seed": 42,
+  "projects": 7,
+  "samples_total": 129,
+  "samples_valid": 129,
+  "collect_failures": 0,
+  "verdict_breakdown": {
+    "stable_ok（K 遍全过）": 128,
+    "env_fail（K 遍全挂，排除并单独报数）": 1,
+    "noisy（有过有挂 = N1 噪声）": 0
+  },
+  "env_fail_tests": [
+    {
+      "project": "irmen/Pyro5",
+      "test": "tests/test_naming.py::TestOfflineNameServer::testStartNSfunc"
+    }
+  ],
+  "flipped_tests": [],
+  "noise_rate_upper_bound": 0.0,
+  "confirm_stable_ratio_lower_bound": 1.0,
+  "catch_prob_5pct": 0.7854,
+  "disclaimer": "30 遍全过 ≠ 证明稳定（95% 置信需 ~170 遍）；全过比例 = N1 纯度下界。env_fail（全挂）不是 flaky 也不是噪声 —— 是断网等环境约束下的预期失败（C1 指标口径：环境类失败排除并单独报数）"
+}

@@ -69,14 +69,18 @@ uv run python experiments/build_labels.py
 uv sync --extra dashboard
 uv run streamlit run dashboard/app.py
 
-# N3 负样本复核（7 项目 × 8 条 N1 负样本 × 换进程 K 遍，报告确认稳定比例）
-uv run python experiments/run_negatives_recheck.py --runs 30
+# N3 负样本复核（每项目 --per-project 条 × 换进程 K 遍；v1=8/项目 → 56 条，
+#   扩样 v2=20/项目 → 129 条，均噪声 0；--src-root/--deps-root 指向已备好的
+#   源码/依赖目录，详见 experiments/run_negatives_recheck.py 模块注释）
+uv run python experiments/run_negatives_recheck.py --per-project 20 --runs 30 \
+    --out experiments/negatives_recheck_v2.csv
 
 # 模式 B：历史翻转（吃 JUnit XML 目录，文件名典序 = 时间序；秒级零 Docker）
 python -m flaky_hunter.detect_history --xml-dir <历史目录> \
     --project owner/repo --json-out history.json --md-out history.md
 
-# N2 口径落档（negatives_recheck 30 遍记录 → JUnit 历史 → detect_history 管道）
+# N2 口径落档（复核 30 遍记录 → JUnit 历史 → detect_history 管道；
+#   --recheck/--out-json/--out-csv 可换输入输出，默认吃 v1 文件）
 uv run python experiments/build_n2_from_recheck.py
 ```
 

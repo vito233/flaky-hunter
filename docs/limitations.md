@@ -71,6 +71,15 @@
     数据：`experiments/negatives_recheck.{csv,json}`（脚本
     `experiments/run_negatives_recheck.py`；分类修正在 json 的
     post_hoc_audit 块）。
+    **扩样 v2（2026-10-14）**：7 项目 × 每项目抽 20（seed=42；池小全取
+    ——yamicache 15 / pythondi 14）× 换进程 30 遍，有效 129 条 ——
+    全过 128 · env_fail 1（仍是 Pyro5 testStartNSfunc，与 v1 同一条）·
+    噪声 0 → **N1 纯度下界 100%（128/128）**。本次剔除在抽样前就对照
+    IDoFT 全库做（d80f68b 修复生效），分母生而纯净，无需事后修正；
+    两轮独立抽样同结论、同一条 env_fail。数据：
+    `experiments/negatives_recheck_v2.{csv,json}`；N2 v2 同步重建
+    `experiments/negatives_n2_v2.{csv,json}`（128 条 / 7 项目），
+    实验记录 `experiments/2026-10-14-negatives-expand.md`。
 
 ## 阶段 C1 补账补充（2026-10-13 深夜 · 模式 B）
 
@@ -81,9 +90,10 @@
     历史"有差别：自攒历史同 SHA 同环境，公开 CI 历史跨 commit 跨环境
     （我们的 stable 判定因此在历史口径下封顶 medium）。公开 CI 历史
     路线已补：fork 上 history-collect workflow 攒 mdutils master 30 个
-    真实 CI 产物。    数据：`experiments/negatives_n2.{csv,json}`（脚本
-    `experiments/build_n2_from_recheck.py`，N2 门槛 = 历史 ≥10 遍
-    无翻转且全过）。
+    真实 CI 产物。    数据：`experiments/negatives_n2.{csv,json}`（v1，55 条；
+    脚本 `experiments/build_n2_from_recheck.py`，N2 门槛 = 历史 ≥10 遍
+    无翻转且全过）；v2 扩样版 `experiments/negatives_n2_v2.{csv,json}`
+    （128 条，脚本输入/输出已参数化，出处日期随复核 JSON 动态读）。
 16. **模式 B 抓不到顺序依赖和"坏→修好"**：历史翻转检测的是跨 run
     非确定性；OD 家族在固定顺序下不翻（和 replay 同样的盲区），FFFPPP
     （坏了后被修好）失败率 50% 却不是 flaky。所以 N2 的"无翻转"证据
