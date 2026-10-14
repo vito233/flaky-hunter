@@ -54,7 +54,26 @@
 - OpenStack 为重跑时好时坏的测试烧掉 **187.4 个 CPU 年**
 - 要有 95% 把握确认一个测试不 flaky，平均要重跑 **170 遍**
 
+## 前置条件
+
+- Git + [uv](https://docs.astral.sh/uv/)（官网一条命令安装）。
+- **评测类脚本要能直接调用 `docker`**：Linux / macOS 装好 Docker 即可；
+  **Windows 请进 WSL 跑**——Windows 侧没有 docker 命令时脚本不崩但会全数报
+  DEPS_FAIL、指标归零（2026-10-14 复现验证实测），且 Windows 风格路径
+  挂载不进 WSL 的容器。单测 / ruff / 历史翻转 / 看板不碰 Docker，
+  Windows 直接跑。
+- Windows 最短路径（WSL 内执行，仓库放 WSL 家目录而非 /mnt/c）：
+
+  ```bash
+  curl -LsSf https://astral.sh/uv/install.sh | sh   # 装 uv
+  git clone https://github.com/vito233/flaky-hunter.git && cd flaky-hunter
+  uv sync
+  uv run python experiments/run_eval.py --projects mtik00/yamicache --runs 10
+  ```
+
 ## 快速开始
+
+不碰 Docker（任何平台直接跑）：
 
 ```bash
 uv sync                # 装依赖（含 dev 组）
@@ -62,34 +81,45 @@ uv run pytest          # 单元测试（含基线断言、"stable 需要证据"�
 uv run ruff check .    # 静态检查
 uv run ruff format .   # 格式化
 
-# 跑评测（需要 Docker；20 条正样本 + N1 负样本（IDoFT 全库对照），默认 runs=100）
+# C2 地板：生成裁剪后标签表（data/processed/labels.csv，19 条 / 6 类）
+uv run python experiments/build_labels.py
+
+# 历史翻转演示（自带 30 份真实 GitHub Actions 产物，秒级零 Docker）
+uv run python -m flaky_hunter.detect_history \
+    --xml-dir experiments/raw/history-mdutils --project didix21/mdutils \
+    --json-out history.json --md-out history.md
+```
+
+需要 Docker（Linux / macOS 直接跑；Windows 按前置条件进 WSL）：
+
+```bash
+# 跑评测（20 条正样本 + N1 负样本（IDoFT 全库对照），默认 runs=100；
+#   试点首次约 8 分钟——含逐容器装工具链 + 卷种子化）
 uv run python experiments/run_eval.py --runs 100 --negatives 2
 uv run python experiments/run_eval.py --projects mtik00/yamicache --runs 10  # 试点
 
 # 顺序变换评测（OD 家族；产出 results_order.csv + metrics_combined.json）
 uv run python experiments/run_order_eval.py --orders 4 --alone-runs 10
 uv run python experiments/run_order_eval.py --projects didix21/mdutils  # 试点
+```
 
-# C2 地板：生成裁剪后标签表（data/processed/labels.csv，19 条 / 6 类）
-uv run python experiments/build_labels.py
+进阶：N3 负样本复核 / N2 口径落档（需要预先备好的源码与依赖目录，
+`--src-root/--deps-root` 为必填、需 WSL 视角路径；Windows 侧可用
+`--docker-bin "wsl;-e;docker"` 调 WSL docker——仅复核脚本暴露该口子，
+详见 `experiments/run_negatives_recheck.py` 模块注释）：
 
-# 看板（可选依赖组，不污染核心依赖；3 个视图：检测 / 归因 / 真值表）
+```bash
+uv run python experiments/run_negatives_recheck.py --per-project 20 --runs 30 \
+    --src-root <WSL视角源码根> --deps-root <依赖缓存根> \
+    --out experiments/negatives_recheck_v2.csv
+uv run python experiments/build_n2_from_recheck.py   # 复核记录 → detect_history 管道
+```
+
+看板（可选依赖组，不污染核心依赖；3 个视图：检测 / 归因 / 真值表）：
+
+```bash
 uv sync --extra dashboard
 uv run streamlit run dashboard/app.py
-
-# N3 负样本复核（每项目 --per-project 条 × 换进程 K 遍；v1=8/项目 → 56 条，
-#   扩样 v2=20/项目 → 129 条，均噪声 0；--src-root/--deps-root 指向已备好的
-#   源码/依赖目录，详见 experiments/run_negatives_recheck.py 模块注释）
-uv run python experiments/run_negatives_recheck.py --per-project 20 --runs 30 \
-    --out experiments/negatives_recheck_v2.csv
-
-# 模式 B：历史翻转（吃 JUnit XML 目录，文件名典序 = 时间序；秒级零 Docker）
-python -m flaky_hunter.detect_history --xml-dir <历史目录> \
-    --project owner/repo --json-out history.json --md-out history.md
-
-# N2 口径落档（复核 30 遍记录 → JUnit 历史 → detect_history 管道；
-#   --recheck/--out-json/--out-csv 可换输入输出，默认吃 v1 文件）
-uv run python experiments/build_n2_from_recheck.py
 ```
 
 ## 局限（先读这个再下结论）
