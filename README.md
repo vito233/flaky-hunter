@@ -24,6 +24,14 @@
 > + 注入 victim + 1 条连带）。单次 run 总耗时 32s / 49s。
 > 详见 [`experiments/2026-10-13-ci-gate-fork.md`](experiments/2026-10-13-ci-gate-fork.md)。
 >
+> 第二版（2026-10-14）：**`--strict` 硬拦截上线** —— alert → exit 1 阻断合并、
+> inconclusive → exit 2 fail-closed（瞎了不放行），GateReport 带 mode 字段
+> （schema 1.1），退出码矩阵 6 组合单测钉死（单测 254 全绿）。fork 双档演示：
+> 同一注入代码，报告档 PR#2 绿（shadow，alert 10 条）vs strict 档
+> [PR#3](https://github.com/vito233/mdutils/pull/3) 红（exit 1 拦截，findings
+> 逐条一致）。详见
+> [`experiments/2026-10-14-strict-gate.md`](experiments/2026-10-14-strict-gate.md)。
+>
 > 换进程重跑 + 同进程 `--count` 双探头抓 NIO/NOD；顺序变换（多顺序扫描 + 前缀
 > 二分 + ddmin 最小 polluter 归因）抓 OD 家族；历史翻转（`detect_history.py`，
 > 吃 JUnit XML 的 CI 存量产物）零成本补第三模式。
